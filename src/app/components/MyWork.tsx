@@ -1,0 +1,85 @@
+import Link from "next/link";
+
+const MyWork = () => {
+  return (
+    <div>
+      <div>
+        <h2 className="text-3xl border-b border-b-[#FAF0E6] pb-10">My Work</h2>
+      </div>
+      <div>
+        {PageContent.map((item, index) => {
+          return (
+            <WorkItem
+              key={index}
+              link={item.link}
+              heading={item.heading}
+              description={item.description}
+              tech={item.tech}
+              year={item.year}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const PageContent = [
+  {
+    link: "https://github.com/Senseii-ai",
+    heading: "Senseii",
+    description: "AI driven Health and Fitness App",
+    tech: "NextJS(Typescript), NodeJS, LangChain, Openai, Mongodb",
+    year: "/23",
+  },
+  {
+    link: "https://github.com/cilium/tetragon",
+    heading: "Tetragon",
+    description: "eBPF-based Security Observability and Runtime Enforcement",
+    tech: "Go, eBPF, Kubernetes, Helm, CI/CD, Docker",
+    year: "/23",
+  },
+  {
+    link: "https://github.com/dapr/dapr",
+    heading: "Dapr",
+    description:
+      "A portable, event-driven, runtime for building distributed applications across cloud and edge.",
+    tech: "Go, Docker, microservices, PubSub, event-driven, Action Model, Prometheus.",
+    year: "/23",
+  },
+];
+
+const WorkItem = ({
+  link,
+  heading,
+  description,
+  tech,
+  year,
+}: {
+  link: string;
+  heading: string;
+  description: string;
+  tech: string;
+  year: string;
+}) => {
+  return (
+    <div className="py-10 grid grid-cols-8 border-b border-b-[#FAF0E6]">
+      <div className="col-span-7 space-y-5">
+        <Link href={link}>
+          <h2 className="underline underline-offset-8 text-7xl">{heading}</h2>
+        </Link>
+        <div className="space-y-2">
+          <h3 className="text-2xl">{description}</h3>
+          <h2 className="font-light">{tech}</h2>
+        </div>
+      </div>
+      <div className="col-start-8">
+        <div className="flex h-full items-center justify-center">
+          <h1 className="text-6xl">{year}</h1>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MyWork;
