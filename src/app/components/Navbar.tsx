@@ -9,7 +9,7 @@ const Navbar = () => {
         <Link href={"#about"}>
           <div>About</div>
         </Link>
-        <Link href={"/writings"}>
+        <Link href={"/writings/life"}>
           <div>Writing</div>
         </Link>
       </div>

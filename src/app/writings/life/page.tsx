@@ -17,7 +17,6 @@ const LifeArticle = async () => {
     .process(matterResult.content);
 
   const contentHtml = processedMarkdown.toString();
-  console.log(contentHtml);
   return (
     <div className="w-full mx-10 ">
       <div className="flex flex-col items-center gap-y-10">
@@ -36,7 +35,7 @@ const LifeArticle = async () => {
           />
         </div>
       </div>
-      <div className="bg-[#352F44] relative md:p-[5rem] md:-mt-[calc(40%-300px)]">
+      <div className="w-full bg-[#352F44] relative md:p-[3rem] md:-mt-[calc(40%-300px)]">
         <ArticleContent pageContent={contentHtml} />
       </div>
     </div>

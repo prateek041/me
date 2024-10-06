@@ -22,7 +22,9 @@ export default function WritingLayout({
       <div className="col-span-1">
         <WritingNav />
       </div>
-      <div className="col-span-4 mx-10 flex justify-center">{children}</div>
+      <div className="overflow-y-auto col-span-4 mx-10 flex justify-center">
+        {children}
+      </div>
     </div>
   );
 }
