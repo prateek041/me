@@ -22,11 +22,11 @@ const LookingFor = () => {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col gap-y-10">
-        <h1 className="col-span-7 text-6xl">
+      <div className="md:grid md:grid-cols-3 flex flex-col gap-y-10">
+        <h1 className="md:col-span-2 col-span-7 text-6xl">
           Let’s talk about a project, collaboration or an idea you may have
         </h1>
-        <div className="col-start-8">
+        <div className="md:col-start-4 col-start-8">
           <Contact />
         </div>
       </div>

@@ -53,7 +53,7 @@ const SkillCard = ({
 }) => {
   return (
     <div className="border-l border-[#FAF0E6] px-4 space-y-5">
-      <div className="text-4xl opacity-45">{index}</div>
+      <div className="md:text-6xl text-4xl opacity-45">{index}</div>
       <div className="text-2xl">{heading}</div>
       <div>{content}</div>
     </div>
