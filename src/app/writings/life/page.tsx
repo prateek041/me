@@ -36,7 +36,7 @@ const LifeArticle = async () => {
           />
         </div>
       </div>
-      <div className="bg-[#352F44] relative md:p-[5.25rem] md:-mt-[calc(40%-300px)]">
+      <div className="bg-[#352F44] relative md:p-[5rem] md:-mt-[calc(40%-300px)]">
         <ArticleContent pageContent={contentHtml} />
       </div>
     </div>
