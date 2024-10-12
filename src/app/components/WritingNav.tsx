@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import FileExplorer from "./FileExplorer";
+import { FileSystemNode } from "../writings/api/blog";
 
 const Navlinks = [
   {
@@ -17,33 +19,39 @@ const Navlinks = [
     title: "Life",
   },
 ];
-const WritingNav = () => {
+const WritingNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
   const pathName = usePathname();
   const route = pathName.split("/");
-
+  const [path, setPath] = useState("life");
   const [isActive, setIsActive] = useState(2);
 
   useEffect(() => {
     Navlinks.map((item, index) => {
       if (item.title.toLowerCase() === route[route.length - 1]) {
         setIsActive(index);
+        setPath(item.title.toLowerCase());
       }
     });
-  }, []);
+  }, [route]);
+
+  const blogType = nodes.filter((item) => item.name === path) || [];
 
   return (
-    <div className="flex h-full justify-center gap-x-5 border-r border-[#FAF0E6]">
-      {Navlinks.map((item, index) => {
-        return (
-          <NavItem
-            key={index}
-            url={item.url}
-            index={index}
-            isActive={isActive}
-            title={item.title}
-          />
-        );
-      })}
+    <div className="h-full">
+      <div className="flex justify-center gap-x-5 ">
+        {Navlinks.map((item, index) => {
+          return (
+            <NavItem
+              key={index}
+              url={item.url}
+              index={index}
+              isActive={isActive}
+              title={item.title}
+            />
+          );
+        })}
+      </div>
+      <FileExplorer path={path} nodes={blogType} />
     </div>
   );
 };
