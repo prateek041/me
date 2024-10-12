@@ -4,7 +4,9 @@ const MyWork = () => {
   return (
     <div>
       <div>
-        <h2 className="text-3xl border-b border-b-[#FAF0E6] pb-10">My Work</h2>
+        <h2 className="text-3xl border-b border-b-[#FAF0E6] md:pb-10 pb-5">
+          My Work
+        </h2>
       </div>
       <div>
         {PageContent.map((item, index) => {
@@ -66,16 +68,18 @@ const WorkItem = ({
     <div className="py-10 grid grid-cols-8 border-b border-b-[#FAF0E6]">
       <div className="col-span-7 space-y-5">
         <Link href={link}>
-          <h2 className="underline underline-offset-8 text-7xl">{heading}</h2>
+          <h2 className="underline underline-offset-8 md:text-7xl text-4xl">
+            {heading}
+          </h2>
         </Link>
         <div className="space-y-2">
-          <h3 className="text-2xl">{description}</h3>
-          <h2 className="font-light">{tech}</h2>
+          <h3 className="md:text-2xl text-lg">{description}</h3>
+          <h2 className="font-light text-sm">{tech}</h2>
         </div>
       </div>
       <div className="col-start-8">
         <div className="flex h-full items-center justify-center">
-          <h1 className="text-6xl">{year}</h1>
+          <h1 className="md:text-6xl text-3xl">{year}</h1>
         </div>
       </div>
     </div>

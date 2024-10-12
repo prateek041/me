@@ -1,5 +1,3 @@
-import { getArticle, getArticleNameAndLocation } from "@/utils/fetchPosts";
-import { join } from "path";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import Link from "next/link";
 import readDirectoryRecursively from "../../api/blog";
@@ -8,7 +6,6 @@ export async function generateStaticParams() {
   const directoryTree = readDirectoryRecursively(
     process.cwd() + "/writings/tech",
   );
-  console.log(directoryTree);
 
   // Object.entries(series).map(([key, value]) => {
   //   value.map((entry) => {
@@ -21,8 +18,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function Page({ params }) {
-  console.log("I was called ", params);
+export default async function Page({ params }: { params: { slug: string } }) {
   // const articleName = params.posts;
 
   // const series = getArticleNameAndLocation(postsDirectory);
@@ -52,7 +48,7 @@ export default async function Page({ params }) {
           <p className="text-sm font-light">Back</p>
         </div>
       </Link>
-      <div>THis is new {params} </div>
+      <div>Tech Article {params.slug} </div>
       {/* <div */}
       {/*   className={`flex flex-col gap-y-4 font-light leading-relaxed tracking-wide max-h-[75vh] md:max-h-[70vh] overflow-y-auto`} */}
       {/*   dangerouslySetInnerHTML={{ __html: articleHTML }} */}

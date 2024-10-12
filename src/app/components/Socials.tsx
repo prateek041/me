@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Socials = () => {
   return (
-    <div>
+    <div className="md:text-base text-sm">
       <div>{"Let's get connected"}</div>
       <div className="flex flex-col">
         <Link href={"https://www.linkedin.com/in/prateek-singh-903449211/"}>

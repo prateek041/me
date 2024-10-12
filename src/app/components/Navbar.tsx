@@ -4,7 +4,9 @@ import { CiSun } from "react-icons/ci";
 const Navbar = () => {
   return (
     <div className="container mx-auto flex w-full justify-between my-2">
-      <div>Prateek Singh</div>
+      <Link href={"/"}>
+        <div>Prateek Singh</div>
+      </Link>
       <div className="flex justify-between space-x-5">
         <Link href={"#about"}>
           <div>About</div>

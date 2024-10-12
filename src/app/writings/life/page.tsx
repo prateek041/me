@@ -20,7 +20,7 @@ const LifeArticle = async () => {
   return (
     <div className="w-full mx-10 ">
       <div className="flex flex-col items-center gap-y-10">
-        <h1 className="text-8xl">{matterResult.data.title}</h1>
+        <h1 className="md:text-8xl text-4xl">{matterResult.data.title}</h1>
         <h3>{matterResult.data.date}</h3>
       </div>
       <div className="md:sticky top-16 flex justify-center w-full mt-10">

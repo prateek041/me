@@ -6,7 +6,7 @@ const About = () => {
     <div className="flex flex-col gap-y-16">
       <div className="grid grid-cols-8">
         <div className="md:col-span-4  col-span-5">
-          <h2 className="text-4xl">
+          <h2 className="md:text-4xl text-2xl">
             I’m a builder from India with about 2 years of experience with Web
             Technologies, Cloud Native, Open Source and Content writing.
           </h2>
