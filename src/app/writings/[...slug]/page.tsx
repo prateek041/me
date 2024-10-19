@@ -27,7 +27,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
 
   const contentHtml = processedMarkdown.toString();
   return (
-    <div className="w-full mx-10 ">
+    <div className="w-full md:mx-10 ">
       <div className="flex flex-col items-center gap-y-10">
         <h1 className="md:text-8xl text-4xl">{matterResult.data.title}</h1>
         <h3>{matterResult.data.date}</h3>

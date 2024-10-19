@@ -5,7 +5,7 @@ import MyWork from "./components/MyWork";
 
 export default function Home() {
   return (
-    <div className="container md:h-full mx-auto md:space-y-32 space-y-20 pb-10">
+    <div className="container md:h-full mx-auto md:spacey2 space-y-20 pb-10">
       <MainHeader />
       <About />
       <MyWork />

@@ -23,7 +23,7 @@ const LookingFor = () => {
         </div>
       </div>
       <div className="md:grid md:grid-cols-3 flex flex-col gap-y-10">
-        <h1 className="md:col-span-2 col-span-7 text-6xl">
+        <h1 className="md:col-span-2 col-span-7 md:text-6xl text-4xl">
           Let’s talk about a project, collaboration or an idea you may have
         </h1>
         <div className="md:col-start-4 col-start-8">
