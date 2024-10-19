@@ -7,17 +7,17 @@ import html from "remark-html";
 import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
 
-const LifeArticle = async ({ params }: { params: { slug: string } }) => {
-  // const articleType = params.slug;
-  //
-  // if (articleType === "life"){
-  //   const articlePath =
-  // const path = process.cwd() + "/writings/life/journey-so-far.md"
-  // }
-
-  const pathName = process.cwd() + "/writings/life";
-  const file = await fs.readFile(`${pathName}/journey-so-far.md`, "utf8");
-  const imageBuffer = await fs.readFile(`${pathName}/journey-so-far.jpg`);
+const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
+  const pathName = process.cwd() + "/writings";
+  console.log("PATHNAME", pathName);
+  console.log("FILE PATH", `${pathName}/${params.slug.join("/")}.md`);
+  const file = await fs.readFile(
+    `${pathName}/${params.slug.join("/")}.md`,
+    "utf8",
+  );
+  const imageBuffer = await fs.readFile(
+    `${pathName}/${params.slug.join("/")}.jpg`,
+  );
   const imageBase64 = imageBuffer.toString("base64");
   const imageSrc = `data:image/jpeg;base64,${imageBase64}`;
   const matterResult = matter(file);
@@ -54,7 +54,7 @@ const LifeArticle = async ({ params }: { params: { slug: string } }) => {
 export async function generateStaticParams() {
   const articlePaths = process.cwd() + "/writings";
   const posts = readDirectoryRecursively(articlePaths);
-  console.log("This is posts", posts);
+  getArticlePaths(posts);
 
   return posts.map((post) => {
     return {
@@ -63,17 +63,18 @@ export async function generateStaticParams() {
   });
 }
 
-const getPathRecursively = (
-  fileSystemNode: FileSystemNode,
-  allPaths: string[] = []
-) => {
-  if (!fileSystemNode.isDirectory) {
-    return [fileSystemNode.path];
+// TODO: Understand this implementation
+const getArticlePaths = (blog: FileSystemNode[]) => {
+  const articles: string[] = [];
+  const queue: FileSystemNode[] = blog;
+  while (queue.length > 0) {
+    const node = queue.shift();
+    if (node?.isDirectory === false) {
+      articles.push(node.path);
+    } else {
+      queue.push(...(node?.children || []));
+    }
   }
-  const paths: string[] = getPathRecursively(
-    fileSystemNode?.children as FileSystemNode
-  );
-  return [...allPaths, ...paths];
 };
 
 export default LifeArticle;

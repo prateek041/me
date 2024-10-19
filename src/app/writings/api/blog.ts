@@ -15,10 +15,12 @@ export interface Blog {
 }
 
 export interface FileSystemNode {
+  articlePath: string;
   id: string; // Unique id for React rendering
   name: string;
   path: string;
   parentPath: string | null;
+  lastModified: string;
   isDirectory: boolean;
   children?: FileSystemNode[];
 }
@@ -32,14 +34,17 @@ const readDirectoryRecursively = (
   return files.map((file): FileSystemNode => {
     const fullPath = path.join(dirPath, file);
     const stat = fs.statSync(fullPath);
+    const prettyTime = stat.mtime.toLocaleString();
     const isDirectory = stat.isDirectory();
 
     const node: FileSystemNode = {
+      articlePath: path.relative(process.cwd(), fullPath),
       id: fullPath,
       name: file,
       path: fullPath,
       parentPath: parentPath,
       isDirectory: isDirectory,
+      lastModified: prettyTime,
       children: isDirectory
         ? readDirectoryRecursively(fullPath, fullPath)
         : undefined,

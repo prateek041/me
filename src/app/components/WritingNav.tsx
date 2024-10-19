@@ -7,15 +7,15 @@ import { FileSystemNode } from "../writings/api/blog";
 
 const Navlinks = [
   {
-    url: "/writings/tech",
+    url: "/writings/tech/home",
     title: "Tech",
   },
   {
-    url: "/writings/thoughts",
+    url: `/writings/thoughts/home`,
     title: "Thoughts",
   },
   {
-    url: "/writings/life",
+    url: "/writings/life/journey-so-far",
     title: "Life",
   },
 ];
@@ -27,7 +27,7 @@ const WritingNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
 
   useEffect(() => {
     Navlinks.map((item, index) => {
-      if (item.title.toLowerCase() === route[route.length - 1]) {
+      if (item.title.toLowerCase() === route[2]) {
         setIsActive(index);
         setPath(item.title.toLowerCase());
       }

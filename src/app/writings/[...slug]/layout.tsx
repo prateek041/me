@@ -19,9 +19,7 @@ export default async function WritingLayout({
   params,
 }: WritingLayoutParams) {
   let blogStructure = readDirectoryRecursively(process.cwd() + "/writings");
-  console.log("this", params.slug);
-  blogStructure = blogStructure.filter((node) => node.name === params.slug);
-  console.log("this is blog structure", blogStructure);
+  blogStructure = blogStructure.filter((node) => node.name === params.slug[0]);
 
   return (
     <div
