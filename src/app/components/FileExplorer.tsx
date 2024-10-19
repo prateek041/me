@@ -31,14 +31,15 @@ const fileName = (name: string) => {
   return file.split("-").join(" ");
 };
 
-const filePath = (name: string) => {
-  const checkPath = usePathname().split("/");
+const filePath = (name: string, articlePath: string) => {
+  const checkPath = articlePath.split("/");
   const relativePath = checkPath.splice(1, 2).join("/");
 
   return path.relative(relativePath, name.split(".")[0]);
 };
 
 const FileNode = ({ node }: { node: FileSystemNode }) => {
+  const path = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const isFile = node.name.endsWith(".md");
@@ -61,7 +62,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
               />
             )
           ) : isFile ? (
-            <Link href={filePath(node.articlePath)}>
+            <Link href={filePath(node.articlePath, path)}>
               <div className="flex items-center">
                 <TbPointFilled />
                 <span className="flex flex-col w-full gap-x-2">
