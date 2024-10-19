@@ -6,6 +6,14 @@ import * as path from "path";
 import html from "remark-html";
 import { remark } from "remark";
 
+export interface Blog {
+  id: string;
+  title: string;
+  articlePath: string;
+  imageUrl: string;
+  parentPath: string | null;
+}
+
 export interface FileSystemNode {
   id: string; // Unique id for React rendering
   name: string;

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import WritingNav from "../components/WritingNav";
-import readDirectoryRecursively from "./api/blog";
+import WritingNav from "../../components/WritingNav";
+import readDirectoryRecursively from "../api/blog";
 
 export const metadata: Metadata = {
   title: "Writings",
@@ -18,9 +18,11 @@ export default async function WritingLayout({
   children,
   params,
 }: WritingLayoutParams) {
-  console.log(params);
-  // Example usage:
-  const blogStructure = readDirectoryRecursively(process.cwd() + "/writings");
+  let blogStructure = readDirectoryRecursively(process.cwd() + "/writings");
+  console.log("this", params.slug);
+  blogStructure = blogStructure.filter((node) => node.name === params.slug);
+  console.log("this is blog structure", blogStructure);
+
   return (
     <div
       className={`bg-[#352F44] text-[#FAF0E6] md:h-screen w-full container flex mx-auto md:grid md:grid-cols-5 mt-5`}

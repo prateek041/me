@@ -22,7 +22,7 @@ const Navlinks = [
 const WritingNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
   const pathName = usePathname();
   const route = pathName.split("/");
-  const [path, setPath] = useState("life");
+  const [path, setPath] = useState(nodes[0].name);
   const [isActive, setIsActive] = useState(2);
 
   useEffect(() => {

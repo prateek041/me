@@ -1,3 +1,5 @@
+import readDirectoryRecursively, { FileSystemNode } from "../api/blog";
+
 import { promises as fs } from "fs";
 import { remark } from "remark";
 import matter from "gray-matter";
@@ -5,7 +7,14 @@ import html from "remark-html";
 import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
 
-const LifeArticle = async () => {
+const LifeArticle = async ({ params }: { params: { slug: string } }) => {
+  // const articleType = params.slug;
+  //
+  // if (articleType === "life"){
+  //   const articlePath =
+  // const path = process.cwd() + "/writings/life/journey-so-far.md"
+  // }
+
   const pathName = process.cwd() + "/writings/life";
   const file = await fs.readFile(`${pathName}/journey-so-far.md`, "utf8");
   const imageBuffer = await fs.readFile(`${pathName}/journey-so-far.jpg`);
@@ -40,6 +49,31 @@ const LifeArticle = async () => {
       </div>
     </div>
   );
+};
+
+export async function generateStaticParams() {
+  const articlePaths = process.cwd() + "/writings";
+  const posts = readDirectoryRecursively(articlePaths);
+  console.log("This is posts", posts);
+
+  return posts.map((post) => {
+    return {
+      slug: post.path,
+    };
+  });
+}
+
+const getPathRecursively = (
+  fileSystemNode: FileSystemNode,
+  allPaths: string[] = []
+) => {
+  if (!fileSystemNode.isDirectory) {
+    return [fileSystemNode.path];
+  }
+  const paths: string[] = getPathRecursively(
+    fileSystemNode?.children as FileSystemNode
+  );
+  return [...allPaths, ...paths];
 };
 
 export default LifeArticle;
