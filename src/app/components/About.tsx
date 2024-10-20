@@ -5,8 +5,9 @@ import * as motion from "framer-motion/client";
 const About = () => {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
       whileHover={{ scale: 1.05 }}
     >
       <div className="flex flex-col gap-y-16">

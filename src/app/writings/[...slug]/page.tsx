@@ -45,7 +45,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           />
         </div>
       </div>
-      <div className="w-full bg-[#352F44] relative md:p-[3rem] md:-mt-[calc(40%-300px)]">
+      <div className="w-full bg-gray-100 relative md:p-[3rem] md:-mt-[calc(40%-300px)]">
         <ArticleContent pageContent={contentHtml} />
       </div>
     </div>
