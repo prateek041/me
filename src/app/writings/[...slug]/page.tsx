@@ -28,10 +28,12 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   return (
     <div className="w-full md:mx-10 md:my-0 my-10 scroll-smooth">
       <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
-        <h1 className="md:text-8xl text-4xl">{matterResult.data.title}</h1>
+        <h1 className="md:text-8xl text-4xl text-center">
+          {matterResult.data.title}
+        </h1>
         <h3>{matterResult.data.date}</h3>
       </div>
-      <div className="md:sticky top-16 flex justify-center w-full mt-10">
+      <div className="md:sticky top-10 flex justify-center w-full mt-10">
         <div className="relative md:-left-8">
           <Image
             src={imageSrc}
