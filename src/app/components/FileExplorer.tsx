@@ -2,7 +2,6 @@
 
 import React from "react";
 import { FileSystemNode } from "../writings/api/blog";
-import Link from "next/link";
 import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
 import path from "path";
