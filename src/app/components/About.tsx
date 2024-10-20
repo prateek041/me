@@ -8,12 +8,6 @@ const About = () => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       whileHover={{ scale: 1.05 }}
-      animate={{
-        x: 0,
-        backgroundColor: "rgba(53, 47, 68, 1)",
-
-        boxShadow: "10px 10px 0 #FAF0E6",
-      }}
     >
       <div className="flex flex-col gap-y-16">
         <div className="grid grid-cols-8">
