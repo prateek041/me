@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import html from "remark-html";
 import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
+import emoji from "remark-emoji";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
@@ -19,12 +20,13 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const imageSrc = `data:image/jpeg;base64,${imageBase64}`;
   const matterResult = matter(file);
   const processedMarkdown = await remark()
+    .use(emoji)
     .use(html)
     .process(matterResult.content);
 
   const contentHtml = processedMarkdown.toString();
   return (
-    <div className="w-full md:mx-10 md:my-0 my-10">
+    <div className="w-full md:mx-10 md:my-0 my-10 scroll-smooth">
       <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
         <h1 className="md:text-8xl text-4xl">{matterResult.data.title}</h1>
         <h3>{matterResult.data.date}</h3>

@@ -1,28 +1,35 @@
 import Link from "next/link";
+import * as motion from "framer-motion/client";
 
 const MyWork = () => {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      whileHover={{ scale: 1.05 }}
+    >
       <div>
-        <h2 className="text-3xl border-b border-b-[#FAF0E6] md:pb-10 pb-5">
-          My Work
-        </h2>
+        <div>
+          <h2 className="text-3xl border-b border-b-[#FAF0E6] md:pb-10 pb-5">
+            My Work
+          </h2>
+        </div>
+        <div>
+          {PageContent.map((item, index) => {
+            return (
+              <WorkItem
+                key={index}
+                link={item.link}
+                heading={item.heading}
+                description={item.description}
+                tech={item.tech}
+                year={item.year}
+              />
+            );
+          })}
+        </div>
       </div>
-      <div>
-        {PageContent.map((item, index) => {
-          return (
-            <WorkItem
-              key={index}
-              link={item.link}
-              heading={item.heading}
-              description={item.description}
-              tech={item.tech}
-              year={item.year}
-            />
-          );
-        })}
-      </div>
-    </div>
+    </motion.div>
   );
 };
 

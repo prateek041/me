@@ -4,7 +4,7 @@ description: ""
 date: "October 19, 2024"
 ---
 
-# Dapr
+# [:link:Dapr](https://github.com/dapr/dapr)
 
 Dapr is an event-driven, distributed runtime that makes it easy for developers to develop applications that are resilient, stateless/stateful (without being an expert in distributed systems) that can run on cloud as well as edge.
 
@@ -16,9 +16,16 @@ Microservice building for cloud and edge are shown below (and growing :))
 
 # My work
 
+## TLDR
+
+I wrote metrics for [Dapr Workflow Building Block :arrow_upper_right:](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-overview/).
+
+- [:link:**Issue link**](https://github.com/dapr/dapr/issues/7109)
+- [:link:**Pull Request**](https://github.com/dapr/dapr/pull/7152)
+
 ## The Issue
 
-I worked on implementing metrics for the [Dapr Workflow Building Block](https://docs.dapr.io/images/building_blocks.png). This helped Dapr users to track the overall traffic and health of their applications (workflows).
+I worked on implementing metrics for the [Dapr Workflow Building Block](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-overview/). This helped Dapr users to track the overall traffic and health of their applications (workflows).
 
 To fully understand the issue I worked on, check this [Issue link](https://github.com/dapr/dapr/issues/7109).
 
@@ -42,7 +49,7 @@ Here is the Link to the [**Pull Request**](https://github.com/dapr/dapr/pull/715
 
 ### Actor Model
 
-The Dapr project has the [Actor Model](https://en.wikipedia.org/wiki/Actor_model) at it's core. I got to learn the implementation of the Actor pattern, how it works and how to implement it. I came across amazing resources from senior engineers at **Microsoft** that explained the conceptual knowledge perfectly. One of them is this [YouTube Video](https://www.youtube.com/watch?v=7erJ1DV_Tlo&t=2s)
+The [:link:Dapr](https://github.com/dapr/dapr) project has the [:link:Actor Model](https://en.wikipedia.org/wiki/Actor_model) at it's core. I got to learn the implementation of the Actor pattern, how it works and how to implement it. I came across amazing resources from senior engineers at **Microsoft** that explained the conceptual knowledge perfectly. One of them is this [YouTube Video](https://www.youtube.com/watch?v=7erJ1DV_Tlo&t=2s)
 
 ### Workflow Engine
 
