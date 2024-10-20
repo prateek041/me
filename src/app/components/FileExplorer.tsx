@@ -8,7 +8,14 @@ import { TbPointFilled } from "react-icons/tb";
 import path from "path";
 import { usePathname } from "next/navigation";
 
-const FileExplorer = ({ nodes }: { nodes: FileSystemNode[]; path: string }) => {
+const FileExplorer = ({
+  nodes,
+  isMobile,
+}: {
+  nodes: FileSystemNode[];
+  path: string;
+  isMobile: boolean;
+}) => {
   const articles = nodes[0]?.children;
   const articlesSortedByTime = articles?.sort((a, b) => {
     return (
@@ -16,7 +23,9 @@ const FileExplorer = ({ nodes }: { nodes: FileSystemNode[]; path: string }) => {
     );
   });
   return (
-    <div className="border-r border-[#FAF0E6] h-full">
+    <div
+      className={`${isMobile ? "w-full" : "border-r ml-20"} border-[#FAF0E6] h-full`}
+    >
       <ul>
         {articlesSortedByTime?.map((node) => (
           <FileNode key={node.id} node={node} />
@@ -99,7 +108,7 @@ const Directory = ({
   isOpen: boolean;
 }) => {
   return (
-    <div className="my-4 flex items-center">
+    <div className="md:my-4 my-2 flex items-center">
       {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
       <div className="w-full">
         <h3 className="font-semibold text-lg">{fileName(name)}</h3>

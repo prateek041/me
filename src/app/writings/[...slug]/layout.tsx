@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import WritingNav from "../../components/WritingNav";
 import readDirectoryRecursively from "../api/blog";
+import MobileNav from "@/app/components/MobileNav";
 
 export const metadata: Metadata = {
   title: "Writings",
@@ -23,12 +24,15 @@ export default async function WritingLayout({
 
   return (
     <div
-      className={`bg-[#352F44] text-[#FAF0E6] md:h-screen w-full container flex mx-auto md:grid md:grid-cols-5 mt-5`}
+      className={`bg-[#352F44] text-[#FAF0E6] md:h-screen w-full flex mx-auto md:grid md:grid-cols-5 mt-5`}
     >
-      <div className="hidden md:grid md:col-span-1">
-        <WritingNav nodes={blogStructure} />
+      <div className="hidden mt-10 md:grid md:col-span-1">
+        <WritingNav isMobile={false} nodes={blogStructure} />
       </div>
-      <div className="overflow-y-auto md:col-span-4 md:mx-10 flex justify-center">
+      <div className="md:hidden z-10 absolute w-full h-full inset-x-0">
+        <MobileNav nodes={blogStructure} />
+      </div>
+      <div className="overflow-y-auto mt-10 md:col-span-4 md:mx-10 flex justify-center">
         {children}
       </div>
     </div>

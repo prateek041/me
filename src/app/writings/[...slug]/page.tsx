@@ -1,5 +1,4 @@
 import readDirectoryRecursively, { FileSystemNode } from "../api/blog";
-
 import { promises as fs } from "fs";
 import { remark } from "remark";
 import matter from "gray-matter";
@@ -9,8 +8,6 @@ import Image from "next/image";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
-  console.log("PATHNAME", pathName);
-  console.log("FILE PATH", `${pathName}/${params.slug.join("/")}.md`);
   const file = await fs.readFile(
     `${pathName}/${params.slug.join("/")}.md`,
     "utf8",
@@ -27,8 +24,8 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
 
   const contentHtml = processedMarkdown.toString();
   return (
-    <div className="w-full md:mx-10 ">
-      <div className="flex flex-col items-center gap-y-10">
+    <div className="w-full md:mx-10 md:my-0 my-10">
+      <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
         <h1 className="md:text-8xl text-4xl">{matterResult.data.title}</h1>
         <h3>{matterResult.data.date}</h3>
       </div>

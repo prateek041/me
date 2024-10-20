@@ -3,7 +3,7 @@ import { CiSun } from "react-icons/ci";
 
 const Navbar = () => {
   return (
-    <div className="container mx-auto flex w-full justify-between my-2">
+    <div className="container fixed z-20 bg-[#352F44] inset-x-0 top-0 h-10 mx-auto flex w-full justify-between items-center md:px-0 px-10">
       <Link href={"/"}>
         <div>
           <h1 className="md:text-4xl text-base">Prateek Singh</h1>
