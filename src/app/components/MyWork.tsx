@@ -4,13 +4,14 @@ import * as motion from "framer-motion/client";
 const MyWork = () => {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
       whileHover={{ scale: 1.05 }}
     >
       <div>
         <div>
-          <h2 className="text-3xl border-b border-b-[#FAF0E6] md:pb-10 pb-5">
+          <h2 className="text-3xl border-b border-b-[black] md:pb-10 pb-5">
             My Work
           </h2>
         </div>
@@ -72,7 +73,7 @@ const WorkItem = ({
   year: string;
 }) => {
   return (
-    <div className="py-10 grid grid-cols-8 border-b border-b-[#FAF0E6]">
+    <div className="py-10 grid grid-cols-8 border-b-[0.2px] border-b-[black]">
       <div className="col-span-7 space-y-5">
         <Link href={link}>
           <h2 className="underline underline-offset-8 md:text-7xl text-4xl">

@@ -7,16 +7,19 @@ const MainHeader = () => {
   return (
     <motion.div
       className="h-full"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
     >
       <div className="md:h-4/5 md:grid md:grid-cols-10 flex  mt-32 flex-col gap-y-10">
         <div className="md:col-span-8 md:self-end lg:text-[220px] md:text-9xl text-6xl">
-          <TypeWriter
-            onInit={(typewriter) => {
-              typewriter.typeString("Software Engineer").pauseFor(1000).start();
+          <div
+            style={{
+              transform: `translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d`,
             }}
-          />
+          >
+            Software Engineer
+          </div>
         </div>
         <div className="md:col-start-9 md:col-span-2 md:self-end md:text-2xl md:w-full w-1/2">
           <motion.div
@@ -24,8 +27,18 @@ const MainHeader = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
           >
-            working with <b>Open Source</b>, <b>Web Development</b>,{" "}
+            working with
+            <TypeWriter
+              onInit={(typewriter) => {
+                typewriter
+                  .typeString(
+                    `<b>Open Source</b>, <b>Web Development</b>,
             <b>Cloud Native</b> and <b>Artificial Intelligence</b>
+  .`,
+                  )
+                  .start();
+              }}
+            />
           </motion.div>
         </div>
       </div>

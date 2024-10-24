@@ -26,7 +26,7 @@ const ClosedNav = ({ toggleOpen }: { toggleOpen: () => void }) => {
   return (
     <div
       onClick={toggleOpen}
-      className="bg-[#352F44] w-fit mt-10 p-2 rounded-r-lg"
+      className="w-fit bg-[#E9E3E2] mt-10 p-2 rounded-r-lg"
     >
       <RxHamburgerMenu />
     </div>

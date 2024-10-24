@@ -22,9 +22,7 @@ const FileExplorer = ({
     );
   });
   return (
-    <div
-      className={`${isMobile ? "w-full" : "border-r ml-20"} border-[#FAF0E6] h-full`}
-    >
+    <div className={`${isMobile ? "w-full" : "border-r"} border-black h-full`}>
       <ul>
         {articlesSortedByTime?.map((node) => (
           <FileNode key={node.id} node={node} />

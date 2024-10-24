@@ -63,7 +63,7 @@ const WritingNav = ({
         </div>
       ) : (
         <div className="h-full">
-          <div className="flex justify-center gap-x-5">
+          <div className="flex justify-start gap-x-5">
             {Navlinks.map((item, index) => {
               return (
                 <NavItem
