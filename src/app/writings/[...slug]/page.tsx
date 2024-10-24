@@ -26,7 +26,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
 
   const contentHtml = processedMarkdown.toString();
   return (
-    <div className="w-full md:mx-10 md:my-0 my-10 scroll-smooth">
+    <div className="container w-full md:mx-10 md:my-0 my-10 scroll-smooth">
       <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
         <h1 className="md:text-8xl text-4xl text-center">
           {matterResult.data.title}
@@ -45,7 +45,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           />
         </div>
       </div>
-      <div className="w-full bg-gray-100 relative md:p-[3rem] md:-mt-[calc(40%-300px)]">
+      <div className="flex w-full max-w-screen-2xl bg-gray-100 relative md:p-[3rem] md:-mt-[calc(40%-300px)]">
         <ArticleContent pageContent={contentHtml} />
       </div>
     </div>
