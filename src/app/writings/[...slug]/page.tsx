@@ -12,10 +12,10 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
   const file = await fs.readFile(
     `${pathName}/${params.slug.join("/")}.md`,
-    "utf8",
+    "utf8"
   );
   const imageBuffer = await fs.readFile(
-    `${pathName}/${params.slug.join("/")}.jpg`,
+    `${pathName}/${params.slug.join("/")}.jpg`
   );
   const imageBase64 = imageBuffer.toString("base64");
   const imageSrc = `data:image/jpeg;base64,${imageBase64}`;

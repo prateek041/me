@@ -12,7 +12,7 @@ const MobileNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
   };
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="container fixed h-full mx-auto px-5">
+    <div className="container z-10 fixed mx-auto px-5">
       {isOpen ? (
         <OpenNav toggleOpen={toggleOpen} nodes={nodes} />
       ) : (

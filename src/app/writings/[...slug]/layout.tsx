@@ -26,7 +26,7 @@ export default async function WritingLayout({
     <div
       className={`container md:h-screen w-full flex mx-auto md:grid md:grid-cols-5 mt-5`}
     >
-      <div className="hidden mt-10 md:grid md:col-span-1">
+      <div className="hidden mt-10  md:grid md:col-span-1">
         <WritingNav isMobile={false} nodes={blogStructure} />
       </div>
       <div className="md:hidden z-20 absolute w-full inset-x-0">

@@ -45,7 +45,7 @@ const WritingNav = ({
   return (
     <div className="h-full py-10">
       {isMobile ? (
-        <div className="absolute px-5 flex flex-col items-start inset-x-0 justify-start mb-10">
+        <div className="absolute px-5 flex h-full flex-col items-start inset-x-0 justify-start mb-10">
           <div className="flex justify-center gap-x-5 ">
             {Navlinks.map((item, index) => {
               return (
