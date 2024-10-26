@@ -29,7 +29,7 @@ export default async function WritingLayout({
       <div className="hidden mt-10 md:grid md:col-span-1">
         <WritingNav isMobile={false} nodes={blogStructure} />
       </div>
-      <div className="md:hidden z-10 absolute w-full h-full inset-x-0">
+      <div className="md:hidden z-20 absolute w-full inset-x-0">
         <MobileNav nodes={blogStructure} />
       </div>
       <div className="overflow-y-auto mt-10 md:col-span-4 md:mx-10 flex justify-center">

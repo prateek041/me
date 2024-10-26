@@ -24,10 +24,7 @@ const MobileNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
 
 const ClosedNav = ({ toggleOpen }: { toggleOpen: () => void }) => {
   return (
-    <div
-      onClick={toggleOpen}
-      className="w-fit bg-[#E9E3E2] mt-10 p-2 rounded-r-lg"
-    >
+    <div onClick={toggleOpen} className="w-fit mt-10 p-2 rounded-r-lg">
       <RxHamburgerMenu />
     </div>
   );
@@ -41,7 +38,7 @@ const OpenNav = ({
   toggleOpen: () => void;
 }) => {
   return (
-    <div className="flex bg-[#352F44] h-full pt-10 flex-row-reverse justify-between">
+    <div className="flex bg-[#E9E3E2] h-full pt-10 flex-row-reverse justify-between">
       <div onClick={toggleOpen}>
         <IoIosArrowBack />
       </div>

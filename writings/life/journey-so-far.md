@@ -2,6 +2,7 @@
 title: "Journey So Far"
 date: "March 5, 2021"
 description: "How my journey has been so far"
+audio: "you-say-run.mp3"
 ---
 
 Almost 2 years ago, I started exploring my passion, I started with my quest to find what I love to do. Up till now, I have tried my hands on **Design**, **Software Development**, **Cloud Native** and **Artificial Intelligence**. I liked the learning process of every domain and I often go back to them in my free time.
