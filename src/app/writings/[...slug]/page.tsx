@@ -12,10 +12,10 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
   const file = await fs.readFile(
     `${pathName}/${params.slug.join("/")}.md`,
-    "utf8"
+    "utf8",
   );
   const imageBuffer = await fs.readFile(
-    `${pathName}/${params.slug.join("/")}.jpg`
+    `${pathName}/${params.slug.join("/")}.jpg`,
   );
   const imageBase64 = imageBuffer.toString("base64");
   const imageSrc = `data:image/jpeg;base64,${imageBase64}`;
@@ -33,7 +33,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           {matterResult.data.title}
         </h1>
         <h3>{matterResult.data.date}</h3>
-        <div className="z-10">
+        <div className="">
           <AudioPlayer audioFile={matterResult.data.audio} />
         </div>
       </div>

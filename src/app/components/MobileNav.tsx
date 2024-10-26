@@ -38,7 +38,7 @@ const OpenNav = ({
   toggleOpen: () => void;
 }) => {
   return (
-    <div className="flex bg-[#E9E3E2] h-full pt-10 flex-row-reverse justify-between">
+    <div className="flex bg-[#E9E3E2] h-screen pt-10 flex-row-reverse justify-between">
       <div onClick={toggleOpen}>
         <IoIosArrowBack />
       </div>
