@@ -20,10 +20,8 @@ const formatFileName = (fileName: string): string => {
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  // CHANGE HERE: Added state for title
   const [title, setTitle] = useState<string>("");
 
-  // CHANGE HERE: Added useEffect to set title when component mounts
   useEffect(() => {
     setTitle(formatFileName(audioFile));
   }, [audioFile]);
@@ -56,7 +54,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
         )}
       </button>
 
-      {/* CHANGE HERE: Only show marquee if title exists */}
       {title && (
         <div className="w-32 overflow-hidden whitespace-nowrap relative bg-gray-50 rounded px-2">
           <div className="animate-marquee inline-block">
