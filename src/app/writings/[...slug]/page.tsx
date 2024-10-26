@@ -6,6 +6,7 @@ import html from "remark-html";
 import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
 import emoji from "remark-emoji";
+import AudioPlayer from "@/app/components/AudioPlayer";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
@@ -32,6 +33,9 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           {matterResult.data.title}
         </h1>
         <h3>{matterResult.data.date}</h3>
+        <div className="z-50">
+          <AudioPlayer audioFile={matterResult.data.audio} />
+        </div>
       </div>
       <div className="md:sticky top-10 flex justify-center w-full mt-10">
         <div className="relative md:-left-8">

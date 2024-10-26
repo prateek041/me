@@ -1,9 +1,8 @@
 ---
-
 title: "Humans have thoughts"
 date: "March 5, 2023"
 description: "How I thought at a point in time"
-
+audio: "despair.mp3"
 ---
 
 I think a lot, and most of the times about how should I approach my life.

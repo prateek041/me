@@ -2,6 +2,7 @@
 title: "Pits Of Sadness"
 date: "October 20, 2024"
 description: "Dips of Sadness once in a while"
+audio: "ochihabune.mp3"
 ---
 
 I did not have the exact name for it, so I just named it "pits-of-sadness".
