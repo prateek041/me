@@ -33,7 +33,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           {matterResult.data.title}
         </h1>
         <h3>{matterResult.data.date}</h3>
-        <div className="z-50">
+        <div className="z-10">
           <AudioPlayer audioFile={matterResult.data.audio} />
         </div>
       </div>
