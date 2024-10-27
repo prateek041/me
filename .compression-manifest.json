@@ -1,0 +1,56 @@
+{
+  "/Users/prateek/Desktop/dev/projects/me/public/despair.mp3": {
+    "hash": "0b6c116e8940cbb52538f36b08f1e72d",
+    "lastCompressed": "2024-10-27T19:06:32.553Z",
+    "originalSize": 2199730,
+    "compressedSize": 1715314
+  },
+  "/Users/prateek/Desktop/dev/projects/me/public/going-for-a-walk.mp3": {
+    "hash": "13898ae236faf270af0b021a3e1ef0c5",
+    "lastCompressed": "2024-10-27T19:26:25.976Z",
+    "originalSize": 3264648,
+    "compressedSize": 2966865
+  },
+  "/Users/prateek/Desktop/dev/projects/me/public/ochihabune.mp3": {
+    "hash": "850cdd9cabf2c31fab03c292feacb0a5",
+    "lastCompressed": "2024-10-27T19:29:47.233Z",
+    "originalSize": 14667107,
+    "compressedSize": 3069082
+  },
+  "/Users/prateek/Desktop/dev/projects/me/public/samidare.mp3": {
+    "hash": "141c37d84285d485e5b4e5fbc9d0d927",
+    "lastCompressed": "2024-10-27T19:29:52.734Z",
+    "originalSize": 4143872,
+    "compressedSize": 2374207
+  },
+  "/Users/prateek/Desktop/dev/projects/me/public/you-say-run.mp3": {
+    "hash": "b2f7746466c57b08d2097a1ea3cdbb79",
+    "lastCompressed": "2024-10-27T19:30:39.708Z",
+    "originalSize": 8311998,
+    "compressedSize": 3081197
+  },
+  "public/going-for-a-walk.mp3": {
+    "hash": "9a13e452bdece1f1effd777084617ea3",
+    "lastCompressed": "2024-10-28T01:04:54.297271+05:30",
+    "originalSize": 3264648,
+    "compressedSize": 2966865
+  },
+  "public/ochihabune.mp3": {
+    "hash": "29332a3b25c98fa5c6622140a791789f",
+    "lastCompressed": "2024-10-28T01:09:23.961615+05:30",
+    "originalSize": 14667107,
+    "compressedSize": 2947234
+  },
+  "public/samidare.mp3": {
+    "hash": "a583d7f5b873dc5b089e3c8fadd250d1",
+    "lastCompressed": "2024-10-28T01:04:58.170889+05:30",
+    "originalSize": 4143872,
+    "compressedSize": 2374207
+  },
+  "public/you-say-run.mp3": {
+    "hash": "479ccbaa1033c2365f822a512197f2f3",
+    "lastCompressed": "2024-10-28T01:05:41.921651+05:30",
+    "originalSize": 8311998,
+    "compressedSize": 3081197
+  }
+}
