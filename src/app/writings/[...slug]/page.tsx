@@ -14,6 +14,8 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
     `${pathName}/${params.slug.join("/")}.md`,
     "utf8",
   );
+  const isTech = params.slug.includes("tech");
+
   const imageBuffer = await fs.readFile(
     `${pathName}/${params.slug.join("/")}.jpg`,
   );
@@ -33,9 +35,11 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           {matterResult.data.title}
         </h1>
         <h3>{matterResult.data.date}</h3>
-        <div className="">
-          <AudioPlayer audioFile={matterResult.data.audio} />
-        </div>
+        {!isTech && (
+          <div className="">
+            <AudioPlayer audioFile={matterResult.data.audio} />
+          </div>
+        )}
       </div>
       <div className="md:sticky top-10 flex justify-center w-full mt-10">
         <div className="relative md:-left-8">
