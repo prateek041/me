@@ -4,4 +4,4 @@ date: "October 19, 2024"
 description: "Tech and how it affected my Life"
 ---
 
-# Tech changed my life, it is powerful
+Tech is to me what art was to Picasso.
