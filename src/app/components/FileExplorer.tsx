@@ -4,8 +4,7 @@ import React from "react";
 import { FileSystemNode } from "../writings/api/blog";
 import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
-import path from "path";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const FileExplorer = ({
   nodes,
@@ -37,19 +36,14 @@ const fileName = (name: string) => {
   return file.split("-").join(" ");
 };
 
-const filePath = (name: string, articlePath: string) => {
-  const checkPath = articlePath.split("/");
-  const relativePath = checkPath.splice(1, 2).join("/");
-  const finalpath = path.relative(relativePath, name.split(".")[0]);
-  return finalpath;
+const filePath = (articlePath: string) => {
+  return articlePath.split(".")[0]
 };
 
 const FileNode = ({ node }: { node: FileSystemNode }) => {
-  const path = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const isFile = node.name.endsWith(".md");
-  const router = useRouter();
 
   return (
     <div>
@@ -70,12 +64,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
               />
             )
           ) : isFile ? (
-            <a
-              onClick={() => {
-                const rerouteTo = filePath(node.articlePath, path);
-                router.push(rerouteTo);
-              }}
-            >
+            <Link href={`/${filePath(node.articlePath)}`}>
               <div className="flex items-center">
                 <TbPointFilled />
                 <span className="flex flex-col w-full gap-x-2">
@@ -85,13 +74,13 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
                   </div>
                 </span>
               </div>
-            </a>
+            </Link>
           ) : (
             ""
           )}
         </div>
         {isOpen && node.children && (
-          <ul className="pl-5">
+          <ul className="pl-5 md:text-base text-sm">
             {node.children.map((child) => (
               <FileNode key={child.id} node={child} />
             ))}
@@ -112,7 +101,7 @@ const Directory = ({
   isOpen: boolean;
 }) => {
   return (
-    <div className="md:my-4 my-2 flex items-center">
+    <div className="flex items-center">
       {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
       <div className="w-full">
         <h3 className="font-semibold text-lg">{fileName(name)}</h3>

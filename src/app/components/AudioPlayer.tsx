@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react"; // CHANGE HERE: Added useEffect
+import React, { useState, useRef, useEffect } from "react";
 import { CiPause1, CiPlay1 } from "react-icons/ci";
 
 interface AudioPlayerProps {

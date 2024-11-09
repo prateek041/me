@@ -25,6 +25,15 @@ export interface FileSystemNode {
   children?: FileSystemNode[];
 }
 
+const getFileDate = (path: string, dirpath: string, parentPath: string | null, isDirectory: boolean) => {
+  if (isDirectory) {
+    return null
+  }
+  const fileData = fs.readFileSync(path)
+  const matterResult = matter(fileData)
+  return matterResult.data.date
+}
+
 const readDirectoryRecursively = (
   dirPath: string,
   parentPath: string | null = null,
@@ -34,8 +43,9 @@ const readDirectoryRecursively = (
   return files.map((file): FileSystemNode => {
     const fullPath = path.join(dirPath, file);
     const stat = fs.statSync(fullPath);
-    const prettyTime = stat.mtime.toLocaleString();
+    // const prettyTime = stat.mtime.toLocaleString();
     const isDirectory = stat.isDirectory();
+
 
     const node: FileSystemNode = {
       articlePath: path.relative(process.cwd(), fullPath),
@@ -44,7 +54,7 @@ const readDirectoryRecursively = (
       path: fullPath,
       parentPath: parentPath,
       isDirectory: isDirectory,
-      lastModified: prettyTime,
+      lastModified: getFileDate(fullPath, dirPath, parentPath, isDirectory),
       children: isDirectory
         ? readDirectoryRecursively(fullPath, fullPath)
         : undefined,

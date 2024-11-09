@@ -35,6 +35,18 @@
     "originalSize": 3264648,
     "compressedSize": 2966865
   },
+  "public/hello.mp3": {
+    "hash": "479ccbaa1033c2365f822a512197f2f3",
+    "lastCompressed": "2024-10-28T21:38:45.606608+05:30",
+    "originalSize": 8311998,
+    "compressedSize": 2823044
+  },
+  "public/naruto-main-theme.mp3": {
+    "hash": "c21058de37b22c062d9f80a814ba4d1c",
+    "lastCompressed": "2024-10-28T21:38:27.50865+05:30",
+    "originalSize": 5123158,
+    "compressedSize": 2902389
+  },
   "public/ochihabune.mp3": {
     "hash": "29332a3b25c98fa5c6622140a791789f",
     "lastCompressed": "2024-10-28T01:09:23.961615+05:30",

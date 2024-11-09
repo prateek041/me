@@ -24,7 +24,10 @@ const MobileNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
 
 const ClosedNav = ({ toggleOpen }: { toggleOpen: () => void }) => {
   return (
-    <div onClick={toggleOpen} className="w-fit mt-10 p-2 rounded-r-lg">
+    <div
+      onClick={toggleOpen}
+      className="w-fit bg-[#E9E3E2] mt-10 p-2 rounded-r-lg"
+    >
       <RxHamburgerMenu />
     </div>
   );
