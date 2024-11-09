@@ -12,11 +12,17 @@ export const metadata: Metadata = {
   description: "A public diary of my Life",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await new Promise((resolve, reject) => {
+    return setTimeout(resolve, 5000);
+  });
+
+  console.log("I shouldn't be called");
+
   return (
     <html lang="en">
       <body

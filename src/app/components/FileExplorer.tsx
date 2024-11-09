@@ -5,7 +5,8 @@ import { FileSystemNode } from "../writings/api/blog";
 import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
 import path from "path";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const FileExplorer = ({
   nodes,
@@ -41,6 +42,7 @@ const filePath = (name: string, articlePath: string) => {
   const checkPath = articlePath.split("/");
   const relativePath = checkPath.splice(1, 2).join("/");
   const finalpath = path.relative(relativePath, name.split(".")[0]);
+  console.log("THIS IS FILE PATH", finalpath);
   return finalpath;
 };
 
@@ -49,7 +51,6 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const isFile = node.name.endsWith(".md");
-  const router = useRouter();
 
   return (
     <div>
@@ -70,12 +71,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
               />
             )
           ) : isFile ? (
-            <a
-              onClick={() => {
-                const rerouteTo = filePath(node.articlePath, path);
-                router.push(rerouteTo);
-              }}
-            >
+            <Link href={`/${filePath(node.articlePath, path)}`}>
               <div className="flex items-center">
                 <TbPointFilled />
                 <span className="flex flex-col w-full gap-x-2">
@@ -85,7 +81,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
                   </div>
                 </span>
               </div>
-            </a>
+            </Link>
           ) : (
             ""
           )}

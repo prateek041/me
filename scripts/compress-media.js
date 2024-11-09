@@ -12,7 +12,7 @@ const CONFIG = {
   ),
   maxImageSize: 1024 * 1024, // 1MB
   maxAudioSize: 3 * 1024 * 1024, // 2MB
-  minAudioBitrate: 32, // Minimum bitrate in kbps
+  minAudioBitrate: 96, // Minimum bitrate in kbps
   maxAudioBitrate: 128, // Maximum bitrate in kbps
   minAudioDuration: 60, // Minimum duration in seconds (1 minute)
 };
