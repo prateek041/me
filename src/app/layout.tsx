@@ -21,8 +21,6 @@ export default async function RootLayout({
     return setTimeout(resolve, 5000);
   });
 
-  console.log("I shouldn't be called");
-
   return (
     <html lang="en">
       <body

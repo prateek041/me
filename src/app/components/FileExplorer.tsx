@@ -4,11 +4,11 @@ import React from "react";
 import { FileSystemNode } from "../writings/api/blog";
 import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
-import path from "path";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const FileExplorer = ({
+  path,
   nodes,
   isMobile,
 }: {
@@ -16,6 +16,7 @@ const FileExplorer = ({
   path: string;
   isMobile: boolean;
 }) => {
+  console.log("Path is", path)
   const articles = nodes[0]?.children;
   const articlesSortedByTime = articles?.sort((a, b) => {
     return (
@@ -38,12 +39,8 @@ const fileName = (name: string) => {
   return file.split("-").join(" ");
 };
 
-const filePath = (name: string, articlePath: string) => {
-  const checkPath = articlePath.split("/");
-  const relativePath = checkPath.splice(1, 2).join("/");
-  const finalpath = path.relative(relativePath, name.split(".")[0]);
-  console.log("THIS IS FILE PATH", finalpath);
-  return finalpath;
+const filePath = (articlePath: string, path: string) => {
+  return articlePath.split(".")[0]
 };
 
 const FileNode = ({ node }: { node: FileSystemNode }) => {
