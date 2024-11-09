@@ -4,11 +4,9 @@ import React from "react";
 import { FileSystemNode } from "../writings/api/blog";
 import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const FileExplorer = ({
-  path,
   nodes,
   isMobile,
 }: {
@@ -16,7 +14,6 @@ const FileExplorer = ({
   path: string;
   isMobile: boolean;
 }) => {
-  console.log("Path is", path)
   const articles = nodes[0]?.children;
   const articlesSortedByTime = articles?.sort((a, b) => {
     return (
@@ -39,12 +36,11 @@ const fileName = (name: string) => {
   return file.split("-").join(" ");
 };
 
-const filePath = (articlePath: string, path: string) => {
+const filePath = (articlePath: string) => {
   return articlePath.split(".")[0]
 };
 
 const FileNode = ({ node }: { node: FileSystemNode }) => {
-  const path = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const isFile = node.name.endsWith(".md");
@@ -68,7 +64,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
               />
             )
           ) : isFile ? (
-            <Link href={`/${filePath(node.articlePath, path)}`}>
+            <Link href={`/${filePath(node.articlePath)}`}>
               <div className="flex items-center">
                 <TbPointFilled />
                 <span className="flex flex-col w-full gap-x-2">
@@ -84,7 +80,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
           )}
         </div>
         {isOpen && node.children && (
-          <ul className="pl-5">
+          <ul className="pl-5 md:text-base text-sm">
             {node.children.map((child) => (
               <FileNode key={child.id} node={child} />
             ))}
@@ -105,7 +101,7 @@ const Directory = ({
   isOpen: boolean;
 }) => {
   return (
-    <div className="md:my-4 my-2 flex items-center">
+    <div className="flex items-center">
       {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
       <div className="w-full">
         <h3 className="font-semibold text-lg">{fileName(name)}</h3>
