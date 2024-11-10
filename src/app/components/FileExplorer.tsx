@@ -104,8 +104,8 @@ const Directory = ({
     <div className="flex items-center">
       {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
       <div className="w-full">
-        <h3 className="font-semibold text-lg">{fileName(name)}</h3>
-        <p className="text-xs">{date}</p>
+        <h3 className="font-semibold xl:text-lg md:text-base text-sm">{fileName(name)}</h3>
+        <p className="lg:text-base text-xs">{date}</p>
       </div>
     </div>
   );
