@@ -27,17 +27,35 @@ We want to send the data from one device to another in a Fast, efficient and sca
 
 ### Physical World vs Digital World
 
-Let's say you want to send a message to your friend, who lives two houses away from you. You would need their address, so that you can write the information on let's say a piece of paper and tell your younger brother to give that piece of paper to the people living in that house.
+Let's say you want to send a message to your friend, who lives two houses away
+from you. You would need their address, so that you can write the information
+on let's say a piece of paper and tell your younger brother to give that piece
+of paper to the people living in that house.
 
-You would also attach the name of the person on top of it, because you wouldn't want someone other than your friend to read your messages right? But let's think about this later, we just want the message to somehow reach your friend's house.
+You would also attach the name of the person on top of it, because you wouldn't
+want someone other than your friend to read your messages right? But let's think
+about this later, we just want the message to somehow reach your friend's house.
 
-This is the physical way of sharing information, but since we are creating our own internet, we would need "digital world". Luckily you and your friend both have a computer to work with.
+This is the physical way of sharing information, but since we are creating our
+own internet, we would need "digital world". Luckily you and your friend both
+have a computer to work with.
 
-In the **Physical world**, your younger brother is the messenger who carries your message. But in the **Digital World** we need a medium that can carry information in a way computers understand. This medium could be a wire, like an Ethernet cable, or even wireless signals like Wi-Fi.
+In the **Physical world**, your younger brother is the messenger who carries
+your message. But in the **Digital World** we need a medium that can carry
+information in a way computers understand. This medium could be a wire, like an
+Ethernet cable, or even wireless signals like Wi-Fi.
 
-Similarly, computers can't read handwritten notes. They need the message in a special format (binary). Think of it as translating your note into a secret code that only computers can understand. This code is called "binary", made up of 0s and 1s.
+Similarly, computers can't read handwritten notes. They need the message in a
+special format (binary). Think of it as translating your note into a secret code
+that only computers can understand. This code is called "binary", made up of 0s
+and 1s.
 
-So, you and your friend decided to buy an Ethernet cable, that carries binary information in the form of Electrical impulses, these impulses travel from your computer to your friend's. As for converting your messages into **binary**, let's say for simplicity's sake, your computer has a **messenger** built in--a magical helper called a **driver**. This driver knows how to convert your messages into bits and pass it to the Ethernet Cable.
+So, you and your friend decided to buy an Ethernet cable, that carries binary
+information in the form of Electrical impulses, these impulses travel from your
+computer to your friend's. As for converting your messages into **binary**,
+let's say for simplicity's sake, your computer has a **messenger** built
+in-a magical helper called a **driver**. This driver knows how to convert your
+messages into bits and pass it to the Ethernet Cable.
 
 
 ### Comparison with Old internet
