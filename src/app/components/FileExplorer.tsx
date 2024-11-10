@@ -69,7 +69,9 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
                 <TbPointFilled />
                 <span className="flex flex-col w-full gap-x-2">
                   <div>
-                    {fileName(node.name)}
+                    <h3 className="md:text-sm text-xs">
+                      {fileName(node.name)}
+                    </h3>
                     <p className="text-xs font-light">{node.lastModified}</p>
                   </div>
                 </span>
@@ -104,7 +106,7 @@ const Directory = ({
     <div className="flex items-center">
       {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
       <div className="w-full">
-        <h3 className="font-semibold xl:text-lg md:text-base text-sm">{fileName(name)}</h3>
+        <h3 className="font-semibold xl:text-lg text-sm">{fileName(name)}</h3>
         <p className="lg:text-base text-xs">{date}</p>
       </div>
     </div>
