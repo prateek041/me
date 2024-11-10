@@ -11,13 +11,13 @@ const CONFIG = {
     ".compression-manifest.json",
   ),
   maxImageSize: 1024 * 1024, // 1MB
-  maxAudioSize: 3 * 1024 * 1024, // 2MB
+  maxAudioSize: 3 * 1024 * 1024, // 3MB
   minAudioBitrate: 96, // Minimum bitrate in kbps
   maxAudioBitrate: 128, // Maximum bitrate in kbps
   minAudioDuration: 60, // Minimum duration in seconds (1 minute)
 };
 
-// Utility functions remain the same
+// Utility functions
 function calculateFileHash(filepath) {
   const content = fs.readFileSync(filepath);
   return crypto.createHash("md5").update(content).digest("hex");
@@ -267,22 +267,35 @@ function processFile(filepath, manifest) {
   }
 }
 
-// Main function
+// New recursive directory scanning function
+function scanDirectory(directory, manifest) {
+  const items = fs.readdirSync(directory);
+
+  for (const item of items) {
+    const fullPath = path.join(directory, item);
+    const stat = fs.statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      // Recursively process subdirectories
+      scanDirectory(fullPath, manifest);
+    } else if (stat.isFile()) {
+      const ext = path.extname(item).toLowerCase();
+      if ([".jpg", ".jpeg", ".mp3"].includes(ext)) {
+        processFile(fullPath, manifest);
+      }
+    }
+  }
+}
+
+// Updated main function
 function compressMediaFiles() {
   console.log("Starting media compression...");
   checkFFmpeg();
 
   const manifest = loadManifest();
 
-  const files = fs.readdirSync(CONFIG.publicDir);
-  for (const file of files) {
-    const filepath = path.join(CONFIG.publicDir, file);
-    const ext = path.extname(file).toLowerCase();
-
-    if ([".jpg", ".jpeg", ".mp3"].includes(ext)) {
-      processFile(filepath, manifest);
-    }
-  }
+  // Start recursive scan from public directory
+  scanDirectory(CONFIG.publicDir, manifest);
 
   saveManifest(manifest);
   console.log("\nCompression completed!");
