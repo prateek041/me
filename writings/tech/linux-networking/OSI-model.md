@@ -91,4 +91,4 @@ This is the layer where your information is present in the form of 0s and 1s, an
 
 Don't be confused by the name "Physical" layer, because the medium of transport doesn't specifically have to be Physical. The OSI model was created in the olden days, and the devices working on this layer at that time were using Physical mediums to transfer data. But this not the case anymore, Wifi is readily available, and does the same thing. i.e. Transferring the Bytes of information.
 
-###
+TO BE DONE

@@ -16,11 +16,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   );
   const isTech = params.slug.includes("tech");
 
-  const imageBuffer = await fs.readFile(
-    `${pathName}/${params.slug.join("/")}.jpg`,
-  );
-  const imageBase64 = imageBuffer.toString("base64");
-  const imageSrc = `data:image/jpeg;base64,${imageBase64}`;
+  const imagePath = `/${params.slug.join("/")}.jpg`
   const matterResult = matter(file);
   const processedMarkdown = await remark()
     .use(emoji)
@@ -44,9 +40,10 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
       <div className="md:sticky top-10 flex justify-center w-full mt-10">
         <div className="relative md:-left-8">
           <Image
-            src={imageSrc}
+            className="object-cover"
+            src={imagePath}
             alt="Article Header image"
-            style={{ width: "100%", height: "auto" }}
+            style={{ width: "100vw", height: "100%" }}
             width={1000}
             height={1000}
             quality={100}
