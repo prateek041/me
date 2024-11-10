@@ -69,6 +69,8 @@ travel from your computer to your friend's. As for converting your messages into
 in-a *magical* helper called a **driver**. This driver knows how to convert your
 messages into bits and pass it to the Ethernet Cable.
 
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261309509/0f30cf36-4141-494f-ad99-6bf21b8e6345.png?auto=compress,format&format=webp)
+
 > diagram here :check
 
 ### Comparison with Old internet
@@ -86,7 +88,7 @@ So, you decided that the task is fairly easy, just buy more Ethernet Cables,
 connect it to each other's computers and start sharing messages.
 But there are a few problems.
 
-> diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261373376/fa861057-5d78-47d1-9591-e3c6bdf1ca9a.png?auto=compress,format&format=webp)
 
 - There are too many cables now! Each computer has 3 cables connected to it,
 which is causing clutter and your Mom is not liking it. Also your computer has
@@ -105,7 +107,7 @@ of computers being directly connected to each other, let's have X has the common
 connection between all the other computers, so now each computer
 (A, B, C and D) have just one cable connected to them, which connects them to X.
 
-> diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261416168/eb308cf5-6003-4d6f-b54b-7b904c3769e9.png?auto=compress,format&format=webp)
 
 If A wants to send a message to B, the message goes from A -> X and X sends the
 message from X -> B.
@@ -125,7 +127,7 @@ and D:4. And you added a table (let's call it **lookup table** ) in the
 computer X, that has a mapping of which cable sends message to which unique
 address.
 
-> diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261469889/9f563b4f-7055-4851-b9e1-805e64b21a0a.png?auto=compress,format&format=webp)
 
 Now if A wants to send message to B, it wraps the message into something like an
 envelope, with B's unique address on it and sends it to X. Then X reads that
@@ -133,7 +135,7 @@ envelope and knows that this message needs to be sent to B, therefore it checks
 the lookup table to know which out of the 4 cables connects X to B, and send the
 message on it.
 
-> diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261505815/0d37548b-a0c2-4b79-b287-b881594437c5.png?auto=compress,format&format=webp)
 
 ### Comparison with Old internet
 
@@ -187,7 +189,7 @@ Now, by adding the entries of all the computers and their unique addresses in bo
 When your brother sends a message to you, your computer's address is attached on
 top. It goes from his computer to Y, from Y to X and from X to your computer.
 
-> Diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261733597/7df6b92a-93b8-4a4b-a141-0b1a90c37221.png?auto=compress,format&format=webp)
 
 But, there are still many problems.
 
@@ -222,7 +224,7 @@ This address is assigned to computers in a specific way. If 2 computers are conn
 to **R1**, they will have address **1.1** and **1.2**. Similarly computers connected
 to **R3** will have addresses in **3.x** format.
 
-> diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261873089/9d7a71a5-e455-4499-9e67-49b4df587be3.png?auto=compress,format&format=webp)
 
 This forms a *hierarchy* telling which computer is within the LAN and which one is
 out of it. For **R1**, computer **1.1** is internal since it's address starts
@@ -233,7 +235,7 @@ for internal devices. If the destination address of a message is internal, our
 older system still works. **R1** just has to send the message to the
 **Physical Address** (MAC address) of the destination device.
 
-> diagram here :check
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261928960/55f74947-8669-42a3-b171-fa6d8ea17383.png?auto=compress,format&format=webp)
 
 If the destination is external let's say **3.1** , **R1**  doesn't have to know
 the exact path the message has to follow to reach **3.1**, it just needs
@@ -264,8 +266,7 @@ the new device and similarly the Logical address table will assign a new address
 unaware of this change.
 
 Now let's say our system looks like the diagram below.
-
-> diagram here
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261991050/54c8fcb3-b323-4a1c-9cdc-e3bab6c0143b.png?auto=compress,format&format=webp)
 
 If **R2** has to send a message with destination address of format **1.x**,
 it just knows that it is a local address for the device **R1**. **R2** doesn't
