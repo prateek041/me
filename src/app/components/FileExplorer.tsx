@@ -65,16 +65,14 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
             )
           ) : isFile ? (
             <Link href={`/${filePath(node.articlePath)}`}>
-              <div className="flex items-center">
+              <div className="flex items-center gap-x-2 border border-b-black py-1 mx-5">
                 <TbPointFilled />
-                <span className="flex flex-col w-full gap-x-2">
-                  <div>
-                    <h3 className="md:text-sm text-xs">
-                      {fileName(node.name)}
-                    </h3>
-                    <p className="text-xs font-light">{node.lastModified}</p>
-                  </div>
-                </span>
+                <div className="flex flex-col w-full gap-y-0 gap-x-2">
+                  <h3 className="lg:text-sm md:text-xs text-base">
+                    {fileName(node.name)}
+                  </h3>
+                  <p className="text-xs font-light">{node.lastModified}</p>
+                </div>
               </div>
             </Link>
           ) : (
@@ -82,7 +80,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
           )}
         </div>
         {isOpen && node.children && (
-          <ul className="pl-5 md:text-base text-sm">
+          <ul className="lg:pl-2 pl-1 md:text-base leading-tight text-sm">
             {node.children.map((child) => (
               <FileNode key={child.id} node={child} />
             ))}
@@ -106,7 +104,7 @@ const Directory = ({
     <div className="flex items-center">
       {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
       <div className="w-full">
-        <h3 className="font-semibold xl:text-lg text-sm">{fileName(name)}</h3>
+        <h3 className="font-semibold xl:text-lg md:text-sm text-lg">{fileName(name)}</h3>
         <p className="lg:text-base text-xs">{date}</p>
       </div>
     </div>
