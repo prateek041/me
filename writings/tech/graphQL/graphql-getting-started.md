@@ -4,17 +4,28 @@ date: 'February 28, 2023'
 description: 'Understand the basics of GraphQL, and how is it comparable to RESTful APIs'
 ---
 
-So, you have been developing RESTful services, where you define routes, that return data you might not even need. The age-old "Underfetching" and "Overfetching" problems.
+So, you have been developing RESTful services, where you define routes, that
+return data you might not even need. The age-old "under-fetching" and
+"over-fetching" problems.
 
-Numerous resources can help you realize why GraphQL can make your work hard, but eventually easier. This article is about helping you learn how to use it in your project. All you need to know is that commonly when using REST APIs, there are different routes related to different entities, i.e. if you want to do something related to the user, you will POST/GET/UPDATE ... to the /user route and similarly, you will use /posts for interacting with Posts related information.
+Numerous resources can help you realize why GraphQL can make your work hard,
+but eventually easier. This article is about helping you learn how to use it
+in your project. All you need to know is that commonly when using REST APIs,
+there are different routes related to different entities, i.e. if you want to
+do something related to the user, you will POST/GET/UPDATE ... To the /user
+route and similarly, you will use /posts for interacting with Posts related information.
 
-But, in the case of GraphQL, you can do all the things with just one route, where you send a request defining what you want to do and the server will do exactly what was asked. Check this small intro:
+But, in the case of GraphQL, you can do all the things with just one route,
+where you send a request defining what you want to do and the server will do
+exactly what was asked. Check this small intro:
 
 [GraphQL Explained in 100 Seconds](https://www.youtube.com/watch?v=eIQh02xuVw4)
 
 ## What is GraphQL
 
-Above we understood the overall concept, now we will be understanding how a developer can use GraphQL in their project. Here is what you have to understand, it might not be the true definition but, GraphQL is a way of defining
+Above we understood the overall concept, now we will be understanding how a
+developer can use GraphQL in their project. Here is what you have to understand,
+it might not be the true definition but, GraphQL is a way of defining
 
 1. What your server can do (using the schema)
 2. Telling it how to do it (using resolvers)
@@ -53,15 +64,25 @@ type Mutation {
 }
 ```
 
-yes, this is huge. but let me point out the obvious things. Here, we have a **User** type, a **Profile** type, a **Query** type and a **Mutation** type.
+Yes, this is huge. but let me point out the obvious things. Here, we have a
+**User** type, a **Profile** type, a **Query** type and a **Mutation** type.
 
-> Note: These types might look like JavaScript objects, but it is not JavaScript, instead it is the GraphQL DSL (Domain specific language), which is made specifically to make the task of writing schema easier. Here each attribute is like an entry/property of that type.
+> Note: These types might look like JavaScript objects, but it is not JavaScript,
+> instead it is the GraphQL DSL (Domain specific language), which is made
+> specifically to make the task of writing schema easier. Here each attribute is
+> like an entry/property of that type.
 
-let's start with the *special* ones, the Query type and Mutation type. These are special ones because these are reserved words, that have special functionality. Just like programming languages have Keywords.
+Let's start with the *special* ones, the Query type and Mutation type. These
+are special ones because these are reserved words, that have special
+functionality. Just like programming languages have Keywords.
 
 * **Query Type:**
 
-This type tells what you can *query* from the server i.e. what you can get from the server. As the name of the first field **getAllUsersProfile** suggests, it returns all user profiles that exist. How? (we use resolvers for that) we don't need to care about that right now because we are in the "what your server can do ?" part. Now let's try to understand the code.
+This type tells what you can *query* from the server i.e. what you can get
+from the server. As the name of the first field **getAllUsersProfile** suggests,
+it returns all user profiles that exist. How? (we use resolvers for that)
+we don't need to care about that right now because we are in the "what your
+server can do ?" part. Now let's try to understand the code.
 
 ```graphql
 type Query {
@@ -70,17 +91,27 @@ type Query {
 }
 ```
 
-The code says *"when you run getAllUsersProfile, you will get an array of Profiles"*. And similarly, **getUserProfile(email: String): Profile** says *"If you run getUserProfile and pass an argument of String type, you will get a profile back". Here is how it looks:*
+The code says *"when you run getAllUsersProfile, you will get an array of
+Profiles"*. And similarly, **getUserProfile(email: String): Profile** says
+*"If you run getUserProfile and pass an argument of String type, you will get
+a profile back". Here is how it looks:*
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1677591450941/1135ae0a-42d9-4b21-9d59-543632a4c608.png)
-
-What you see right now is a "GraphQL playground", where you can test your API by sending it requests. On the left we have the request, on the right side, we have the response, generated from the server. We are passing the email into the *argument* of the request so that the server can identify the user we want to see the profile of. There are a lot of special things going on here, but we will have to wait for them.
+![image of the query](https://cdn.hashnode.com/res/hashnode/image/upload/v1677591450941/1135ae0a-42d9-4b21-9d59-543632a4c608.png)
+What you see right now is a "GraphQL playground", where you can test your API
+by sending it requests. On the left we have the request, on the right side, we
+have the response, generated from the server. We are passing the email into the
+*argument* of the request so that the server can identify the user we want to
+see the profile of. There are a lot of special things going on here, but we will
+have to wait for them.
 
 Similarly, we have another query, getAllUsersProfile, that looks like this
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1677591843735/fcc4f3f1-2dd8-472b-a7b4-da2869876a96.png)
 
-We did not pass any argument here because we don't want any unique user here, we want to see all the users in our database, and that is what we get. See how getAllUsersProfile contains an array of objects? just like we described in the schema above.
+We did not pass any argument here because we don't want any unique user here, we
+want to see all the users in our database, and that is what we get. See how
+getAllUsersProfile contains an array of objects? just like we described in the
+schema above.
 
 Ok, so we use query type to define what we can search from the server. But, we don't always just search, for things like creating a new user, a new post or editing the user profile, we need to *change* something in our database. That is what *mutations* are for.
 

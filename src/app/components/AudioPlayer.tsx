@@ -41,6 +41,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
         ref={audioRef}
         src={`/${audioFile}`}
         onEnded={() => setIsPlaying(false)}
+        loop={true}
       />
       <button
         onClick={togglePlay}
