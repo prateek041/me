@@ -18,7 +18,7 @@ I talk to people who understand, it makes me feel, complete.
 
 There are beautiful views to see, mountains, rivers, valleys, forests and
 so on, the world is filled with beauty. Nature gives me peace. I like to
-just sit alone, in the perfect temprature, watching nature just exist.
+just sit alone, in the perfect temperature, watching nature just exist.
 
 There are tasty things to eat, humans have progressed so much in terms of
 cuisine, as a fellow human, what is the point of being alive if I can't
