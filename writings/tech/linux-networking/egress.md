@@ -3,6 +3,7 @@ title: "Egress Path of an Internet Packet"
 description: "When you create your HTTP server, what happens internally inside
 the kernel"
 date: November 19, 2024
+status: WIP
 ---
 
 ## Egress Path
@@ -88,4 +89,4 @@ No they are not. Any network based application like web-servers, mail clients et
 Needs to use sockets. Sockets are the standard API provided by the kernel for
 applications to communicate with each other.
 
-The process in makes a
+STATUS: WIP
