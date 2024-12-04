@@ -2,19 +2,20 @@
 title: "Egress Path of an Internet Packet"
 description: "When you create your HTTP server, what happens internally inside
 the kernel"
-date: 19 November, 2024
+date: November 19, 2024
 ---
 
 ## Egress Path
 
 The path that network packets follow as they leave the system.
+
 > Network Packet handlers within the kernel like queuing disciplines, XDP etc
 > can modify packets in the egress path before they leave the Network Interface.
 
 Some of the questions this article will answer:
 
 - What happens in the kernel when you send or receive information from the
-Internet? (Egress and Ingress Path of a Packet).
+  Internet? (Egress and Ingress Path of a Packet).
 - What path does it follow?
 - What data structures are used by the Kernel?
 - How is the **OSI/TCP-IP Model** implemented in the kernel?
@@ -23,25 +24,25 @@ Internet? (Egress and Ingress Path of a Packet).
 The application running in the user space is a process, when it needs to
 send or receive anything from the Internet, it happens through the
 Kernel only. So what happens when you create a HTTP, Node JS server using
-**Express**  package.
+**Express** package.
 
 ## Packets journey from User Space to NIC
 
 - User-space socket operation (Application Layer)
   - Web server in User space sends data using the `send()` or `write()`. // is this system call?
   - the call is initiated with three things, which socket to send data to.
-  What is the size of the data and the data itself.
+    What is the size of the data and the data itself.
   - The data exists in the user space and hasn't entered the kernel space,
-  where the networking stack will handle it.
+    where the networking stack will handle it.
 - Transition to kernel Space (System Call Interface)
   - The application layer's `send()` or `recv()` triggers a system call,
-  switching the process from user space to kernel space.
+    switching the process from user space to kernel space.
   - This involves saving application's context, executing kernel code to handle
-  the socket system call.
+    the socket system call.
   - Data is copied from user space buffer to kernel space buffer.
 - TCP/UDP processing
   - Segmentation, adding TCP headers, sequence number and checksum. New
-  connection establishment (if applicable).
+    connection establishment (if applicable).
   - UDP just adds the necessary headers and send the data.
 - Network Layer
   - IP headers, time to live and protocol type information.
@@ -75,7 +76,7 @@ Sockets are **abstractions for network communication**. // there is more here.
 
 - HTTP is an application layer protocol, built on top of TCP.
 - Sockets provide an interface to TCP, allowing HTTP to benefit from
-reliable data transfer, sequencing and error correction.
+  reliable data transfer, sequencing and error correction.
 
 > [!IMPORTANT] When you make an HTTP request, it opens a TCP socket
 > connection, allowing client and server to communicate by sending and

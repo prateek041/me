@@ -1,14 +1,15 @@
 ---
 title: "OSI Model"
 description: "Understanding the What, Why and How of different layers of the OSI model."
-date: 11 November, 2024
+date: November 11, 2024
 ---
+
 ## What is OSI Model
 
 OSI stands of **Open Systems Interconnection**, is a conceptual model that helps
 people understand how different systems can communicate with each other.
-It introduces various concepts like *multiple layers*, *separation of
-concerns* etc. so that it is easier to understand how a device, which is
+It introduces various concepts like _multiple layers_, _separation of
+concerns_ etc. so that it is easier to understand how a device, which is
 connected to the internet is sending and receiving information.
 
 The actual implementation of the networking stack follows something like
@@ -26,7 +27,7 @@ It consists of the following layers:
 - Data Link Layer (Layer 2)
 - Physical Layer (Layer 1)
 
-****
+---
 
 ## Why OSI model
 
@@ -75,7 +76,7 @@ transfer, routing and hardware connections (below layers).
 
 > Not sure if the article is up yet, but I will write how Networking stack is
 > implemented in the Linux based Systems. It should be present [here](https://prateeksigh.tech/writings/tech/linx-networking/ingress-and-egress-path)
->
+
 #### Interoperability
 
 The layered approach makes sure that devices and software from different sellers
@@ -92,7 +93,7 @@ for it.
 There are many more use-cases and benefits in following a layered approach, we
 will appreciate them more with time.
 
-****
+---
 
 ## How it works
 
@@ -165,9 +166,9 @@ manage contacts, compose messages and send them.
 
 - Message Composition: You type your message into the WhatsApp app.
 - Protocol: Application layer protocol like HTTP or WebSocket is used
-at this level to communicate with the WhatsApp servers.
+  at this level to communicate with the WhatsApp servers.
 - Data encoding: Once you press **Send**, WhatsApp formats the message into a
-data format suitable for transmission at this layer. This is typically JSON.
+  data format suitable for transmission at this layer. This is typically JSON.
 
 One common misconception people might have at this moment is that the app is
 interacting with the WhatsApp servers directly at this layer. It is actually
@@ -188,10 +189,10 @@ flexibility of which each layer does.
 
 ##### What happens here
 
-- **Encryption**: You must have seen the *end-to-end encrypted* box over every
-chat you have on WhatsApp. This is because the message is encrypted before it
-leaves the computer. This ensures that no-one other than the receiver can see
-the messages.
+- **Encryption**: You must have seen the _end-to-end encrypted_ box over every
+  chat you have on WhatsApp. This is because the message is encrypted before it
+  leaves the computer. This ensures that no-one other than the receiver can see
+  the messages.
 - **Compression**: If you are sending images or videos it will get compressed here.
 
 Send the data to the Session layer.
@@ -235,7 +236,7 @@ as long as it is "good enough", it doesn't bother you.
 So there are two types of transmissions, **Reliable** and **No Reliable**.
 
 - **Reliable**: For reliable transmission, Layer 4 uses **TCP** (Transmission
-Control Protocol). This ensured reliable transmission of data between the Hosts.
+  Control Protocol). This ensured reliable transmission of data between the Hosts.
 - **Unreliable**: For this, Layer 4 uses **UDP**(User Datagram Protocol).
 
 You can read more about how they work internally on the internet.
@@ -254,7 +255,6 @@ forwarded to.
 > parts and assigning them sequence numbers. So that when the
 > segments are received on the receiver's side, they can be re-assembled in the right
 > order.
->
 
 #### Network Layer (Layer 3)
 
@@ -307,13 +307,13 @@ by the Data Link Layer. This process is done by NIC present in each devices.
 Each frame contains:
 
 - **Source MAC Address**: The Media Access Control (MAC) address of your device’s
-network interface card (NIC).
+  network interface card (NIC).
 - **Destination MAC Address**: The MAC address of the next hop (router or device).
 - **Frame Check Sequence (FCS)**: An error detection mechanism (like CRC) to ensure
-data integrity at the link layer.
+  data integrity at the link layer.
 - **Error Detection**: The Data Link Layer performs error detection to ensure the
-integrity of the data at the hardware level. If an error is detected in the frame,
-it is discarded, and the packet is sent again by the Transport Layer.
+  integrity of the data at the hardware level. If an error is detected in the frame,
+  it is discarded, and the packet is sent again by the Transport Layer.
 
 So, when your message goes from your computer to WhatsApp servers, the **Source
 MAC address** is yours and the **Destination MAC address** is WhatsApp Server's.
@@ -339,23 +339,23 @@ format and then into medium specific signals by the NIC.
 ## Key Takeaways
 
 - **OSI Model Simplifies Networking**: By breaking down complex networking tasks
-into seven layers, the OSI model makes it easier to design, implement, and
-troubleshoot network systems.
+  into seven layers, the OSI model makes it easier to design, implement, and
+  troubleshoot network systems.
 
 - **Layered Approach Enables Modularity**: Each layer focuses on a specific function
-like data routing, error detection, or encryption, allowing developers to specialize
-and work independently on different parts of the networking stack.
+  like data routing, error detection, or encryption, allowing developers to specialize
+  and work independently on different parts of the networking stack.
 
 - **Interoperability Across Systems**: The standardized framework ensures that devices
-and applications from different vendors can communicate seamlessly, promoting
-global connectivity.
+  and applications from different vendors can communicate seamlessly, promoting
+  global connectivity.
 
 - **Enhanced Troubleshooting**: Isolating issues becomes more straightforward when
-errors can be traced to a specific layer, reducing downtime and improving reliability.
+  errors can be traced to a specific layer, reducing downtime and improving reliability.
 
 - **Foundation for Networking Standards**: Understanding the OSI model provides a
-solid foundation for grasping real-world implementations like the TCP/IP stack,
-aiding in the development and maintenance of networked applications.
+  solid foundation for grasping real-world implementations like the TCP/IP stack,
+  aiding in the development and maintenance of networked applications.
 
 ## What next
 
