@@ -1,7 +1,7 @@
 ---
 title: "Building the New Internet from Scratch"
 description: "If we build the internet from scratch, how different will it be from what we already have?"
-date: 11 November, 2024
+date: November 10, 2024
 ---
 
 In order to write **eBPF** programs that interact with the Linux Networking stack,
@@ -66,7 +66,7 @@ So, you and your friend decided to buy an Ethernet cable as your medium,
 that carries binary information in the form of Electrical pulses, these pulses
 travel from your computer to your friend's. As for converting your messages into
 **binary**, let's say for simplicity's sake, your computer has a **messenger** built
-in-a *magical* helper called a **driver**. This driver knows how to convert your
+in-a _magical_ helper called a **driver**. This driver knows how to convert your
 messages into bits and pass it to the Ethernet Cable.
 
 ![Computer Networks](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261309509/0f30cf36-4141-494f-ad99-6bf21b8e6345.png?auto=compress,format&format=webp)
@@ -89,11 +89,11 @@ But there are a few problems.
 ![Computer Networks](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261373376/fa861057-5d78-47d1-9591-e3c6bdf1ca9a.png?auto=compress,format&format=webp)
 
 - There are too many cables now! Each computer has 3 cables connected to it,
-which is causing clutter and your Mom is not liking it. Also your computer has
-limited Ethernet sockets. Less than the number of friends you have.
+  which is causing clutter and your Mom is not liking it. Also your computer has
+  limited Ethernet sockets. Less than the number of friends you have.
 
 - Since there are 4 computers now (A, B, C and D) and if A wants to send
-messages to B, how would A uniquely identify which cable is connected to B?
+  messages to B, how would A uniquely identify which cable is connected to B?
 
 Let's solve the problems one at a time.
 
@@ -163,9 +163,9 @@ want their own separate LAN.
 So, if we break down the problem, here is what we want:
 
 - Your cousin's group should have a separate Local Area Network (LAN) where they
-can talk about their personal things.
+  can talk about their personal things.
 - Your cousin wants to talk to you as well, so you need to figure out a way to
-make these two LANs talk to each other.
+  make these two LANs talk to each other.
 
 ### Setting Up a New LAN
 
@@ -192,16 +192,16 @@ top. It goes from his computer to Y, from Y to X and from X to your computer.
 But, there are still many problems.
 
 - Both X and Y need to constantly be aware of every computer’s physical location
-(which cable connects to which computer). What if there are tens of thousands of
-Computers? X and Y both store the same information and every time anyone new joins
-the Network, the entire table in both X and Y needs to be updated.
-**System is not Scalable enough**.
+  (which cable connects to which computer). What if there are tens of thousands of
+  Computers? X and Y both store the same information and every time anyone new joins
+  the Network, the entire table in both X and Y needs to be updated.
+  **System is not Scalable enough**.
 - Another problem is the current process of addressing is based on **physical presence**
-instead of a logical hierarchy i.e. Switch X needs to know exact address and path
-of every computer in the world. So if there are multiple **Switch** between you and
-your brother's computer, still each Switch needs to know the exact path to be followed
-in order for the message to reach from one place to another. Longer the distance,
-larger the path to remember.
+  instead of a logical hierarchy i.e. Switch X needs to know exact address and path
+  of every computer in the world. So if there are multiple **Switch** between you and
+  your brother's computer, still each Switch needs to know the exact path to be followed
+  in order for the message to reach from one place to another. Longer the distance,
+  larger the path to remember.
 
 You need a way to make the system scalable. Instead of having **Switch X** and
 **Switch Y** know about every device and always needing updates, you want a
@@ -224,7 +224,7 @@ to **R3** will have addresses in **3.x** format.
 
 ![Computer Networks](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261873089/9d7a71a5-e455-4499-9e67-49b4df587be3.png?auto=compress,format&format=webp)
 
-This forms a *hierarchy* telling which computer is within the LAN and which one is
+This forms a _hierarchy_ telling which computer is within the LAN and which one is
 out of it. For **R1**, computer **1.1** is internal since it's address starts
 with 1. And **2.1** (but internal for R2) is external.
 
@@ -235,7 +235,7 @@ older system still works. **R1** just has to send the message to the
 
 ![Computer Networks](https://cdn.hashnode.com/res/hashnode/image/upload/v1731261928960/55f74947-8669-42a3-b171-fa6d8ea17383.png?auto=compress,format&format=webp)
 
-If the destination is external let's say **3.1** , **R1**  doesn't have to know
+If the destination is external let's say **3.1** , **R1** doesn't have to know
 the exact path the message has to follow to reach **3.1**, it just needs
 to know which direction should I pass the message so it eventually reaches **R3**.
 So it passes the message to the next closest device to it, **R2** and **R2** does
@@ -246,9 +246,9 @@ You might be thinking, why? What are the benefits of this? Let's try to
 understand that.
 
 - The older system doesn't change, it is still responsible for sending message
-from one device to it's immediate neighbour another. We just built a higher
-level system so that the older one still works, but the new one makes it
-**dynamic**
+  from one device to it's immediate neighbour another. We just built a higher
+  level system so that the older one still works, but the new one makes it
+  **dynamic**
 
 ##### **Dynamic**
 
@@ -269,7 +269,7 @@ Now let's say our system looks like the diagram below.
 If **R2** has to send a message with destination address of format **1.x**,
 it just knows that it is a local address for the device **R1**. **R2** doesn't
 know the exact path to be followed by this message to reach **R1**. It just knows
-that addresses of the format **1.x** and **5.x**  are somewhere to the left and **4.x**
+that addresses of the format **1.x** and **5.x** are somewhere to the left and **4.x**
 are somewhere to the right (how? We will check it out later) .
 
 It checks the Physical address table to get the Physical address of the device
@@ -279,7 +279,7 @@ the immediate left of **R5** is the address family **1.x**. **R5** gives the
 message to **R1**.
 
 Since **1.1** format is internal for **R1**, there is no need of logical addresses
-anymore. It just get's the Physical address of the computer whose *Logical*
+anymore. It just get's the Physical address of the computer whose _Logical_
 address is **1.1** which is unique for the LAN. Finally sends the message
 to that Physical address and message is delivered to the right destination computer.
 
@@ -291,33 +291,33 @@ from his **R level device**(let's say R1).
 When he comes to your home, he just connects his device to your LAN's
 **R level device** (let's say R2). **R2** stores the physical address of your
 brother's computer and also assigns it a logical address of the format **2.x**.
-The *routing* process still remains the same. And the entire system except **R1**
+The _routing_ process still remains the same. And the entire system except **R1**
 and **R2** is unaware of any changes.
 
 #### Comparison to the Old Internet
 
 This **R** level device is called **Router**. This device is responsible to
-**route** message between any two LANs. The *Logical* addresses assigned by
+**route** message between any two LANs. The _Logical_ addresses assigned by
 the Routers is called **IP addresses**.
 
 The process of assigning logical addresses to newly connected devices, is called
-*IP address assignment* and the protocol that does this is called **DHCP**.
+_IP address assignment_ and the protocol that does this is called **DHCP**.
 
-Routers don't *guess* the right direction to pass the message to, there are many
-router protocols like **OSPF**, **BPG** etc. that keep the *logical* address table
+Routers don't _guess_ the right direction to pass the message to, there are many
+router protocols like **OSPF**, **BPG** etc. that keep the _logical_ address table
 of routers updated. Mapping specific IP ranges to neighbouring routers. Hence
 routers can tell which IP range is on the right and which one is on the Left.
 
 The process of sending message from one device to it's immediate neighbour using
-**MAC** (Physical) addresses  is called **Hop to Hop** delivery.
+**MAC** (Physical) addresses is called **Hop to Hop** delivery.
 
 The process of sending message from sending device's IP address to receiving device's
 IP address is called **End to End Delivery**.
 
-This process of building a *higher level system* like IP addressing over
-*lower level systems* like MAC addressing is called **Abstraction**.
-Here the higher level system relies on lower level system for *Hop to Hop* delivery
-while ensuring *End to End delivery* through it's own addressing system.
+This process of building a _higher level system_ like IP addressing over
+_lower level systems_ like MAC addressing is called **Abstraction**.
+Here the higher level system relies on lower level system for _Hop to Hop_ delivery
+while ensuring _End to End delivery_ through it's own addressing system.
 
 There is a pattern now, even if we are trying to build a new internet from scratch,
 it still looks extremely like the older one! I guess the "forefathers" knew what
@@ -337,7 +337,7 @@ Now there is a need of a system that can turn these computer addresses into
 something easy to remember. But internally your routes and switches will need an
 address to finally get the message to it's destination.
 
-In the old internet, you just type in *google.com* and it takes you to the right
+In the old internet, you just type in _google.com_ and it takes you to the right
 place, it's easy to remember names as compared to computer addresses, and as
 mentioned earlier, these computer addresses keep changing right? Your cousin's
 computer has a different address when he is at his home, and a different one
@@ -362,43 +362,43 @@ now we are trying to make it User friendly.
 ## Key Takeaways
 
 - **We started with basic communication**: Just like sending a letter in the physical
-world, we explored how computers can send messages to each other through a digital
-"medium" (like Ethernet cables or Wi-Fi) and how that message is translated into
-binary.
+  world, we explored how computers can send messages to each other through a digital
+  "medium" (like Ethernet cables or Wi-Fi) and how that message is translated into
+  binary.
 
 - **The need for unique addresses**: As more devices join the network, we faced
-the problem of how to uniquely identify each device. The solution? Assigning
-unique hard-coded physical addresses (MAC addresses) to each device, allowing
-switches to know where to send data.
+  the problem of how to uniquely identify each device. The solution? Assigning
+  unique hard-coded physical addresses (MAC addresses) to each device, allowing
+  switches to know where to send data.
 
 - **The first network expansion**: To manage multiple devices, we set up a LAN with
-one central switch connecting all computers. However, we quickly realized that
-as the network grows, each device can't know about every other device. This led
-us to a more scalable approach.
+  one central switch connecting all computers. However, we quickly realized that
+  as the network grows, each device can't know about every other device. This led
+  us to a more scalable approach.
 
 - **The move to routers and IP addresses**: As the network expands globally,
-we need a system that scales beyond a single LAN. We introduced routers to
-route data between LANs, and IP addresses to uniquely identify devices in
-a hierarchical, dynamic way—allowing us to manage large networks without
-excessive overhead.
+  we need a system that scales beyond a single LAN. We introduced routers to
+  route data between LANs, and IP addresses to uniquely identify devices in
+  a hierarchical, dynamic way—allowing us to manage large networks without
+  excessive overhead.
 
 - **Dynamic addressing**: Instead of updating every device on the Internet
-when a new one joins, we adopted a dynamic addressing system. Routers update
-only their own tables, so the rest of the Internet doesn't need to be aware of
-every change.
+  when a new one joins, we adopted a dynamic addressing system. Routers update
+  only their own tables, so the rest of the Internet doesn't need to be aware of
+  every change.
 
 - **Comparison with the old Internet**: The design of our new Internet mirrors
-key concepts from the old one, such as MAC addresses for local communication
-and IP addresses for global communication. We also explored how routing protocols
-(like OSPF and BGP) help manage data across networks.
+  key concepts from the old one, such as MAC addresses for local communication
+  and IP addresses for global communication. We also explored how routing protocols
+  (like OSPF and BGP) help manage data across networks.
 
 - **The problem of remembering addresses**: As more devices join the network,
-remembering IP addresses becomes impractical. This is where the Domain Name System
-(DNS) comes in—translating easy-to-remember names like "google.com" into the current
-IP addresses of devices, making the system user-friendly.
+  remembering IP addresses becomes impractical. This is where the Domain Name System
+  (DNS) comes in—translating easy-to-remember names like "google.com" into the current
+  IP addresses of devices, making the system user-friendly.
 - **Scalable and dynamic design**: We’ve created a system where new devices can
-join without disrupting the entire network, and where the routing system remains
-efficient even as the Internet continues to grow.
+  join without disrupting the entire network, and where the routing system remains
+  efficient even as the Internet continues to grow.
 
 ## Future Scope
 

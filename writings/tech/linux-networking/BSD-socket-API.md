@@ -21,12 +21,10 @@ Systemd communicating internally. However when the processes are on different
 machines- like when a web browser talks to a web server- the data has to travel
 across networks, which is a different series of steps.
 
-> Diagram for IPC here
-
 In either case, all communication follows a specific route:
 
 - **Ingress Path**: This is the path a packet takes as it enters a system from
-the network.
+  the network.
 - **Egress Path**: This is the path a packet takes when it leaves the system.
 
 To manage this complexity, Linux provides various layers of abstraction,
@@ -52,14 +50,12 @@ Here’s a simple analogy: Imagine a phone call. Each person (process) has a
 unique phone number (address), and the phone line (socket) connects them,
 allowing conversation (data exchange) in both directions.
 
-> Diagram here
-
 Depending on how they operate, sockets can be:
 
 - **Connection-oriented** (e.g., TCP): Establishes a reliable connection before
-data is exchanged.
+  data is exchanged.
 - **Connectionless** (e.g., UDP): Sends data without setting up a dedicated
-connection, which have more data transfer speed but lack reliability.
+  connection, which have more data transfer speed but lack reliability.
 
 Sockets provide an abstraction over the complexities of data transfer. They
 provide a universal interface (API) for applications to talk to each other,
@@ -91,7 +87,7 @@ protocol. For Example:
 - **AF_INET**: Used for IPv4 internet communication.
 - **AF_INET6**: Used for IPv6 internet communication.
 - **AF_UNIX**: Used for local communicatoin between processes on the same
-machine.
+  machine.
 
 ### Address Families
 
@@ -109,10 +105,10 @@ Some common address families in the BSD socket API:
 
 When creating a socket, you specify the address family along with the socket
 type and protocol. This determines the socket’s behavior and the communication
-rules for communication. For instance, an **AF_INET**  socket use **SOCK_STREAM**
+rules for communication. For instance, an **AF_INET** socket use **SOCK_STREAM**
 for **TCP** and **SOCK_DGRAM** for UDP.
 
-----
+---
 
 ### Type of BSD Sockets
 
@@ -120,14 +116,14 @@ There are two types of BSD sockets, depending on the type of communication
 between two processes.
 
 - **SOCK_STREAM**: This is a type that is used to specify that the socket is
-**TCP** type, hence reliable, connection-oriented communication will happen
-through it. **HTTP** internally uses **TCP** therefore every time you create
-a server using HTTP, remember that your server is talking to Kernel through a
-**SOCK_STREAM** type of BSD socket.
+  **TCP** type, hence reliable, connection-oriented communication will happen
+  through it. **HTTP** internally uses **TCP** therefore every time you create
+  a server using HTTP, remember that your server is talking to Kernel through a
+  **SOCK_STREAM** type of BSD socket.
 - **SOCK_DGRAM**: Used with the UDP (User Datagram Protocol) for fast,
-connectionless communication.
+  connectionless communication.
 
-----
+---
 
 ### How does it Work
 
@@ -136,17 +132,17 @@ Through this interface, applications interact with the **Transport** and
 **Network** layers of the Networking stack (OSI model).
 
 The BSD Socket API looks something like this, along with an overview of
-what each method is supposed to do, with an example in *C*:
+what each method is supposed to do, with an example in _C_:
 
 - **socket()**: Creates a Socket
   - This method initializes a new socket, specifying the communication "Address
-  Family" (AF_INET, for IPv4), socket type (eg SOCK_STREAM for TCP) and the
-  protocol. It returns a socket descriptor, which is like a file (linux :D) handle
-  that represents the socket in subsequent operations.
+    Family" (AF_INET, for IPv4), socket type (eg SOCK_STREAM for TCP) and the
+    protocol. It returns a socket descriptor, which is like a file (linux :D) handle
+    that represents the socket in subsequent operations.
   - Example: `int sockfd = socket(AF_INET, SOCKET_STREAM, 0)`
 - **bind()**: Bind the Socket to an Address (IP + Port) (Server Side)
   - bind() function associates with a specific IP address and Port number.
-  Client makes connection request on this socket to establish connection.
+    Client makes connection request on this socket to establish connection.
   - Example: `bind(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr))`
 - **listen()**: Listen for Incoming Connections (Server Side)
   The Listen() function takes a backlog parameter, which is the max number
@@ -154,16 +150,16 @@ what each method is supposed to do, with an example in *C*:
   - Example: `listen(sockfd, 5)`
 - **accept()**: Accept a Client Connection(Server Side)
   - When a client attempts to connect, the server calls accept() to
-  establish the connection. This call creates a new socket specifically for the client
-  connection, allowing server to still listen on the original socket for other
-  connections.
+    establish the connection. This call creates a new socket specifically for the client
+    connection, allowing server to still listen on the original socket for other
+    connections.
   - Example: `int client_sock = accept(sockfd, (struct sockaddr*) &server_addr,
-  sizeof(server_addr))`
+sizeof(server_addr))`
 - **send()** and **recv()**: Data Transfer
   - After a connection with the client is established, both the client and the
-  server can send and receive data using `send()` and `recv()`.
-  Example: `send(sockfd, buffer, strlen(buffer), 0)` and `recv(socffd, buffer,
-  sizeof(buffer), 0)`
+    server can send and receive data using `send()` and `recv()`.
+    Example: `send(sockfd, buffer, strlen(buffer), 0)` and `recv(socffd, buffer,
+sizeof(buffer), 0)`
 - **close()**: Close the socket
   - when the communication is complete, the socket is closed using `close()`
 
@@ -180,17 +176,17 @@ int sockfd = socket(AF_INET, SOCK_STREAM, 0)
 - **`AF_INET`** specifies we're using IPv4 protocol family.
 - **`SOCK_STREAM`** specifies that the socket is for a TCP connection.
 - **`0`** Indicates the system should automatically select the default
-protocol for the given combination of address family and socket type.
+  protocol for the given combination of address family and socket type.
 
 In the above example, we are creating a TCP socket for IPv4. Some of the
 common combinations are as follows.
 
 - `AF_INET` + `SOCK_STREAM`: Default protocol is TCP (Transmission Control
-Protocol).
+  Protocol).
 - `AF_INET` + `SOCK_DGRAM`: Default protocol is UDP (User Datagram
-Protocol).
+  Protocol).
 - `AF_UNIX` + `SOCK_STREAM`: Default protocol is a Unix domain stream
-socket.
+  socket.
 
 ## Conclusion: Why Understanding BSD sockets is Crucial
 
@@ -206,7 +202,7 @@ This knowledge becomes essential in scenarios like:
 - **Building scalable network services**, such as web servers or chat applications.
 - **Optimizing data flow**, between processes for high-performance systems.
 - **Understanding the complete packet lifecycle**, from user space to the **NIC**
-and beyond, which is crucial for understanding how **XDP** and **eBPF** works.
+  and beyond, which is crucial for understanding how **XDP** and **eBPF** works.
 
 Ultimately, mastering these concepts bridges the gap between theory and practice,
 empowering you to design robust, efficient, and scalable networked applications and
@@ -214,4 +210,5 @@ understanding how to interact with the networking stack using **eBPF**. Whether
 you're working on low-level optimizations or developing high-level APIs,
 understanding this foundational layer ensures you have the tools to succeed.
 
-Next we will be looking into the **Egress** and **Ingress** path implementation.
+Next we will be looking into the
+[**Egress** and **Ingress** path implementation](https://www.prateeksingh.tech/writings/tech/linux-networking/egress).

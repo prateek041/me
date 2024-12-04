@@ -29,6 +29,48 @@
     "originalSize": 8311998,
     "compressedSize": 3081197
   },
+  "/home/prateek/Desktop/Dev/me/public/samidare.mp3": {
+    "hash": "30ef91e966095dcd9639aa02dbcdca2d",
+    "lastCompressed": "2024-11-10T19:32:04.667Z",
+    "originalSize": 4143872,
+    "compressedSize": 2994080
+  },
+  "/home/prateek/Desktop/Dev/me/public/tech/home.jpg": {
+    "hash": "931c2ab5b153a0c610858f8c4b7770a7",
+    "lastCompressed": "2024-11-10T19:37:54.515Z",
+    "originalSize": 2222949,
+    "compressedSize": 227424
+  },
+  "/home/prateek/Desktop/Dev/me/public/tech/linux-networking/how-servers-work.jpg": {
+    "hash": "0d7b7e7a70fe0a173ac2852d816ae86a",
+    "lastCompressed": "2024-11-10T19:37:54.934Z",
+    "originalSize": 7751155,
+    "compressedSize": 232038
+  },
+  "/home/prateek/Desktop/Dev/me/public/thoughts/burden-we-carry.jpg": {
+    "hash": "a2476e1a16752e5c7befea82815d1d5b",
+    "lastCompressed": "2024-11-10T19:37:55.332Z",
+    "originalSize": 2982380,
+    "compressedSize": 235004
+  },
+  "/home/prateek/Desktop/Dev/me/public/thoughts/home.jpg": {
+    "hash": "ec2e926ef5c08b67ffdf10c4f5b36ac3",
+    "lastCompressed": "2024-11-10T19:37:55.775Z",
+    "originalSize": 4095758,
+    "compressedSize": 242601
+  },
+  "/home/prateek/Desktop/Dev/me/public/you-say-run.mp3": {
+    "hash": "fad0986d754d7f85eb071c8b1dac14b2",
+    "lastCompressed": "2024-11-10T19:33:36.914Z",
+    "originalSize": 8311998,
+    "compressedSize": 2937957
+  },
+  "public/Samidare-(Early summer Rain).mp3": {
+    "hash": "5fa21aabd8ef82e5703cda69ee1cd0f7",
+    "lastCompressed": "2024-12-04T17:53:56.578734+05:30",
+    "originalSize": 5310935,
+    "compressedSize": 2655536
+  },
   "public/going-for-a-walk.mp3": {
     "hash": "9a13e452bdece1f1effd777084617ea3",
     "lastCompressed": "2024-10-28T01:04:54.297271+05:30",
@@ -64,41 +106,5 @@
     "lastCompressed": "2024-10-28T01:05:41.921651+05:30",
     "originalSize": 8311998,
     "compressedSize": 3081197
-  },
-  "/home/prateek/Desktop/Dev/me/public/samidare.mp3": {
-    "hash": "30ef91e966095dcd9639aa02dbcdca2d",
-    "lastCompressed": "2024-11-10T19:32:04.667Z",
-    "originalSize": 4143872,
-    "compressedSize": 2994080
-  },
-  "/home/prateek/Desktop/Dev/me/public/you-say-run.mp3": {
-    "hash": "fad0986d754d7f85eb071c8b1dac14b2",
-    "lastCompressed": "2024-11-10T19:33:36.914Z",
-    "originalSize": 8311998,
-    "compressedSize": 2937957
-  },
-  "/home/prateek/Desktop/Dev/me/public/tech/home.jpg": {
-    "hash": "931c2ab5b153a0c610858f8c4b7770a7",
-    "lastCompressed": "2024-11-10T19:37:54.515Z",
-    "originalSize": 2222949,
-    "compressedSize": 227424
-  },
-  "/home/prateek/Desktop/Dev/me/public/tech/linux-networking/how-servers-work.jpg": {
-    "hash": "0d7b7e7a70fe0a173ac2852d816ae86a",
-    "lastCompressed": "2024-11-10T19:37:54.934Z",
-    "originalSize": 7751155,
-    "compressedSize": 232038
-  },
-  "/home/prateek/Desktop/Dev/me/public/thoughts/burden-we-carry.jpg": {
-    "hash": "a2476e1a16752e5c7befea82815d1d5b",
-    "lastCompressed": "2024-11-10T19:37:55.332Z",
-    "originalSize": 2982380,
-    "compressedSize": 235004
-  },
-  "/home/prateek/Desktop/Dev/me/public/thoughts/home.jpg": {
-    "hash": "ec2e926ef5c08b67ffdf10c4f5b36ac3",
-    "lastCompressed": "2024-11-10T19:37:55.775Z",
-    "originalSize": 4095758,
-    "compressedSize": 242601
   }
 }
