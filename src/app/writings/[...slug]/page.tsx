@@ -10,6 +10,7 @@ import AudioPlayer from "@/app/components/AudioPlayer";
 import type { Metadata } from "next";
 import Head from "next/head"
 import remarkGfm from "remark-gfm";
+import Impression from "@/app/components/Impressions";
 
 export const metadata: Metadata = {
   title: "writings",
@@ -18,8 +19,9 @@ export const metadata: Metadata = {
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
+  const articlePath = `${pathName}/${params.slug.join("/")}.md`
   const file = await fs.readFile(
-    `${pathName}/${params.slug.join("/")}.md`,
+    articlePath,
     "utf8",
   );
   const isTech = params.slug.includes("tech");
@@ -31,6 +33,8 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
     .use(remarkGfm)
     .use(html)
     .process(matterResult.content);
+
+  // TODO: get likes, comments and number of shares here and pass down to impressions.
 
   const contentHtml = processedMarkdown.toString();
   return (
@@ -73,6 +77,9 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
         <div className="flex w-full max-w-screen-2xl bg-gray-100 relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
           <ArticleContent pageContent={contentHtml} />
         </div>
+      </div>
+      <div className="xl:p-5 lg:p-2 rounded-t-xl w-1/2 absolute flex justify-center mx-auto bottom-0 bg-[#E9E3E2]">
+        <Impression articleName={params.slug} />
       </div>
     </>
 
