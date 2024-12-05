@@ -363,7 +363,7 @@ We will be understanding how this is implemented in the Linux networking stack,
 What happens in each layer, how the code looks in C and how data in each layer looks
 like.
 
-We will follow the entire **Egress** and **Ingress** path of data from and to
+We will follow the entire [**Egress** and **Ingress** path](/writings/tech/linux-networking/Egress-path-part-1.md) of data from and to
 a Linux based machine.
 
 Stay Tuned.
