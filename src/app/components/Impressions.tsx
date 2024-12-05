@@ -1,5 +1,5 @@
 "use client"
-import { BiHeart, BiComment, BiShare, BiSolidHeart, BiCheck } from "react-icons/bi"
+import { BiHeart, BiShare, BiSolidHeart, BiCheck } from "react-icons/bi"
 import { useImpressions } from "../hooks/impressions"
 
 interface ImpressionProps {
