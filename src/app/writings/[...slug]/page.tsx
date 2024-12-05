@@ -9,6 +9,7 @@ import emoji from "remark-emoji";
 import AudioPlayer from "@/app/components/AudioPlayer";
 import type { Metadata } from "next";
 import Head from "next/head"
+import remarkGfm from "remark-gfm";
 
 export const metadata: Metadata = {
   title: "writings",
@@ -27,6 +28,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const matterResult = matter(file);
   const processedMarkdown = await remark()
     .use(emoji)
+    .use(remarkGfm)
     .use(html)
     .process(matterResult.content);
 
