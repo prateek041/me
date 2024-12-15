@@ -19,7 +19,7 @@ const LookingFor = () => {
             <ul className="list-disc">
               {lookingforContent.map(content => {
                 return (
-                  <li>
+                  <li key={content} >
                     <LookingForItem item={content} />
                   </li>
                 )
