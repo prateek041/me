@@ -1,24 +1,37 @@
 ---
-title: 'Building Kubernetes Operators'
-date: 'September 14, 2023'
-description: 'Understanding the Kubernetes API and build Kubernetes Operators'
+title: "Building Kubernetes Operators"
+date: "September 14, 2023"
+description: "Understanding the Kubernetes API and build Kubernetes Operators"
 ---
 
-In the next 12 minutes, you will gain the pre-requisite knowledge needed to create your own Custom Resource Definitions. You will also develop a different image of the working of Kunernetes and how to look at it as a Developer rather than a User.
+In the next 12 minutes, you will gain the pre-requisite knowledge needed to create
+your own Custom Resource Definitions. You will also develop a different image of
+the working of Kunernetes and how to look at it as a Developer rather than a User.
 
-This is the first article of a series "Building Custom Kubernetes Operators", where we will start from ground zero to end with creating a custom operator.
+This is the first article of a series "Building Custom Kubernetes Operators",
+where we will start from ground zero to end with creating a custom operator.
 
 ## Why Build an Operator
 
-A custom resource + the controller is called an operator. Kubernetes operators extend the cluster's behavior without modifying the code of Kubernetes itself by linking controllers to one or more custom resources. Adding new features in the main Kubernetes Repository is a long task that needs a lot of reviews, discussions etc. It might not be needed by other organizations using Kubernetes, so an organization can build an operator, that adds new features to their Kubernetes Cluster and not the main Kubernetes code base.
+A custom resource + the controller is called an operator. Kubernetes operators extend
+the cluster's behavior without modifying the code of Kubernetes itself by linking
+controllers to one or more custom resources. Adding new features in the main Kubernetes
+Repository is a long task that needs a lot of reviews, discussions etc. It might
+not be needed by other organizations using Kubernetes, so an organization can build
+an operator, that adds new features to their Kubernetes Cluster and not the main
+Kubernetes code base.
 
-To extend the behavior of anything, it is very important to understand how that thing works, that is what this article is for.
+To extend the behavior of anything, it is very important to understand how that thing
+works, that is what this article is for.
 
 ## What is Kubernetes
 
-A lot of things must come to your mind when you hear the word Kubernetes, but at the end of the day, it is software, written in a programming language (Go) and following certain principles so that things are consistent with every update.
+A lot of things must come to your mind when you hear the word Kubernetes, but at
+the end of the day, it is software, written in a programming language (Go) and following
+certain principles so that things are consistent with every update.
 
-When I call it software, you might think of it as a single binary, like the Visual Studio Code application, but it is a little different, instead, it is a collection of binaries, which are available as images that can be run inside a container runtime (Fancy word for an application that provides an environment to run the images).
+When I call it software, you might think of it as a single binary, like the Visual
+Studio Code application, but it is a little different, instead, it is a collection of binaries, which are available as images that can be run inside a container runtime (Fancy word for an application that provides an environment to run the images).
 
 ![Kubernetes cluster image from Kubernetes.io](https://cdn.hashnode.com/res/hashnode/image/upload/v1694663629146/7f151747-7202-45c1-b2cf-7349cb8cafa5.png)
 
@@ -36,7 +49,7 @@ From now on, we will call these Building Blocks **Resources**.
 
 ## Resources and Controllers
 
-Alternatively, you can imagine the working of Kubernetes as a combined effort of **Controllers** and **Resources**. Resources are *things* like **Pods** and Controllers are *loops* that manage them (Creating, Updating and Deleting). So, let's take an example of Deployments, this workflow will help you understand things better.
+Alternatively, you can imagine the working of Kubernetes as a combined effort of **Controllers** and **Resources**. Resources are _things_ like **Pods** and Controllers are _loops_ that manage them (Creating, Updating and Deleting). So, let's take an example of Deployments, this workflow will help you understand things better.
 
 ```yaml
 apiVersion: apps/v1
@@ -60,14 +73,14 @@ spec:
 
 Consider the above deployment, when that is applied to the cluster using `` `kubectl apply -f deployment.yaml` `` the following things happen.
 
-* API server receives the object and validates the syntax, if it is valid, it will create or update the Deployment object in the **etcd** datastore.
-* The **Deployment** **controller** watches all the changes happening with Deployment objects in the **etcd** datastore and gets triggered. The controller then creates corresponding **replica sets.** A replica set for the above deployment will look like this.
+- API server receives the object and validates the syntax, if it is valid, it will create or update the Deployment object in the **etcd** datastore.
+- The **Deployment** **controller** watches all the changes happening with Deployment objects in the **etcd** datastore and gets triggered. The controller then creates corresponding **replica sets.** A replica set for the above deployment will look like this.
 
 ```yaml
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: my-deployment-1234567890  # An automatically generated name
+  name: my-deployment-1234567890 # An automatically generated name
 spec:
   replicas: 3
   selector:
@@ -83,8 +96,8 @@ spec:
           image: nginx:latest
 ```
 
-* The Job of **Replica sets** is to ensure that the same number of pods, as mentioned in the Deployment (that created the replica set), are always running. How does that work? The **Replica Set controller.**
-* The **Replica Set controller** watches the Replica sets and ensures the actual number of running pods is the same as mentioned in the **Replica Sets**.
+- The Job of **Replica sets** is to ensure that the same number of pods, as mentioned in the Deployment (that created the replica set), are always running. How does that work? The **Replica Set controller.**
+- The **Replica Set controller** watches the Replica sets and ensures the actual number of running pods is the same as mentioned in the **Replica Sets**.
 
 This pattern can be seen in a lot of places inside Kubernetes, for the **Services** we have the **Service Controller** etc. There might be questions regarding how these controllers know if something they care about (their respective objects) has changed. Informers are core concepts that do that, we will talk about them later.
 
@@ -94,7 +107,7 @@ So, if Kubernetes has let's say 10 core blocks (Resources like Pods, Deployments
 
 ## Kubernetes API (Server)
 
-Just like any other API, Kubernetes API is the Interface through which you can access some "Functionality" of the cluster. Just like this [Cat facts API](https://documenter.getpostman.com/view/1946054/S11HvKSz), where you can do a **GET** request, and it will return a random fact about cats. Interactions with the **Kubernetes API** perform the same results, instead of cats, it does *things* to the Kubernetes Cluster it belongs to.
+Just like any other API, Kubernetes API is the Interface through which you can access some "Functionality" of the cluster. Just like this [Cat facts API](https://documenter.getpostman.com/view/1946054/S11HvKSz), where you can do a **GET** request, and it will return a random fact about cats. Interactions with the **Kubernetes API** perform the same results, instead of cats, it does _things_ to the Kubernetes Cluster it belongs to.
 
 For a newcomer, there are fewer chances that they have interacted with their Kubernetes cluster using the API server "**Directly"** and have used **Kubectl** instead. That directly is bold for a reason, the fact is, every interaction with the cluster is done via the API Server. **Kubectl** for instance, is just a utility, that helps in making that interaction with the API server easier, Under the hood, it is doing the same thing i.e. HTTP requests to the server.
 
@@ -136,10 +149,10 @@ There will be two additional lines on the terminal this time. Look carefully at 
 
 The `--v=6` flag is used to increase the verbosity of logs generated by Kubectl. The second line in the logs clearly shows that Kubectl made an HTTP request to that URL. Let's try to understand that URL now, through this, Kubernetes concepts like **Group Version Kind** and **Group Version Resource** can be understood.
 
-* `https://127.0.0.1:43877/`: It is the address (IP address and Port number) at which the Kubernetes API server is listening, Anything that is done with the cluster through Kubectl, will eventually be converted into a URL and sent to this address.
-* `/v1`: This tells the specific API version being used, Yes there are multiple API versions in Kubernetes for which you can read this.
-* `/namespaces/kube-systm`: Is used to specify that the resources are to be checked in a specific namespace, that namespace being kube-system.
-* `/pods`: This is specifying the **Resource** that is being interacted with.
+- `https://127.0.0.1:43877/`: It is the address (IP address and Port number) at which the Kubernetes API server is listening, Anything that is done with the cluster through Kubectl, will eventually be converted into a URL and sent to this address.
+- `/v1`: This tells the specific API version being used, Yes there are multiple API versions in Kubernetes for which you can read this.
+- `/namespaces/kube-systm`: Is used to specify that the resources are to be checked in a specific namespace, that namespace being kube-system.
+- `/pods`: This is specifying the **Resource** that is being interacted with.
 
 Combining line number two says, **"Kubernetes API server** listening on `https://127.0.0.1:43877/` **GET** me all the `/pods` in the `kube-system` namespace". Now let's understand the additional stuff mentioned.
 
@@ -161,21 +174,21 @@ Now the final part, **Kinds** and **Resources**. They are familiar sounding but 
 
 Up till now, we understood the following:
 
-* API server and URLs: The Kubernetes API server is the core component for managing and interacting with the cluster. API requests are made using URLs structured as `<api-server-address>/api/<Group>/<Version>/namespaces/<Namespace>/resource`.
-* URL Components:
-  * `<api-server-address>`: The address of the Kubernetes API server.
-  * `<Group>`: The API group, is used to categorize the resources for easier management.
-  * `<Version>`: The API version, defining the API schema (allowed features for that version), where different schema can have the same resources providing different and more stable functionalities.
-  * `<namespaces/Namespace>`: Optional, used to tell that the resources should be looked for in a specific namespace.
-  * `<resource>`: The specific resource type you want to interact with.
-  * Examples: To get all the pods in the `hello` namespace, the URL used will be `https://<api-server-address>/api/v1/namespaces/hello/pods` and to get deployments in the `default` namespace, the URL for the **GET** method will be  
-        `https://<api-server-address>/apis/apps/v1/namespaces/default/deployments`.
+- API server and URLs: The Kubernetes API server is the core component for managing and interacting with the cluster. API requests are made using URLs structured as `<api-server-address>/api/<Group>/<Version>/namespaces/<Namespace>/resource`.
+- URL Components:
+  - `<api-server-address>`: The address of the Kubernetes API server.
+  - `<Group>`: The API group, is used to categorize the resources for easier management.
+  - `<Version>`: The API version, defining the API schema (allowed features for that version), where different schema can have the same resources providing different and more stable functionalities.
+  - `<namespaces/Namespace>`: Optional, used to tell that the resources should be looked for in a specific namespace.
+  - `<resource>`: The specific resource type you want to interact with.
+  - Examples: To get all the pods in the `hello` namespace, the URL used will be `https://<api-server-address>/api/v1/namespaces/hello/pods` and to get deployments in the `default` namespace, the URL for the **GET** method will be  
+     `https://<api-server-address>/apis/apps/v1/namespaces/default/deployments`.
 
 ## Controllers
 
-Controllers are the **loops** that are responsible for implementing "what to do when a certain thing changes in the cluster". They are configured to watch for changes in a specific **Resource** (e.g.: Deployment Resource) and *do something* when the change happens (e.g.: Create Replica set resources). The developer writing the controller is responsible for deciding what the controller does when triggered.
+Controllers are the **loops** that are responsible for implementing "what to do when a certain thing changes in the cluster". They are configured to watch for changes in a specific **Resource** (e.g.: Deployment Resource) and _do something_ when the change happens (e.g.: Create Replica set resources). The developer writing the controller is responsible for deciding what the controller does when triggered.
 
-Example: For this [Deployment](https://github.com/kubernetes/api/blob/master/apps/v1/types.go#L354-L369), we have this [Deployment Controller](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go). Now, most of the code might not be understood (yet) but that **Deployment** struct is used to *define* what the deployment resource would look like, and the controller is responsible for [Creating](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L182), [Updating](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L188), [Deleting](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L195) Deployments, also responsible for tasks like [Creating Replica Sets](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L214) and so on. All it knows is, "Something happened with the Deployment of this **Name** in this **Namespace**" and it contains logic to check what happened, and also how to reflect the changes in the **Replica set** objects. Where the changes in Replica Sets are watched by the Replica Set controller.
+Example: For this [Deployment](https://github.com/kubernetes/api/blob/master/apps/v1/types.go#L354-L369), we have this [Deployment Controller](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go). Now, most of the code might not be understood (yet) but that **Deployment** struct is used to _define_ what the deployment resource would look like, and the controller is responsible for [Creating](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L182), [Updating](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L188), [Deleting](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L195) Deployments, also responsible for tasks like [Creating Replica Sets](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/deployment/deployment_controller.go#L214) and so on. All it knows is, "Something happened with the Deployment of this **Name** in this **Namespace**" and it contains logic to check what happened, and also how to reflect the changes in the **Replica set** objects. Where the changes in Replica Sets are watched by the Replica Set controller.
 
 They don't need a custom resource, they can watch any resource present inside the cluster (if they have properly configured RBAC), and get triggered when the resource changes. So, in later stages, when we extend our platform (Kubernetes), we create a new controller, and if needed, we also create a new Custom Resource (and a controller for it).
 
@@ -183,7 +196,7 @@ Thorough understanding can be gained by building an operator, this article is ju
 
 ## Extending the Kubernetes API
 
-In simple words, it's all about creating a new Resource, the controller managing it and registering it to the API schema. To create a new *block* for the platform, four things are needed, a new **Group**, a **Version** (start with v1alpha1), a **Kind** (choose a name) and a **Controller** to implement the Business logic related to that Resource. Various tools like **Kubebuilder** help make these tasks easier, but eventually, the Go [Controller Runtime](https://pkg.go.dev/sigs.k8s.io/controller-runtime) package is the core, everything else is built on top of it.
+In simple words, it's all about creating a new Resource, the controller managing it and registering it to the API schema. To create a new _block_ for the platform, four things are needed, a new **Group**, a **Version** (start with v1alpha1), a **Kind** (choose a name) and a **Controller** to implement the Business logic related to that Resource. Various tools like **Kubebuilder** help make these tasks easier, but eventually, the Go [Controller Runtime](https://pkg.go.dev/sigs.k8s.io/controller-runtime) package is the core, everything else is built on top of it.
 
 ### Ending Remarks
 
