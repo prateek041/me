@@ -17,18 +17,13 @@ const LookingFor = () => {
           </h1>
           <div className="p-5">
             <ul className="list-disc">
-              <li>
-                <h2>Developer Relations</h2>
-              </li>
-              <li>
-                <h2>Cloud Native Products</h2>
-              </li>
-              <li>
-                <h2>eBPF, Observability and Kernel Engineering</h2>
-              </li>
-              <li>
-                <h2>AI powered product Development</h2>
-              </li>
+              {lookingforContent.map(content => {
+                return (
+                  <li>
+                    <LookingForItem item={content} />
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </div>
@@ -44,5 +39,17 @@ const LookingFor = () => {
     </motion.div>
   );
 };
+
+const lookingforContent = [
+  "Developer Relations",
+  "eBPF, Observability and Kernel Engineering",
+  "AI powered product development"
+]
+
+const LookingForItem = ({ item }: { item: string }) => {
+  return (
+    <h2 className="text-2xl">{item}</h2>
+  )
+}
 
 export default LookingFor;

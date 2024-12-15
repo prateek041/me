@@ -37,7 +37,7 @@ const MyWork = () => {
 const PageContent = [
   {
     link: "https://github.com/Senseii-ai",
-    heading: "Senseii",
+    heading: "Senseii (Code Private)",
     description: "AI driven Health and Fitness App",
     tech: "NextJS(Typescript), NodeJS, LangChain, Openai, Mongodb",
     year: "/23",
