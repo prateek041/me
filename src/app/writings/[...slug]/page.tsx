@@ -7,16 +7,10 @@ import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
 import emoji from "remark-emoji";
 import AudioPlayer from "@/app/components/AudioPlayer";
-import type { Metadata } from "next";
 import Head from "next/head";
 import remarkGfm from "remark-gfm";
 import Impression from "@/app/components/Impressions";
 import Script from "next/script";
-
-export const metadata: Metadata = {
-  title: "writings",
-  description: "A public, written diary of what I write",
-};
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
@@ -40,12 +34,20 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
       <Head>
         <title>{matterResult.data.title}</title>
         <meta name="description" content={matterResult.data.description} />
+        <meta name="keywords" content="blog, articles, tech, writings" />
+        <meta name="robots" content="index, follow" />
+        <link
+          rel="canonical"
+          href={`https://prateeksingh.tech/writings/${params.slug.join("/")}`}
+        />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="article" />
         <meta property="og:title" content={matterResult.data.title} />
         <meta
           property="og:description"
           content={matterResult.data.description}
         />
-        <meta property="og:type" content="article" />
         <meta
           property="og:url"
           content={`https://prateeksingh.tech/writings/${params.slug.join(
@@ -53,22 +55,24 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           )}`}
         />
         <meta property="og:image" content={imagePath} />
+
+        {/* Twitter Cards */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:image:secure_url" content={imagePath} />
         <meta name="twitter:title" content={matterResult.data.title} />
+        <meta
+          name="twitter:description"
+          content={matterResult.data.description}
+        />
         <meta name="twitter:image" content={imagePath} />
+        <meta name="twitter:site" content="@YourTwitterHandle" />
+        <meta name="twitter:creator" content="@YourTwitterHandle" />
+
         {matterResult.data.date && (
           <meta
             property="article:published_time"
             content={matterResult.data.date}
           />
         )}
-        <meta name="keywords" content="blog, articles, tech, writings" />
-        <meta name="robots" content="index, follow" />
-        <link
-          rel="canonical"
-          href={`https://prateeksingh.tech/writings/${params.slug.join("/")}`}
-        />
       </Head>
       <Script
         id="structured-data"
