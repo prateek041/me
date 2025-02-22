@@ -8,9 +8,10 @@ import Image from "next/image";
 import emoji from "remark-emoji";
 import AudioPlayer from "@/app/components/AudioPlayer";
 import type { Metadata } from "next";
-import Head from "next/head"
+import Head from "next/head";
 import remarkGfm from "remark-gfm";
 import Impression from "@/app/components/Impressions";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "writings",
@@ -19,14 +20,11 @@ export const metadata: Metadata = {
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
-  const articlePath = `${pathName}/${params.slug.join("/")}.md`
-  const file = await fs.readFile(
-    articlePath,
-    "utf8",
-  );
+  const articlePath = `${pathName}/${params.slug.join("/")}.md`;
+  const file = await fs.readFile(articlePath, "utf8");
   const isTech = params.slug.includes("tech");
 
-  const imagePath = `/${params.slug.join("/")}.jpg`
+  const imagePath = `/${params.slug.join("/")}.jpg`;
   const matterResult = matter(file);
   const processedMarkdown = await remark()
     .use(emoji)
@@ -43,18 +41,49 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
         <title>{matterResult.data.title}</title>
         <meta name="description" content={matterResult.data.description} />
         <meta property="og:title" content={matterResult.data.title} />
-        <meta property="og:description" content={matterResult.data.description} />
+        <meta
+          property="og:description"
+          content={matterResult.data.description}
+        />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://prateeksingh.tech/writings/${params.slug.join("/")}`} />
+        <meta
+          property="og:url"
+          content={`https://prateeksingh.tech/writings/${params.slug.join(
+            "/"
+          )}`}
+        />
         <meta property="og:image" content={imagePath} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="og:image:secure_url" content={imagePath} />
         <meta name="twitter:title" content={matterResult.data.title} />
         <meta name="twitter:image" content={imagePath} />
         {matterResult.data.date && (
-          <meta property="article:published_time" content={matterResult.data.date} />
+          <meta
+            property="article:published_time"
+            content={matterResult.data.date}
+          />
         )}
+        <meta name="keywords" content="blog, articles, tech, writings" />
+        <meta name="robots" content="index, follow" />
+        <link
+          rel="canonical"
+          href={`https://prateeksingh.tech/writings/${params.slug.join("/")}`}
+        />
       </Head>
+      <Script
+        id="structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: matterResult.data.title,
+            datePublished: matterResult.data.date || "",
+            author: "Prateek Singh",
+            description: matterResult.data.description,
+          }),
+        }}
+      />
       <div className="container w-full md:mx-10 md:my-5 my-10 scroll-smooth">
         <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
           <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center">
@@ -92,7 +121,6 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
         <Impression articleName={params.slug} />
       </div>
     </>
-
   );
 };
 

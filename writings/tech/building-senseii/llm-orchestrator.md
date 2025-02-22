@@ -1,8 +1,8 @@
 ---
 title: "LLM Driven Function Orchestrator"
 description: "Learn about my LLM-driven function orchestrator, which makes AI Agent driven systems Fast, Autonomous, Robust and Self Correcting"
-date: November 24, 2024
-status: WIP
+date: February 22, 2025
+status: Published
 ---
 
 Engineering is all about solving problems, and in the real world, a system
