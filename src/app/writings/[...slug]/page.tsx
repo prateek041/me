@@ -48,6 +48,12 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
         <meta property="og:url" content={`https://prateeksingh.tech/writings/${params.slug.join("/")}`} />
         <meta property="og:image" content={imagePath} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:image:secure_url" content={imagePath} />
+        <meta name="twitter:title" content={matterResult.data.title} />
+        <meta name="twitter:image" content={imagePath} />
+        {matterResult.data.date && (
+          <meta property="article:published_time" content={matterResult.data.date} />
+        )}
       </Head>
       <div className="container w-full md:mx-10 md:my-5 my-10 scroll-smooth">
         <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
