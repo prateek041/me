@@ -141,4 +141,4 @@ In the next article, we will try to understand the working of the **Open Telemet
 Collector**. That will help us better understand observability and how to make
 our own systems observable.
 
-Next -> **Otel Collector** (to be continued)
+Next -> [Otel Collector](/writings/tech/observability/OTel-collector)

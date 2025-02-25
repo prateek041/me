@@ -64,8 +64,8 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           content={matterResult.data.description}
         />
         <meta name="twitter:image" content={imagePath} />
-        <meta name="twitter:site" content="@YourTwitterHandle" />
-        <meta name="twitter:creator" content="@YourTwitterHandle" />
+        <meta name="twitter:site" content="@prateek_0041" />
+        <meta name="twitter:creator" content="@prateek_0041" />
 
         {matterResult.data.date && (
           <meta
@@ -82,7 +82,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
             "@context": "https://schema.org",
             "@type": "Article",
             headline: matterResult.data.title,
-            datePublished: matterResult.data.date || "",
+            datePublished: getDate(matterResult.data.date) || "",
             author: "Prateek Singh",
             description: matterResult.data.description,
           }),
@@ -153,5 +153,11 @@ const getArticlePaths = (blog: FileSystemNode[]) => {
     }
   }
 };
+
+const getDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const isoDate = date.toISOString()
+  return isoDate
+}
 
 export default LifeArticle;
