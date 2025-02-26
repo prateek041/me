@@ -5,8 +5,9 @@ date: February 25, 2025
 ---
 
 OTel Collector is the core of [OTel Framework](/writings/tech/observability/observability-101)
-It is a binary, that can be configured using a `YAML` file. It is community maintained,
-supports a lot of configurations and plugins.
+It is a binary, that can be configured using a `YAML` file and can be used to
+set up telemetry data pipelines in a wide variety of environments. It is
+community maintained, supports a lot of configurations and plugins.
 
 ## Why we need a Collector
 
