@@ -228,6 +228,6 @@ Through this article you get a mental model of how the configuration of OTel col
 works, how different components work, what components are provided by the
 community and how to incorporate it in your observability solutions.
 
-In the next article we will talk about how to install the OTel collector on a
-kubernetes cluster, process the telemetry data and make sense of it using a
+In the next article we will go deeper, talk about how to install the OTel collector
+on a kubernetes cluster, process the telemetry data and make sense of it using a
 backend tool.
