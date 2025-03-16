@@ -11,6 +11,7 @@ import Head from "next/head";
 import remarkGfm from "remark-gfm";
 import Impression from "@/app/components/Impressions";
 import Script from "next/script";
+import remarkPrism from "remark-prism";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
@@ -22,6 +23,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const matterResult = matter(file);
   const processedMarkdown = await remark()
     .use(emoji)
+    // .use(remarkPrism)
     .use(remarkGfm)
     .use(html)
     .process(matterResult.content);
