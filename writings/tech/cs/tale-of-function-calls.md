@@ -1,7 +1,7 @@
 ---
 title: "Tale of Function Calls"
 description: "What happens at the kernel level, when function in your program calls another."
-date: "April 18, 2025"
+date: "April 13, 2025"
 ---
 
 Have you ever wondered what happens at the kernel level when a function `caller`
@@ -17,7 +17,7 @@ your system. Which includes understanding of the following concepts:
 - The Journey from source code to executable binary.
 - Executable files and their sections (e.g. ELF format).
 - Private Virtual Address Space and its growth.
-  If the topics are unfamiliar, I recommend reading [Tale of an Executable](https://www.prateeksingh.tech/writings/tech/cs/tale-of-executable)
+  If the topics are unfamiliar, I recommend reading [Tale of an Executable](https://www.prateeksingh.tech/writings/tech/cs/tale-of-executable-program)
   along with [ELF](https://www.prateeksingh.tech/writings/tech/ebpf/elf).
 
 ## How Information is Passed Between Functions
