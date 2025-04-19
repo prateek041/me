@@ -21,7 +21,7 @@ const FileExplorer = ({
     );
   });
   return (
-    <div className={`${isMobile ? "w-full" : "border-r"} border-black h-full`}>
+    <div className={`${isMobile ? "w-full" : ""} border-black h-full`}>
       <ul>
         {articlesSortedByTime?.map((node) => (
           <FileNode key={node.id} node={node} />
@@ -65,7 +65,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
             )
           ) : isFile ? (
             <Link href={`/${filePath(node.articlePath)}`}>
-              <div className="flex items-center gap-x-2 border border-b-black py-1 mx-5">
+              <div className="flex items-center gap-x-2 py-1 mx-5">
                 <TbPointFilled />
                 <div className="flex flex-col w-full gap-y-0 gap-x-2">
                   <h3 className="lg:text-sm md:text-xs text-base">

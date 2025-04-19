@@ -3,7 +3,7 @@ import { ModeToggle } from "./ModeToggle";
 
 const Navbar = () => {
   return (
-    <div className="container fixed z-20 inset-x-0 top-0 h-10 mx-auto flex w-full justify-between items-center md:px-0 px-10">
+    <div className="container bg-background/80 fixed z-20 inset-x-0 top-0 h-10 mx-auto flex w-full justify-between items-center md:px-0 px-10">
       <Link href={"/"}>
         <div>
           <h1 className="">Prateek Singh</h1>
