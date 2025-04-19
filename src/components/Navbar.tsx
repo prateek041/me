@@ -1,30 +1,24 @@
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "./ui/navigation-menu";
 
 const Navbar = () => {
   return (
-    <div className="container bg-background/80 fixed z-20 inset-x-0 top-0 h-10 mx-auto flex w-full justify-between items-center md:px-0 px-10">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href={"/"}>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <h1 className="text-2xl">Prateek Singh</h1>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
+    <div className="container bg-background/40 backdrop-blur-lg fixed z-20 inset-x-0 top-0 h-14 mx-auto w-full">
+      <div className=" h-full rounded-bl-md rounded-br-sm px-5 flex justify-between items-center">
+        <div className="flex gap-x-5">
+          <Link href={"/"}>
+            <div>
+              <h1 className="text-lg font-semibold">Prateek Singh</h1>
+            </div>
+          </Link>
+          <div className="flex justify-between space-x-5 items-center">
             <Link href={"/writings/life/journey-so-far"}>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <h1 className="text-xl">Writings</h1>
-              </NavigationMenuLink>
+              <p className="text-base font-medium">
+                Writings
+              </p>
             </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-      <div className="flex items-center space-x-1">
+          </div>
+        </div>
         <ModeToggle />
       </div>
     </div>

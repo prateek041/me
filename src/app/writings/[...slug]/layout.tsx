@@ -24,7 +24,7 @@ export default function WritingLayout({
 
   return (
     <div
-      className={`mt-10 w-full`}
+      className={`mt-10 w-full container mx-auto`}
     >
       <SidebarProvider>
         <AppSidebar nodes={blogStructure} />

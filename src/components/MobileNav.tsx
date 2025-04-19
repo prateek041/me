@@ -6,22 +6,22 @@ import WritingNav from "./WritingNav";
 import { IoIosArrowBack } from "react-icons/io";
 import { FileSystemNode } from "@/app/writings/api/blog";
 
-const MobileNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
-  };
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className="container z-10 fixed mx-auto px-5">
-      {isOpen ? (
-        <OpenNav toggleOpen={toggleOpen} nodes={nodes} />
-      ) : (
-        <ClosedNav toggleOpen={toggleOpen} />
-      )}
-    </div>
-  );
-};
-
+// const MobileNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
+//   const toggleOpen = () => {
+//     setIsOpen(!isOpen);
+//   };
+//   const [isOpen, setIsOpen] = useState(false);
+//   return (
+//     <div className="container z-10 fixed mx-auto px-5">
+//       {isOpen ? (
+//         <OpenNav toggleOpen={toggleOpen} nodes={nodes} />
+//       ) : (
+//         <ClosedNav toggleOpen={toggleOpen} />
+//       )}
+//     </div>
+//   );
+// };
+//
 const ClosedNav = ({ toggleOpen }: { toggleOpen: () => void }) => {
   return (
     <div
@@ -52,4 +52,4 @@ const OpenNav = ({
   );
 };
 
-export default MobileNav;
+// export default MobileNav;

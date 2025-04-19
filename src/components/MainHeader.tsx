@@ -2,16 +2,17 @@
 
 import TypeWriter from "typewriter-effect";
 import { motion } from "framer-motion";
+import { Card } from "./ui/card";
 
 const MainHeader = () => {
   return (
     <motion.div
       className="h-full"
-      initial={{ opacity: 0, y: 100 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: -1 }}
       transition={{ duration: 1 }}
     >
-      <div className="md:h-4/5 md:grid md:grid-cols-10 flex  mt-32 flex-col gap-y-10">
+      <div className="md:h-4/5 md:grid md:grid-cols-10 flex mt-32 flex-col gap-y-10">
         <div className="md:col-span-8 md:self-end xl:text-[220px] lg:text-[150px] md:text-9xl text-6xl">
           <div
             style={{
