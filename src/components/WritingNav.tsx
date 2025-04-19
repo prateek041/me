@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import FileExplorer from "./FileExplorer";
-import { FileSystemNode } from "../writings/api/blog";
+import { FileSystemNode } from "@/app/writings/api/blog";
 
 const Navlinks = [
   {

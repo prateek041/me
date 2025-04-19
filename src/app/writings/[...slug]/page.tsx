@@ -3,15 +3,14 @@ import { promises as fs } from "fs";
 import { remark } from "remark";
 import matter from "gray-matter";
 import html from "remark-html";
-import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
 import emoji from "remark-emoji";
-import AudioPlayer from "@/app/components/AudioPlayer";
 import Head from "next/head";
 import remarkGfm from "remark-gfm";
-import Impression from "@/app/components/Impressions";
 import Script from "next/script";
-import remarkPrism from "remark-prism";
+import AudioPlayer from "@/components/AudioPlayer";
+import ArticleContent from "@/components/ArticleContent";
+import Impression from "@/components/Impressions";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";

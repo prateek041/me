@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { FileSystemNode } from "../writings/api/blog";
 import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
 import Link from "next/link";
+import { FileSystemNode } from "@/app/writings/api/blog";
 
 const FileExplorer = ({
   nodes,

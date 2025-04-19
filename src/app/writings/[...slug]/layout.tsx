@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import WritingNav from "../../components/WritingNav";
 import readDirectoryRecursively from "../api/blog";
-import MobileNav from "@/app/components/MobileNav";
+import WritingNav from "@/components/WritingNav";
+import MobileNav from "@/components/MobileNav";
 
 export const metadata: Metadata = {
   title: "Writings",

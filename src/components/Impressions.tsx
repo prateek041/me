@@ -1,6 +1,6 @@
 "use client"
+import { useImpressions } from "@/app/hooks/impressions"
 import { BiHeart, BiShare, BiSolidHeart, BiCheck } from "react-icons/bi"
-import { useImpressions } from "../hooks/impressions"
 
 interface ImpressionProps {
   articleName: string[]

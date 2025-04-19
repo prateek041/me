@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import WritingNav from "./WritingNav";
-import { FileSystemNode } from "../writings/api/blog";
 import { IoIosArrowBack } from "react-icons/io";
+import { FileSystemNode } from "@/app/writings/api/blog";
 
 const MobileNav = ({ nodes }: { nodes: FileSystemNode[] }) => {
   const toggleOpen = () => {

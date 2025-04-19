@@ -1,7 +1,7 @@
-import About from "./components/About";
-import LookingFor from "./components/LookingFor";
-import MainHeader from "./components/MainHeader";
-import MyWork from "./components/MyWork";
+import About from "@/components/About";
+import LookingFor from "@/components/LookingFor";
+import MainHeader from "@/components/MainHeader";
+import MyWork from "@/components/MyWork";
 
 export default function Home() {
   return (
