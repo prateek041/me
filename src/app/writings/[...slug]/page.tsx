@@ -123,17 +123,17 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
             />
           </div>
         </div>
-        <div className="flex w-full max-w-screen-2xl relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
+        <div className="flex w-full  max-w-screen-2xl container mx-auto relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
           <ArticleContent pageContent={contentHtml} />
         </div>
 
-        <div className="md:hidden flex -translate-y-10 xl:p-5 lg:p-2 rounded-t-xl w-2/3 md:absolute relative justify-center mx-auto bottom-0">
+        <div className="flex -translate-y-10 xl:p-5 lg:p-2 rounded-t-xl w-2/3 md:absolute relative justify-center mx-auto bottom-0">
           <Impression articleName={params.slug} />
         </div>
       </div>
-      <div className="md:flex hidden xl:p-5 lg:p-2 rounded-t-xl w-1/2 md:absolute relative justify-center mx-auto bottom-0">
-        <Impression articleName={params.slug} />
-      </div>
+      {/* <div className="md:flex hidden xl:p-5 lg:p-2 rounded-t-xl w-1/2 md:absolute relative justify-center mx-auto bottom-0"> */}
+      {/*   <Impression articleName={params.slug} /> */}
+      {/* </div> */}
     </>
   );
 };

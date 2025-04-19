@@ -24,11 +24,11 @@ export default function WritingLayout({
 
   return (
     <div
-      className={`container mt-10`}
+      className={`mt-10 w-full`}
     >
       <SidebarProvider>
         <AppSidebar isMobile={false} node={blogStructure} />
-        <div className="w-full">
+        <div className="mx-auto">
           {children}
         </div>
       </SidebarProvider>
