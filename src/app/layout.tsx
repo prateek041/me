@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
-import Navbar from "./components/Navbar";
+import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ModeToggle } from "@/components/ModeToggle";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -18,12 +20,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.className} bg-[#E9E3E2] md:px-0 px-5 w-full md:h-screen `}
+        className={`${spaceGrotesk.className} md:px-0 px-5 w-full md:h-screen `}
       >
-        <Navbar />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

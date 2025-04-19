@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import WritingNav from "../../components/WritingNav";
 import readDirectoryRecursively from "../api/blog";
-import MobileNav from "@/app/components/MobileNav";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/WritingNav";
 
 export const metadata: Metadata = {
   title: "Writings",
@@ -15,7 +15,7 @@ interface WritingLayoutParams {
   };
 }
 
-export default async function WritingLayout({
+export default function WritingLayout({
   children,
   params,
 }: WritingLayoutParams) {
@@ -24,17 +24,16 @@ export default async function WritingLayout({
 
   return (
     <div
-      className={`container md:h-screen w-full flex mx-auto md:grid md:grid-cols-5 mt-5`}
+      className={`mt-10 w-full container mx-auto`}
     >
-      <div className="hidden mt-10  md:grid md:col-span-1">
-        <WritingNav isMobile={false} nodes={blogStructure} />
-      </div>
-      <div className="md:hidden absolute bg-red-300 w-full inset-x-0">
-        <MobileNav nodes={blogStructure} />
-      </div>
-      <div className="overflow-y-auto mt-10 md:col-span-4 md:mx-10 flex justify-center">
-        {children}
-      </div>
+      <SidebarProvider>
+        <AppSidebar nodes={blogStructure} />
+        <SidebarInset>
+          <div className="mx-auto">
+            {children}
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
     </div>
   );
 }

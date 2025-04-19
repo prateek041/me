@@ -3,15 +3,16 @@ import { promises as fs } from "fs";
 import { remark } from "remark";
 import matter from "gray-matter";
 import html from "remark-html";
-import ArticleContent from "@/app/components/ArticleContent";
 import Image from "next/image";
 import emoji from "remark-emoji";
-import AudioPlayer from "@/app/components/AudioPlayer";
 import Head from "next/head";
 import remarkGfm from "remark-gfm";
-import Impression from "@/app/components/Impressions";
 import Script from "next/script";
-import remarkPrism from "remark-prism";
+import AudioPlayer from "@/components/AudioPlayer";
+import ArticleContent from "@/components/ArticleContent";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const pathName = process.cwd() + "/writings";
@@ -23,12 +24,9 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
   const matterResult = matter(file);
   const processedMarkdown = await remark()
     .use(emoji)
-    // .use(remarkPrism)
     .use(remarkGfm)
     .use(html)
     .process(matterResult.content);
-
-  // TODO: get likes, comments and number of shares here and pass down to impressions.
 
   const contentHtml = processedMarkdown.toString();
   return (
@@ -90,8 +88,15 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           }),
         }}
       />
-      <div className="container w-full md:mx-10 md:my-5 my-10 scroll-smooth">
-        <div className="flex flex-col items-center md:gap-y-10 gap-y-2">
+      <div className="container mx-auto relative w-full md:px-10 md:my-5 my-10 scroll-smooth">
+        <div className="w-full flex flex-col">
+          <div className="flex items-center">
+            <SidebarTrigger />
+            <BreadCrumb articlePath={params.slug} />
+          </div>
+          <Separator className="mb-5" />
+        </div>
+        <div className="flex relative flex-col items-center md:gap-y-10 gap-y-2">
           <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center">
             {matterResult.data.title}
           </h1>
@@ -102,33 +107,56 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
             </div>
           )}
         </div>
-        <div className="md:sticky top-10 flex justify-center w-full mt-10">
-          <div className="relative md:-left-8">
+        <div className="md:sticky max-w-4xl top-10 flex justify-center w-full mt-10">
+          <div className="relative">
             <Image
               className="object-cover"
               src={imagePath}
               alt="Article Header image"
-              style={{ width: "100vw", height: "100%" }}
+              style={{ width: "80vw", height: "100%" }}
               width={1000}
               height={1000}
               quality={100}
             />
           </div>
         </div>
-        <div className="flex w-full max-w-screen-2xl bg-gray-100 relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
+        <div className="flex w-full  max-w-screen-2xl relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
           <ArticleContent pageContent={contentHtml} />
         </div>
 
-        <div className="md:hidden flex -translate-y-10 xl:p-5 lg:p-2 rounded-t-xl w-2/3 md:absolute relative justify-center mx-auto bottom-0 bg-[#E9E3E2]">
-          <Impression articleName={params.slug} />
-        </div>
+        {/* <div className="flex -translate-y-10 xl:p-5 lg:p-2 rounded-t-xl w-2/3 md:absolute relative justify-center mx-auto bottom-0"> */}
+        {/*   <Impression articleName={params.slug} /> */}
+        {/* </div> */}
       </div>
-      <div className="md:flex hidden xl:p-5 lg:p-2 rounded-t-xl w-1/2 md:absolute relative justify-center mx-auto bottom-0 bg-[#E9E3E2]">
-        <Impression articleName={params.slug} />
-      </div>
+      {/* <div className="md:flex hidden xl:p-5 lg:p-2 rounded-t-xl w-1/2 md:absolute relative justify-center mx-auto bottom-0"> */}
+      {/*   <Impression articleName={params.slug} /> */}
+      {/* </div> */}
     </>
   );
 };
+
+const BreadCrumb = ({ articlePath }: { articlePath: string[] }) => {
+  const prevPath = articlePath.slice(0, articlePath.length - 1)
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        {prevPath.map((value, index) => {
+          return (
+            <>
+              <BreadcrumbItem>
+                <BreadcrumbLink className="text-xs" >{value}</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+            </>
+          )
+        })}
+        <BreadcrumbItem>
+          <BreadcrumbPage className="text-xs">{articlePath[articlePath.length - 1]}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  )
+}
 
 export async function generateStaticParams() {
   const articlePaths = process.cwd() + "/writings";
