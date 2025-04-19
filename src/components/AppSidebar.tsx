@@ -15,8 +15,10 @@ interface AppSideBarProps {
 
 export function AppSidebar({ node, isMobile }: AppSideBarProps) {
   return (
-    <Sidebar>
-      <SidebarHeader />
+    <Sidebar className="mt-10">
+      <SidebarHeader>
+        Check
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <WritingNav isMobile={isMobile} nodes={node} />

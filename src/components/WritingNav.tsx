@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FileExplorer from "./FileExplorer";
 import { FileSystemNode } from "@/app/writings/api/blog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 const Navlinks = [
   {
@@ -30,6 +31,7 @@ const WritingNav = ({
   const route = pathName.split("/");
   const [path, setPath] = useState(nodes[0].name);
   const [isActive, setIsActive] = useState(2);
+  const router = useRouter()
 
   useEffect(() => {
     Navlinks.map((item, index) => {
@@ -41,6 +43,12 @@ const WritingNav = ({
   }, [route]);
 
   const blogType = nodes.filter((item) => item.name === path) || [];
+
+  const handleArticleTypeChange = (value: string) => {
+    const newActiveIndex = Navlinks.findIndex((item) => item.title === value)
+    setIsActive(newActiveIndex)
+    router.push(Navlinks[newActiveIndex].url)
+  }
 
   return (
     <div className="h-full py-10">
@@ -63,19 +71,26 @@ const WritingNav = ({
         </div>
       ) : (
         <div className="h-full">
-          <div className="flex justify-start gap-x-5">
-            {Navlinks.map((item, index) => {
-              return (
-                <NavItem
-                  key={index}
-                  url={item.url}
-                  index={index}
-                  isActive={isActive}
-                  title={item.title}
-                />
-              );
-            })}
-          </div>
+          <Select onValueChange={handleArticleTypeChange}>
+            <SelectTrigger className="w-full text-start">
+              <SelectValue placeholder={Navlinks[isActive].title} />
+            </SelectTrigger>
+            <SelectContent onSelect={() => { console.log("what now") }} >
+              {Navlinks.map((value, index) => {
+                return (
+                  <SelectItem key={index} value={value.title}>
+                    <NavItem
+                      key={index}
+                      url={value.url}
+                      index={index}
+                      isActive={isActive}
+                      title={value.title}
+                    />
+                  </SelectItem>
+                )
+              })}
+            </SelectContent>
+          </Select>
           <FileExplorer isMobile={false} path={path} nodes={blogType} />
         </div>
       )}
