@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import FileExplorer from "./FileExplorer";
 import { FileSystemNode } from "@/app/writings/api/blog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Sidebar, SidebarContent, SidebarHeader } from "./ui/sidebar";
 
 const Navlinks = [
   {
@@ -20,12 +21,10 @@ const Navlinks = [
     title: "Life",
   },
 ];
-const WritingNav = ({
+const AppSidebar = ({
   nodes,
-  isMobile,
 }: {
   nodes: FileSystemNode[];
-  isMobile: boolean;
 }) => {
   const pathName = usePathname();
   const route = pathName.split("/");
@@ -51,57 +50,41 @@ const WritingNav = ({
   }
 
   return (
-    <div className="h-full py-10">
-      {isMobile ? (
-        <div className="absolute px-5 flex h-full flex-col items-start inset-x-0 justify-start mb-10">
-          <div className="flex justify-center gap-x-5 ">
-            {Navlinks.map((item, index) => {
+    <Sidebar className="mt-10">
+      <SidebarHeader>
+        <Select onValueChange={handleArticleTypeChange}>
+          <SelectTrigger className="w-full text-start">
+            <SelectValue placeholder={Navlinks[isActive].title} />
+          </SelectTrigger>
+          <SelectContent onSelect={() => { console.log("what now") }} >
+            {Navlinks.map((value, index) => {
               return (
-                <NavItem
-                  key={index}
-                  url={item.url}
-                  index={index}
-                  isActive={isActive}
-                  title={item.title}
-                />
-              );
+                <SelectItem key={index} value={value.title}>
+                  <NavItem
+                    key={index}
+                    url={value.url}
+                    index={index}
+                    isActive={isActive}
+                    title={value.title}
+                  />
+                </SelectItem>
+              )
             })}
-          </div>
-          <FileExplorer isMobile={true} path={path} nodes={blogType} />
-        </div>
-      ) : (
+          </SelectContent>
+        </Select>
+      </SidebarHeader>
+      <SidebarContent>
         <div className="h-full">
-          <Select onValueChange={handleArticleTypeChange}>
-            <SelectTrigger className="w-full text-start">
-              <SelectValue placeholder={Navlinks[isActive].title} />
-            </SelectTrigger>
-            <SelectContent onSelect={() => { console.log("what now") }} >
-              {Navlinks.map((value, index) => {
-                return (
-                  <SelectItem key={index} value={value.title}>
-                    <NavItem
-                      key={index}
-                      url={value.url}
-                      index={index}
-                      isActive={isActive}
-                      title={value.title}
-                    />
-                  </SelectItem>
-                )
-              })}
-            </SelectContent>
-          </Select>
           <FileExplorer isMobile={false} path={path} nodes={blogType} />
         </div>
-      )}
-    </div>
+      </SidebarContent>
+    </Sidebar>
   );
 };
 
 const NavItem = ({
   index,
   isActive,
-  url,
   title,
 }: {
   index: number;
@@ -110,13 +93,12 @@ const NavItem = ({
   title: string;
 }) => {
   return (
-    <Link
+    <div
       className={isActive === index ? "underline font-semibold" : ""}
-      href={url}
     >
       {title}
-    </Link>
+    </div>
   );
 };
 
-export default WritingNav;
+export default AppSidebar;

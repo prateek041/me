@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import readDirectoryRecursively from "../api/blog";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/WritingNav";
 
 export const metadata: Metadata = {
   title: "Writings",
@@ -27,7 +27,8 @@ export default function WritingLayout({
       className={`mt-10 w-full`}
     >
       <SidebarProvider>
-        <AppSidebar isMobile={false} node={blogStructure} />
+        <AppSidebar nodes={blogStructure} />
+        {/* <SideNav nodes={blogStructure} /> */}
         <div className="mx-auto">
           {children}
         </div>
