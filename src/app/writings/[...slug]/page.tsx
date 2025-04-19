@@ -90,7 +90,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           }),
         }}
       />
-      <div className="container relative w-full md:mx-10 md:my-5 my-10 scroll-smooth">
+      <div className="container relative w-full md:px-10 md:my-5 my-10 scroll-smooth">
         <div className="w-fit flex flex-col gap-y-2">
           <div className="flex items-center">
             <SidebarTrigger />
@@ -111,19 +111,19 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           )}
         </div>
         <div className="md:sticky top-10 flex justify-center w-full mt-10">
-          <div className="relative md:-left-8">
+          <div className="relative">
             <Image
               className="object-cover"
               src={imagePath}
               alt="Article Header image"
-              style={{ width: "100vw", height: "100%" }}
+              style={{ width: "80vw", height: "100%" }}
               width={1000}
               height={1000}
               quality={100}
             />
           </div>
         </div>
-        <div className="flex w-full  max-w-screen-2xl container mx-auto relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
+        <div className="flex w-full  max-w-screen-2xl relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
           <ArticleContent pageContent={contentHtml} />
         </div>
 
