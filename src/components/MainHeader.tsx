@@ -2,7 +2,6 @@
 
 import TypeWriter from "typewriter-effect";
 import { motion } from "framer-motion";
-import { Card } from "./ui/card";
 
 const MainHeader = () => {
   return (
