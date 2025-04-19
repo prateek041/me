@@ -32,8 +32,8 @@ const MainHeader = () => {
               onInit={(typewriter) => {
                 typewriter
                   .typeString(
-                    `<b>Open Source</b>, <b>Web Development</b>,
-            <b>Cloud Native</b> and <b>Artificial Intelligence</b>
+                    `<b>Open Source</b>, <b>Full Stack Product Development</b>
+            and <b>Artificial Intelligence</b>
   .`,
                   )
                   .start();

@@ -46,7 +46,7 @@ const OpenNav = ({
         <IoIosArrowBack />
       </div>
       <div className="mt-5">
-        <WritingNav isMobile={true} nodes={nodes} />
+        <WritingNav nodes={nodes} />
       </div>
     </div>
   );
