@@ -7,7 +7,6 @@ const LookingFor = () => {
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
-      whileHover={{ scale: 1.05 }}
       className="pb-20"
     >
       <div className="space-y-20 ">

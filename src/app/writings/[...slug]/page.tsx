@@ -127,9 +127,9 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           <ArticleContent pageContent={contentHtml} />
         </div>
 
-        <div className="flex -translate-y-10 xl:p-5 lg:p-2 rounded-t-xl w-2/3 md:absolute relative justify-center mx-auto bottom-0">
-          <Impression articleName={params.slug} />
-        </div>
+        {/* <div className="flex -translate-y-10 xl:p-5 lg:p-2 rounded-t-xl w-2/3 md:absolute relative justify-center mx-auto bottom-0"> */}
+        {/*   <Impression articleName={params.slug} /> */}
+        {/* </div> */}
       </div>
       {/* <div className="md:flex hidden xl:p-5 lg:p-2 rounded-t-xl w-1/2 md:absolute relative justify-center mx-auto bottom-0"> */}
       {/*   <Impression articleName={params.slug} /> */}

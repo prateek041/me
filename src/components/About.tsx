@@ -8,7 +8,6 @@ const About = () => {
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
-      whileHover={{ scale: 1.05 }}
     >
       <div className="flex flex-col gap-y-16">
         <div className="grid grid-cols-8">

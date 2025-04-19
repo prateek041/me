@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import { MdArrowDropDown, MdArrowRight } from "react-icons/md";
-import { TbPointFilled } from "react-icons/tb";
 import Link from "next/link";
 import { FileSystemNode } from "@/app/writings/api/blog";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
+import { ChevronsUpDown } from "lucide-react";
+import { Button } from "./ui/button";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 const FileExplorer = ({
   nodes,
@@ -41,73 +43,53 @@ const filePath = (articlePath: string) => {
 };
 
 const FileNode = ({ node }: { node: FileSystemNode }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const toggleOpen = () => setIsOpen(!isOpen);
   const isFile = node.name.endsWith(".md");
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
   return (
-    <div>
-      <li>
-        <div onClick={toggleOpen} style={{ cursor: "pointer" }}>
-          {node.isDirectory ? (
-            isOpen ? (
-              <Directory
-                name={node.name}
-                date={node.lastModified}
-                isOpen={isOpen}
-              />
-            ) : (
-              <Directory
-                name={node.name}
-                date={node.lastModified}
-                isOpen={isOpen}
-              />
-            )
-          ) : isFile ? (
-            <Link href={`/${filePath(node.articlePath)}`}>
-              <div className="flex items-center gap-x-2 py-1 mx-5">
-                <TbPointFilled />
-                <div className="flex flex-col w-full gap-y-0 gap-x-2">
-                  <h3 className="lg:text-sm md:text-xs text-base">
-                    {fileName(node.name)}
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="space-y-2"
+    >
+      {node.isDirectory ? (
+        <div>
+          <div className="flex items-center justify-between my-2 space-x-4">
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" className="w-full">
+                <div className="flex w-full items-center justify-between">
+                  <h3 className="text-lg max-w-44 overflow-auto font-semibold">
+                    {node.name}
                   </h3>
-                  <p className="text-xs font-light">{node.lastModified}</p>
+                  <ChevronsUpDown className="h-4 w-4" />
                 </div>
-              </div>
-            </Link>
-          ) : (
-            ""
-          )}
-        </div>
-        {isOpen && node.children && (
-          <ul className="lg:pl-2 pl-1 md:text-base leading-tight text-sm">
-            {node.children.map((child) => (
+              </Button>
+            </CollapsibleTrigger>
+          </div>
+          <CollapsibleContent>
+            {node.children && node.children.map((child) => (
               <FileNode key={child.id} node={child} />
             ))}
-          </ul>
-        )}
-      </li>
-    </div>
-  );
-};
-
-const Directory = ({
-  name,
-  date,
-  isOpen,
-}: {
-  name: string;
-  date: string;
-  isOpen: boolean;
-}) => {
-  return (
-    <div className="flex items-center">
-      {isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
-      <div className="w-full">
-        <h3 className="font-semibold xl:text-lg md:text-sm text-lg">{fileName(name)}</h3>
-        <p className="lg:text-base text-xs">{date}</p>
-      </div>
-    </div>
+          </CollapsibleContent>
+        </div>
+      ) : isFile ? (
+        <div className="w-full">
+          <Link className="mx-2" href={`/${filePath(node.articlePath)}`}>
+            <Button className="w-full" variant={"ghost"}>
+              <div className="flex flex-col items-start w-full text-sm shadow-sm">
+                <h3 className="text-base">
+                  {fileName(node.name)}
+                </h3>
+                <p className="text-xs font-light">{node.lastModified}</p>
+              </div>
+            </Button>
+          </Link>
+          <Separator className="my-2" />
+        </div>
+      ) : (
+        ""
+      )}
+    </Collapsible>
   );
 };
 

@@ -2,7 +2,7 @@ const WhatIDo = () => {
   return (
     <div className="space-y-10">
       <div className="md:text-3xl text-2xl">I can Help you with</div>
-      <div className="md:grid md:grid-cols-3 flex flex-col md:gap-x-2 gap-y-2">
+      <div className="md:grid md:grid-cols-3 flex flex-col md:gap-x-5 gap-y-2">
         {pageContent.map((item, index) => {
           return (
             <SkillCard
@@ -52,7 +52,7 @@ const SkillCard = ({
   content: string;
 }) => {
   return (
-    <div className="md:border-t-[#352F44] md:border-l pb-5 pt-5 border-t border-[#FAF0E6] px-4 space-y-5">
+    <div className="md:border-t-2 md:border-l-2 pb-5 pt-5 px-4 space-y-5">
       <div className="md:text-6xl text-4xl opacity-45">{index}</div>
       <div className="text-2xl">{heading}</div>
       <div>{content}</div>

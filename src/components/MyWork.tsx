@@ -7,7 +7,6 @@ const MyWork = () => {
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
-      whileHover={{ scale: 1.05 }}
     >
       <div>
         <div>
