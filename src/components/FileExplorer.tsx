@@ -4,9 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { FileSystemNode } from "@/app/writings/api/blog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronDownIcon, ChevronRight, ChevronsUpDown, File } from "lucide-react";
 import { Button } from "./ui/button";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
+import { Separator } from "./ui/separator";
 
 const FileExplorer = ({
   nodes,
@@ -47,49 +48,53 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
   return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      className="space-y-2"
-    >
-      {node.isDirectory ? (
-        <div>
-          <div className="flex items-center justify-between my-2 space-x-4">
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" className="w-full">
-                <div className="flex w-full items-center justify-between">
-                  <h3 className="text-lg max-w-44 overflow-auto font-semibold">
-                    {node.name}
-                  </h3>
-                  <ChevronsUpDown className="h-4 w-4" />
-                </div>
-              </Button>
-            </CollapsibleTrigger>
-          </div>
-          <CollapsibleContent>
-            {node.children && node.children.map((child) => (
-              <FileNode key={child.id} node={child} />
-            ))}
-          </CollapsibleContent>
-        </div>
-      ) : isFile ? (
-        <div className="w-full">
-          <Link className="mx-2" href={`/${filePath(node.articlePath)}`}>
-            <Button className="w-full" variant={"ghost"}>
-              <div className="flex flex-col items-start w-full text-sm shadow-sm">
-                <h3 className="text-base">
-                  {fileName(node.name)}
+    <SidebarMenuItem>
+      <Collapsible
+        open={isOpen}
+        key={node.id}
+        onOpenChange={setIsOpen}
+        className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
+      >
+        {node.isDirectory ? (
+          <>
+            <CollapsibleTrigger
+              className="w-full"
+            >
+              <SidebarMenuButton className="w-full">
+                <ChevronRight className="transition-transform" />
+                <h3 className="">
+                  {node.name}
                 </h3>
-                <p className="text-xs font-light">{node.lastModified}</p>
+              </SidebarMenuButton>
+            </ CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub>
+                {node.children && node.children.map((child) => (
+                  <FileNode key={child.id} node={child} />
+                ))}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </>
+        ) : isFile ? (
+          <SidebarMenuButton
+            className="data-[active=true]:bg-transparent h-fit overflow-auto"
+          >
+            <Link href={`/${filePath(node.articlePath)}`}>
+              <div className="flex items-center gap-x-2">
+                <div className="flex flex-col justify-center">
+                  <h3 className="text-base">
+                    {fileName(node.name)}
+                  </h3>
+                  <p className="text-xs font-light">{node.lastModified}</p>
+                </div>
               </div>
-            </Button>
-          </Link>
-          <Separator className="my-2" />
-        </div>
-      ) : (
-        ""
-      )}
-    </Collapsible>
+            </Link>
+          </SidebarMenuButton>
+        ) : (
+          ""
+        )}
+      </Collapsible>
+    </SidebarMenuItem>
   );
 };
 

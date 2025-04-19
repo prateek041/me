@@ -31,9 +31,6 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <div className="absolute top-0 max-h-20">
-            <ModeToggle />
-          </div>
           {children}
         </ThemeProvider>
       </body>

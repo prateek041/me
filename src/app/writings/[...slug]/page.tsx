@@ -10,10 +10,8 @@ import remarkGfm from "remark-gfm";
 import Script from "next/script";
 import AudioPlayer from "@/components/AudioPlayer";
 import ArticleContent from "@/components/ArticleContent";
-import Impression from "@/components/Impressions";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { param } from "framer-motion/client";
 import { Separator } from "@/components/ui/separator";
 
 const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
@@ -90,14 +88,13 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
           }),
         }}
       />
-      <div className="container relative w-full md:px-10 md:my-5 my-10 scroll-smooth">
-        <div className="w-fit flex flex-col">
+      <div className="container mx-auto relative w-full md:px-10 md:my-5 my-10 scroll-smooth">
+        <div className="w-full flex flex-col">
           <div className="flex items-center">
             <SidebarTrigger />
             <BreadCrumb articlePath={params.slug} />
           </div>
           <Separator className="mb-5" />
-
         </div>
         <div className="flex relative flex-col items-center md:gap-y-10 gap-y-2">
           <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center">
@@ -110,7 +107,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
             </div>
           )}
         </div>
-        <div className="md:sticky top-10 flex justify-center w-full mt-10">
+        <div className="md:sticky max-w-4xl top-10 flex justify-center w-full mt-10">
           <div className="relative">
             <Image
               className="object-cover"

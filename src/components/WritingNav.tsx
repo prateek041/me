@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import FileExplorer from "./FileExplorer";
 import { FileSystemNode } from "@/app/writings/api/blog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader } from "./ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarRail } from "./ui/sidebar";
 
 const Navlinks = [
   {
@@ -75,9 +75,12 @@ const AppSidebar = ({
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <FileExplorer isMobile={false} path={path} nodes={blogType} />
+          <SidebarGroupContent>
+            <FileExplorer isMobile={false} path={path} nodes={blogType} />
+          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   );
 };
