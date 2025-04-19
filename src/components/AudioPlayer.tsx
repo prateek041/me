@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { CiPause1, CiPlay1 } from "react-icons/ci";
+import { Button } from "./ui/button";
 
 interface AudioPlayerProps {
   audioFile: string;
@@ -43,9 +44,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
         onEnded={() => setIsPlaying(false)}
         loop={true}
       />
-      <button
+      <Button
         onClick={togglePlay}
-        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        size={"sm"}
+        variant={"secondary"}
         aria-label={isPlaying ? "Pause" : "Play"}
       >
         {isPlaying ? (
@@ -53,10 +55,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
         ) : (
           <CiPlay1 className="w-6 h-6" />
         )}
-      </button>
+      </Button>
 
       {title && (
-        <div className="w-32 overflow-hidden whitespace-nowrap relative bg-gray-50 rounded px-2">
+        <div className="w-32 overflow-hidden whitespace-nowrap relative rounded px-2">
           <div className="animate-marquee inline-block">
             {title}
             <span className="px-4">•</span>
