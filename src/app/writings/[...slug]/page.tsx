@@ -91,7 +91,7 @@ const LifeArticle = async ({ params }: { params: { slug: string[] } }) => {
         }}
       />
       <div className="container relative w-full md:px-10 md:my-5 my-10 scroll-smooth">
-        <div className="w-fit flex flex-col gap-y-2">
+        <div className="w-fit flex flex-col">
           <div className="flex items-center">
             <SidebarTrigger />
             <BreadCrumb articlePath={params.slug} />

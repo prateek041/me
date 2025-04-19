@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import FileExplorer from "./FileExplorer";
 import { FileSystemNode } from "@/app/writings/api/blog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Sidebar, SidebarContent, SidebarHeader } from "./ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader } from "./ui/sidebar";
 
 const Navlinks = [
   {
@@ -50,13 +50,13 @@ const AppSidebar = ({
   }
 
   return (
-    <Sidebar className="mt-10">
+    <Sidebar className="mt-12">
       <SidebarHeader>
         <Select onValueChange={handleArticleTypeChange}>
           <SelectTrigger className="w-full text-start">
             <SelectValue placeholder={Navlinks[isActive].title} />
           </SelectTrigger>
-          <SelectContent onSelect={() => { console.log("what now") }} >
+          <SelectContent >
             {Navlinks.map((value, index) => {
               return (
                 <SelectItem key={index} value={value.title}>
@@ -74,9 +74,9 @@ const AppSidebar = ({
         </Select>
       </SidebarHeader>
       <SidebarContent>
-        <div className="h-full">
+        <SidebarGroup>
           <FileExplorer isMobile={false} path={path} nodes={blogType} />
-        </div>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
