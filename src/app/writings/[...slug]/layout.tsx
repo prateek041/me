@@ -29,7 +29,7 @@ export default function WritingLayout({
       <SidebarProvider>
         <AppSidebar nodes={blogStructure} />
         <SidebarInset>
-          <div className="mx-auto">
+          <div className="container mx-auto md:w-full">
             {children}
           </div>
         </SidebarInset>

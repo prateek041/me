@@ -1,6 +1,7 @@
 ---
 title: "http tracer in Beyla"
 description: "How Beyla traces your HTTP requests"
+date: November 19, 2024
 ---
 
 There are two major sections when it comes to working with HTTP tracers in Beyla.
