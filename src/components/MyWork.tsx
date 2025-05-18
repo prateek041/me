@@ -35,11 +35,18 @@ const MyWork = () => {
 
 const PageContent = [
   {
+    link: "https://github.com/prateek041/ebpf-o11y",
+    heading: "ebpf-o11y",
+    description: "eBPF based auto-instrumentation of Go and NodeJS applications.",
+    tech: "Go, C, eBPF, LLVM, GCC, DWARF, Linux",
+    year: "/25",
+  },
+  {
     link: "https://github.com/Senseii-ai",
     heading: "Senseii",
     description: "AI driven Health and Fitness App",
     tech: "NextJS(Typescript), NodeJS, LangChain, Openai, Mongodb",
-    year: "/23",
+    year: "/24",
   },
   {
     link: "https://github.com/cilium/tetragon",
