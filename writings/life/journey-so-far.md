@@ -7,7 +7,38 @@ audio: "you-say-run.mp3"
 
 The chronological order of reading this article is from Bottom to Top.
 
-> Last Update: 2024-12-04
+> Last Update: 2025-05-23
+
+## Freelance (Current)
+
+Now, I am freelancing, building AI powered products at insane speed for a
+company in Frankfurt, Germany. I think I have found the team I was looking
+for. We will build the next big thing together.
+
+## Building my Business
+
+Yes, you heard it right. I left my last job and moved onto building something
+of my own. Actually, I had no idea that the thing I am starting is going to
+be so wild and weird. In fact, I am writing this after many months of working
+on **Senseii**. And now, I have a clear understanding of where it is headed.
+
+In the past 5 months since I left my Job, I built many things. I initially
+started with the idea of building my own business but actually, it was more
+about "I wanted to find what I love".
+
+Here is the summary of what I did, in order to read more heartfelt version of
+this work, you can reference the **life** section of this article.
+
+- I built and launched an AI powered product. It's [Senseii](https://www.senseii.in/)
+- Applied to YCombinator with this Idea. Rejected with suggestion to build a team.
+- Participated in Next JS Global Hackathon, and my project was the Honourable mention.
+- Went super deep with eBPF, gained experience with writing auto-instrumentation
+  of applications using eBPF.
+- Started my own eBPF project for auto-instrumentation.
+- Interviewed with many YC startups.
+
+Yes, this was an insanely fruitful period of my life. I was not earning anything
+financially, but grew exponentially in my skills and confidence.
 
 ## Fountane (Work Summary)
 
