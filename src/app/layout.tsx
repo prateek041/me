@@ -3,12 +3,12 @@ import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { ModeToggle } from "@/components/ModeToggle";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
+
 export const metadata: Metadata = {
   title: "Prateek Singh",
   description: "A public diary of my Life",

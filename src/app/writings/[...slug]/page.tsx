@@ -144,7 +144,7 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
             <div className="mt-4"><AudioPlayer audioFile={frontmatter.audio} /></div>
           )}
         </div>
-        <div className="md:sticky max-w-4xl top-10 flex justify-center w-full mt-10 mb-8 md:mb-0">
+        <div className="md:sticky top-10 flex justify-center w-full mt-10 mb-8 md:mb-0">
           <div className="relative w-full" style={{ maxWidth: "800px" }}>
             <Image
               className="object-cover rounded-lg shadow-lg"
