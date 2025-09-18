@@ -8,13 +8,20 @@ import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import Script from "next/script";
 
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from "next";
 
 import readDirectoryRecursively, { FileSystemNode } from "../api/blog";
 import AudioPlayer from "@/components/AudioPlayer";
 import ArticleContent from "@/components/ArticleContent";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 
 const SITE_URL = "https://prateeksingh.tech";
@@ -38,7 +45,9 @@ export async function generateMetadata(
   const { frontmatter } = await getArticleData(params.slug);
 
   const title = frontmatter.title || "Untitled Article";
-  const description = frontmatter.description || "An interesting article from Prateek Singh's Blog.";
+  const description =
+    frontmatter.description ||
+    "An interesting article from Prateek Singh's Blog.";
   const pageUrl = `${SITE_URL}/writings/${params.slug.join("/")}`;
   const relativeImagePathFromPublic = `/${params.slug.join("/")}.jpg`;
   const absoluteOgImageUrl = `${SITE_URL}${relativeImagePathFromPublic}`;
@@ -46,7 +55,14 @@ export async function generateMetadata(
   return {
     title: title,
     description: description,
-    keywords: frontmatter.keywords || ["blog", "articles", "tech", "writings", "Prateek Singh", title],
+    keywords: frontmatter.keywords || [
+      "blog",
+      "articles",
+      "tech",
+      "writings",
+      "Prateek Singh",
+      title,
+    ],
     authors: [{ name: "Prateek Singh", url: SITE_URL }],
     creator: "Prateek Singh",
     publisher: "Prateek Singh",
@@ -56,9 +72,9 @@ export async function generateMetadata(
       googleBot: {
         index: true,
         follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     alternates: {
@@ -71,10 +87,14 @@ export async function generateMetadata(
       url: pageUrl,
       siteName: "Prateek Singh's Blog",
       images: [{ url: absoluteOgImageUrl, alt: title }],
-      publishedTime: frontmatter.date ? new Date(frontmatter.date).toISOString() : undefined,
+      publishedTime: frontmatter.date
+        ? new Date(frontmatter.date).toISOString()
+        : undefined,
       modifiedTime: frontmatter.modifiedDate
         ? new Date(frontmatter.modifiedDate).toISOString()
-        : (frontmatter.date ? new Date(frontmatter.date).toISOString() : undefined),
+        : frontmatter.date
+        ? new Date(frontmatter.date).toISOString()
+        : undefined,
       authors: ["Prateek Singh"],
     },
     twitter: {
@@ -96,7 +116,11 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
   const absoluteImagePathForJsonLd = `${SITE_URL}${imagePathForNextImageComponent}`;
   const pageUrl = `${SITE_URL}/writings/${params.slug.join("/")}`;
 
-  const processedMarkdown = await remark().use(emoji).use(remarkGfm).use(html).process(content);
+  const processedMarkdown = await remark()
+    .use(emoji)
+    .use(remarkGfm)
+    .use(html)
+    .process(content);
   const contentHtml = processedMarkdown.toString();
 
   return (
@@ -108,20 +132,24 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            "mainEntityOfPage": { "@type": "WebPage", "@id": pageUrl },
-            "headline": frontmatter.title,
-            "description": frontmatter.description,
-            "image": absoluteImagePathForJsonLd,
-            "author": { "@type": "Person", "name": "Prateek Singh", "url": SITE_URL },
-            "publisher": {
+            mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+            headline: frontmatter.title,
+            description: frontmatter.description,
+            image: absoluteImagePathForJsonLd,
+            author: { "@type": "Person", name: "Prateek Singh", url: SITE_URL },
+            publisher: {
               "@type": "Organization",
-              "name": "Prateek Singh's Blog",
-              "logo": { "@type": "ImageObject", "url": `${SITE_URL}/minimal.png` },
+              name: "Prateek Singh's Blog",
+              logo: { "@type": "ImageObject", url: `${SITE_URL}/minimal.png` },
             },
-            "datePublished": frontmatter.date ? getDate(frontmatter.date) : undefined,
-            "dateModified": frontmatter.modifiedDate
+            datePublished: frontmatter.date
+              ? getDate(frontmatter.date)
+              : undefined,
+            dateModified: frontmatter.modifiedDate
               ? getDate(frontmatter.modifiedDate)
-              : (frontmatter.date ? getDate(frontmatter.date) : undefined),
+              : frontmatter.date
+              ? getDate(frontmatter.date)
+              : undefined,
           }),
         }}
       />
@@ -134,14 +162,23 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
           <Separator className="mb-5" />
         </div>
         <div className="flex relative flex-col items-center md:gap-y-10 gap-y-2">
-          <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center font-bold">{frontmatter.title}</h1>
+          <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center font-bold">
+            {frontmatter.title}
+          </h1>
           {frontmatter.date && (
             <p className="text-muted-foreground text-sm">
-              Published on: {new Date(frontmatter.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              Published on:{" "}
+              {new Date(frontmatter.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </p>
           )}
           {!isTech && frontmatter.audio && (
-            <div className="mt-4"><AudioPlayer audioFile={frontmatter.audio} /></div>
+            <div className="mt-4">
+              <AudioPlayer audioFile={frontmatter.audio} />
+            </div>
           )}
         </div>
         <div className="md:sticky top-10 flex justify-center w-full mt-10 mb-8 md:mb-0">
@@ -150,9 +187,11 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
               className="object-cover rounded-lg shadow-lg"
               src={imagePathForNextImageComponent}
               alt={frontmatter.title || "Article Header Image"}
-              width={1200} height={675}
+              width={1200}
+              height={675}
               style={{ width: "100%", height: "auto" }}
-              quality={85} priority
+              quality={85}
+              priority
             />
           </div>
         </div>
@@ -169,19 +208,30 @@ const BreadCrumb = ({ articlePath }: { articlePath: string[] }) => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem><BreadcrumbLink href="/writings" className="text-xs capitalize">Writings</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/writings" className="text-xs capitalize">
+            Writings
+          </BreadcrumbLink>
+        </BreadcrumbItem>
         {currentPathSegments.map((segment, index) => (
           <React.Fragment key={segment + index}>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/writings/${articlePath.slice(0, index + 1).join('/')}`} className="text-xs capitalize">
-                {segment.replace(/-/g, ' ')}
+              <BreadcrumbLink
+                href={`/writings/${articlePath.slice(0, index + 1).join("/")}`}
+                className="text-xs capitalize"
+              >
+                {segment.replace(/-/g, " ")}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </React.Fragment>
         ))}
         <BreadcrumbSeparator />
-        <BreadcrumbItem><BreadcrumbPage className="text-xs capitalize">{articlePath[articlePath.length - 1].replace(/-/g, ' ')}</BreadcrumbPage></BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbPage className="text-xs capitalize">
+            {articlePath[articlePath.length - 1].replace(/-/g, " ")}
+          </BreadcrumbPage>
+        </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
   );
@@ -200,27 +250,27 @@ export async function generateStaticParams() {
       // We are only interested in files that are Markdown files for generating page slugs
       if (
         node.isDirectory === false &&
-        typeof node.path === 'string' &&         // Ensure node.path is a string
+        typeof node.path === "string" && // Ensure node.path is a string
         node.path.startsWith(writingsBaseDir) && // Ensure it's an absolute path within our writings dir
-        node.path.endsWith('.md')                // CRITICAL: Only process .md files
+        node.path.endsWith(".md") // CRITICAL: Only process .md files
       ) {
         // 1. Make path relative to writingsBaseDir
         // e.g., /home/user/proj/writings/tech/article.md -> /tech/article.md
         let relativePath = node.path.substring(writingsBaseDir.length);
 
         // Remove leading slash if present after substring, making it tech/article.md
-        if (relativePath.startsWith('/')) {
+        if (relativePath.startsWith("/")) {
           relativePath = relativePath.substring(1);
         }
 
         // 2. Remove .md extension
         // e.g., tech/article.md -> tech/article
-        const slugPath = relativePath.replace(/\.md$/, '');
+        const slugPath = relativePath.replace(/\.md$/, "");
 
         // 3. Split into segments and push if slugPath is not empty
         // e.g., tech/article -> ['tech', 'article']
         if (slugPath) {
-          paramsList.push({ slug: slugPath.split('/') });
+          paramsList.push({ slug: slugPath.split("/") });
         }
       } else if (node.isDirectory && node.children) {
         // If it's a directory, add its children to the queue to process them
