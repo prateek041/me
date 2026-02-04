@@ -50,7 +50,7 @@ const AppSidebar = ({
   }
 
   return (
-    <Sidebar className="mt-10">
+    <Sidebar className="mt-10" variant={"floating"}>
       <SidebarHeader>
         <Select onValueChange={handleArticleTypeChange}>
           <SelectTrigger className="w-full text-start">

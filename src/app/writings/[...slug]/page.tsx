@@ -17,6 +17,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbEllipsis,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
@@ -51,14 +52,14 @@ export async function generateMetadata(
   const pageUrl = `${SITE_URL}/writings/${params.slug.join("/")}`;
   const relativeImagePathFromPublic = `/${params.slug.join("/")}.jpg`;
   const absoluteOgImageUrl = `${SITE_URL}${relativeImagePathFromPublic}`;
-  
+
   // Extract category from first slug segment
   const articleSection = params.slug[0] || "General";
-  
+
   // Extract tags from frontmatter (support both array and string formats)
-  const tags = frontmatter.tags 
-    ? Array.isArray(frontmatter.tags) 
-      ? frontmatter.tags 
+  const tags = frontmatter.tags
+    ? Array.isArray(frontmatter.tags)
+      ? frontmatter.tags
       : [frontmatter.tags]
     : [];
 
@@ -113,8 +114,8 @@ export async function generateMetadata(
       modifiedTime: frontmatter.modifiedDate
         ? new Date(frontmatter.modifiedDate).toISOString()
         : frontmatter.date
-        ? new Date(frontmatter.date).toISOString()
-        : undefined,
+          ? new Date(frontmatter.date).toISOString()
+          : undefined,
       authors: ["Prateek Singh"],
       section: articleSection,
       tags: tags.length > 0 ? tags : undefined,
@@ -177,8 +178,8 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
             dateModified: frontmatter.modifiedDate
               ? getDate(frontmatter.modifiedDate)
               : frontmatter.date
-              ? getDate(frontmatter.date)
-              : undefined,
+                ? getDate(frontmatter.date)
+                : undefined,
           }),
         }}
       />
@@ -188,7 +189,6 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
             <SidebarTrigger />
             <BreadCrumb articlePath={params.slug} />
           </div>
-          <Separator className="mb-5" />
         </div>
         <div className="flex relative flex-col items-center md:gap-y-10 gap-y-2">
           <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center font-bold">
@@ -234,34 +234,75 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
 
 const BreadCrumb = ({ articlePath }: { articlePath: string[] }) => {
   const currentPathSegments = articlePath.slice(0, -1);
+  const currentPageLabel = articlePath[articlePath.length - 1].replace(/-/g, " ");
+  const parentPath =
+    articlePath.length > 1
+      ? `/writings/${articlePath.slice(0, -1).join("/")}`
+      : "/writings";
+
+  const fullTrail = (
+    <BreadcrumbList className="hidden md:flex">
+      <BreadcrumbItem>
+        <BreadcrumbLink href="/writings" className="text-xs capitalize">
+          Writings
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      {currentPathSegments.map((segment, index) => (
+        <React.Fragment key={segment + index}>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={`/writings/${articlePath.slice(0, index + 1).join("/")}`}
+              className="text-xs capitalize"
+            >
+              {segment.replace(/-/g, " ")}
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </React.Fragment>
+      ))}
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage className="text-xs capitalize">
+          {currentPageLabel}
+        </BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  );
+
+  const collapsedTrail = (
+    <BreadcrumbList className="flex md:hidden">
+      <BreadcrumbItem>
+        <BreadcrumbLink href="/writings" className="text-xs capitalize">
+          Writings
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      {articlePath.length > 1 && (
+        <>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={parentPath}
+              className="text-xs capitalize"
+              aria-label="Go to parent section"
+            >
+              <BreadcrumbEllipsis className="h-6 w-6 [&>svg]:h-3.5 [&>svg]:w-3.5" />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </>
+      )}
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage className="text-xs capitalize truncate max-w-[180px] sm:max-w-[240px]">
+          {currentPageLabel}
+        </BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  );
+
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/writings" className="text-xs capitalize">
-            Writings
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        {currentPathSegments.map((segment, index) => (
-          <React.Fragment key={segment + index}>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/writings/${articlePath.slice(0, index + 1).join("/")}`}
-                className="text-xs capitalize"
-              >
-                {segment.replace(/-/g, " ")}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </React.Fragment>
-        ))}
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage className="text-xs capitalize">
-            {articlePath[articlePath.length - 1].replace(/-/g, " ")}
-          </BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
+    <Breadcrumb aria-label="Breadcrumb">
+      {collapsedTrail}
+      {fullTrail}
     </Breadcrumb>
   );
 };
@@ -281,7 +322,7 @@ export async function generateStaticParams() {
         node.isDirectory === false &&
         typeof node.path === "string" && // Ensure node.path is a string
         node.path.startsWith(writingsBaseDir) && // Ensure it's an absolute path within our writings dir
-        node.path.endsWith(".md") // CRITICAL: Only process .md files
+        node.path.endsWith(".md") 
       ) {
         // 1. Make path relative to writingsBaseDir
         // e.g., /home/user/proj/writings/tech/article.md -> /tech/article.md

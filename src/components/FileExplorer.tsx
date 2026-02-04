@@ -9,6 +9,15 @@ import { Button } from "./ui/button";
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
 import { Separator } from "./ui/separator";
 
+/** Sort nodes by publication date (newest first). Items without a date go last. */
+function sortNodesByDate(nodes: FileSystemNode[]): FileSystemNode[] {
+  return [...nodes].sort((a, b) => {
+    const timeA = a.lastModified ? new Date(a.lastModified).getTime() : 0;
+    const timeB = b.lastModified ? new Date(b.lastModified).getTime() : 0;
+    return timeB - timeA;
+  });
+}
+
 const FileExplorer = ({
   nodes,
   isMobile,
@@ -17,16 +26,12 @@ const FileExplorer = ({
   path: string;
   isMobile: boolean;
 }) => {
-  const articles = nodes[0]?.children;
-  const articlesSortedByTime = articles?.sort((a, b) => {
-    return (
-      new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()
-    );
-  });
+  const children = nodes[0]?.children ?? [];
+  const sorted = sortNodesByDate(children);
   return (
     <div className={`${isMobile ? "w-full" : ""} border-black h-full`}>
       <ul>
-        {articlesSortedByTime?.map((node) => (
+        {sorted.map((node) => (
           <FileNode key={node.id} node={node} />
         ))}
       </ul>
@@ -69,9 +74,10 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
             </ CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub>
-                {node.children && node.children.map((child) => (
-                  <FileNode key={child.id} node={child} />
-                ))}
+                {node.children &&
+                  sortNodesByDate(node.children).map((child) => (
+                    <FileNode key={child.id} node={child} />
+                  ))}
               </SidebarMenuSub>
             </CollapsibleContent>
           </>
@@ -82,10 +88,10 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
             <Link href={`/${filePath(node.articlePath)}`}>
               <div className="flex items-center gap-x-2">
                 <div className="flex flex-col justify-center">
-                  <h3 className="text-base">
+                  <p className="">
                     {fileName(node.name)}
-                  </h3>
-                  <p className="text-xs font-light">{node.lastModified}</p>
+                  </p>
+                  <p className="text-xs font-light">{node.dateDisplay ?? (node.lastModified ? new Date(node.lastModified).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "")}</p>
                 </div>
               </div>
             </Link>

@@ -20,18 +20,35 @@ export interface FileSystemNode {
   name: string;
   path: string;
   parentPath: string | null;
-  lastModified: string;
+  lastModified: string; // ISO string, used for sorting
+  /** Human-readable date exactly as in the article frontmatter (files only). */
+  dateDisplay?: string;
   isDirectory: boolean;
   children?: FileSystemNode[];
 }
 
-const getFileDate = (path: string, dirpath: string, parentPath: string | null, isDirectory: boolean) => {
-  if (isDirectory) {
-    return null
-  }
-  const fileData = fs.readFileSync(path)
-  const matterResult = matter(fileData)
-  return matterResult.data.date
+/** Read frontmatter date from a .md file. Returns sortable ISO and display string (as written). */
+function getFrontmatterDate(
+  filePath: string,
+): { sortable: string; display: string } | undefined {
+  const fileData = fs.readFileSync(filePath, "utf8");
+  const matterResult = matter(fileData);
+  const d = matterResult.data.date;
+  if (d == null) return undefined;
+  const date = typeof d === "string" ? new Date(d) : d;
+  if (Number.isNaN(date.getTime())) return undefined;
+  const sortable = date.toISOString();
+  const display = typeof d === "string" ? d : date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  return { sortable, display };
+}
+
+/** Latest lastModified among direct children (for sorting directories). */
+function getLatestChildDate(children: FileSystemNode[]): string {
+  const dates = children
+    .map((c) => c.lastModified)
+    .filter((s): s is string => Boolean(s));
+  if (dates.length === 0) return "";
+  return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0];
 }
 
 const readDirectoryRecursively = (
@@ -43,9 +60,25 @@ const readDirectoryRecursively = (
   return files.map((file): FileSystemNode => {
     const fullPath = path.join(dirPath, file);
     const stat = fs.statSync(fullPath);
-    // const prettyTime = stat.mtime.toLocaleString();
     const isDirectory = stat.isDirectory();
+    const children = isDirectory
+      ? readDirectoryRecursively(fullPath, fullPath)
+      : undefined;
 
+    let lastModified: string;
+    let dateDisplay: string | undefined;
+    if (isDirectory) {
+      lastModified = children && children.length > 0 ? getLatestChildDate(children) : "";
+    } else {
+      const parsed = getFrontmatterDate(fullPath);
+      if (parsed) {
+        lastModified = parsed.sortable;
+        dateDisplay = parsed.display;
+      } else {
+        lastModified = stat.mtime.toISOString();
+        dateDisplay = stat.mtime.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      }
+    }
 
     const node: FileSystemNode = {
       articlePath: path.relative(process.cwd(), fullPath),
@@ -53,11 +86,10 @@ const readDirectoryRecursively = (
       name: file,
       path: fullPath,
       parentPath: parentPath,
-      isDirectory: isDirectory,
-      lastModified: getFileDate(fullPath, dirPath, parentPath, isDirectory),
-      children: isDirectory
-        ? readDirectoryRecursively(fullPath, fullPath)
-        : undefined,
+      isDirectory,
+      lastModified,
+      dateDisplay,
+      children,
     };
 
     return node;
