@@ -4,7 +4,7 @@ import fs from 'fs'; // Use import for fs
 import path from 'path'; // Use import for path
 import matter from 'gray-matter'; // Use import for gray-matter
 
-const SITE_URL = "https://prateeksingh.tech";
+const SITE_URL = "https://prateeksingh.xyz";
 
 // --- Copied and adapted from your blog.ts ---
 // Make sure FileSystemNode interface/type is defined or not strictly needed for this script's logic

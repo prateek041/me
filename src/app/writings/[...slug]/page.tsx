@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 
-const SITE_URL = "https://prateeksingh.tech";
+const SITE_URL = "https://prateeksingh.xyz";
 
 interface LifeArticleProps {
   params: { slug: string[] };
@@ -51,6 +51,16 @@ export async function generateMetadata(
   const pageUrl = `${SITE_URL}/writings/${params.slug.join("/")}`;
   const relativeImagePathFromPublic = `/${params.slug.join("/")}.jpg`;
   const absoluteOgImageUrl = `${SITE_URL}${relativeImagePathFromPublic}`;
+  
+  // Extract category from first slug segment
+  const articleSection = params.slug[0] || "General";
+  
+  // Extract tags from frontmatter (support both array and string formats)
+  const tags = frontmatter.tags 
+    ? Array.isArray(frontmatter.tags) 
+      ? frontmatter.tags 
+      : [frontmatter.tags]
+    : [];
 
   return {
     title: title,
@@ -86,7 +96,17 @@ export async function generateMetadata(
       description: description,
       url: pageUrl,
       siteName: "Prateek Singh's Blog",
-      images: [{ url: absoluteOgImageUrl, alt: title }],
+      locale: "en_US",
+      alternateLocale: ["en_US"],
+      images: [
+        {
+          url: absoluteOgImageUrl,
+          width: 1200,
+          height: 675,
+          alt: title,
+          type: "image/jpeg",
+        },
+      ],
       publishedTime: frontmatter.date
         ? new Date(frontmatter.date).toISOString()
         : undefined,
@@ -96,12 +116,21 @@ export async function generateMetadata(
         ? new Date(frontmatter.date).toISOString()
         : undefined,
       authors: ["Prateek Singh"],
+      section: articleSection,
+      tags: tags.length > 0 ? tags : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: title,
       description: description,
-      images: [absoluteOgImageUrl],
+      images: [
+        {
+          url: absoluteOgImageUrl,
+          width: 1200,
+          height: 675,
+          alt: title,
+        },
+      ],
       site: "@prateek_0041",
       creator: "@prateek_0041",
     },

@@ -1,202 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://prateeksingh.tech/</loc>
-        <lastmod>2025-05-18T16:27:49.266Z</lastmod>
+        <loc>https://prateeksingh.xyz/</loc>
+        <lastmod>2025-12-19T10:20:30.805Z</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings</loc>
-        <lastmod>2025-05-18T16:27:49.266Z</lastmod>
+        <loc>https://prateeksingh.xyz/writings</loc>
+        <lastmod>2025-12-19T10:20:30.806Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/life/journey-so-far</loc>
+        <loc>https://prateeksingh.xyz/writings/life/journey-so-far</loc>
         <lastmod>2021-03-04T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/home</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/home</loc>
         <lastmod>2024-10-18T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/thoughts/burden-we-carry</loc>
+        <loc>https://prateeksingh.xyz/writings/thoughts/burden-we-carry</loc>
         <lastmod>2024-10-25T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/thoughts/hello-papa</loc>
+        <loc>https://prateeksingh.xyz/writings/thoughts/hello-papa</loc>
         <lastmod>2024-12-11T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/thoughts/home</loc>
+        <loc>https://prateeksingh.xyz/writings/thoughts/home</loc>
         <lastmod>2023-03-04T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/thoughts/i-went-to-vienna</loc>
+        <loc>https://prateeksingh.xyz/writings/thoughts/i-went-to-vienna</loc>
         <lastmod>2024-11-11T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/thoughts/pits-of-sadness</loc>
+        <loc>https://prateeksingh.xyz/writings/thoughts/pits-of-sadness</loc>
         <lastmod>2024-10-19T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/thoughts/why</loc>
+        <loc>https://prateeksingh.xyz/writings/thoughts/what-has-happened-to-me</loc>
+        <lastmod>2025-09-17T18:30:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://prateeksingh.xyz/writings/thoughts/what-i-want</loc>
+        <lastmod>2025-09-23T18:30:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://prateeksingh.xyz/writings/thoughts/why</loc>
         <lastmod>2024-10-27T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/beyla/http-tracer</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/beyla/http-tracer</loc>
         <lastmod>2024-11-18T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/building-senseii/llm-orchestrator</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/building-senseii/llm-orchestrator</loc>
         <lastmod>2025-02-21T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/cs/tale-of-executable-program</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/cs/tale-of-executable-program</loc>
         <lastmod>2025-04-17T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/cs/tale-of-function-calls</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/cs/tale-of-function-calls</loc>
         <lastmod>2025-04-12T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/ebpf/DWARF</loc>
-        <lastmod>2025-05-18T16:27:49.281Z</lastmod>
+        <loc>https://prateeksingh.xyz/writings/tech/ebpf/DWARF</loc>
+        <lastmod>2025-12-19T10:20:30.815Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/ebpf/elf</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/ebpf/elf</loc>
         <lastmod>2025-03-20T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/ebpf/first-ebpf-program</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/ebpf/first-ebpf-program</loc>
         <lastmod>2024-10-02T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/ebpf/introduction-to-ebpf</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/ebpf/introduction-to-ebpf</loc>
         <lastmod>2024-09-23T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/ebpf/kprobes</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/ebpf/kprobes</loc>
         <lastmod>2024-09-23T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/ebpf/libbpf-getting-started</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/ebpf/libbpf-getting-started</loc>
         <lastmod>2025-03-15T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/graphQL/graphql-getting-started</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/graphQL/graphql-getting-started</loc>
         <lastmod>2023-02-27T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/kubernetes-operators/understanding-the-api</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/kubernetes-operators/understanding-the-api</loc>
         <lastmod>2023-09-13T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/linux-internals/interrupts</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/linux-internals/interrupts</loc>
         <lastmod>2024-09-23T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/linux-networking/BSD-socket-API</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/linux-networking/BSD-socket-API</loc>
         <lastmod>2024-11-15T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/linux-networking/Egress-path-part-One</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/linux-networking/Egress-path-part-One</loc>
         <lastmod>2024-11-18T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/linux-networking/OSI-model</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/linux-networking/OSI-model</loc>
         <lastmod>2024-11-10T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/linux-networking/new-internet-from-scratch</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/linux-networking/new-internet-from-scratch</loc>
         <lastmod>2024-11-09T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/llm-101/agents</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/llm-101/agents</loc>
         <lastmod>2024-11-23T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/observability/OTel-collector</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/observability/OTel-collector</loc>
         <lastmod>2025-02-24T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/observability/observability-101</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/observability/observability-101</loc>
         <lastmod>2025-02-23T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/opensource/dapr</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/opensource/dapr</loc>
         <lastmod>2024-10-18T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/kubernetes-the-hard-way/pki-what-how-and-why/pki-what-how-and-why</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/kubernetes-the-hard-way/pki-what-how-and-why/pki-what-how-and-why</loc>
         <lastmod>2022-11-24T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://prateeksingh.tech/writings/tech/kubernetes-the-hard-way/what-and-why/what-and-why</loc>
+        <loc>https://prateeksingh.xyz/writings/tech/kubernetes-the-hard-way/what-and-why/what-and-why</loc>
         <lastmod>2022-11-23T18:30:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 </urlset>
-

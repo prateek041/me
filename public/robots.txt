@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://prateeksingh.tech/sitemap.xml
+Sitemap: https://prateeksingh.xyz/sitemap.xml

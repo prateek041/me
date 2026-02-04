@@ -50,7 +50,7 @@ const AppSidebar = ({
   }
 
   return (
-    <Sidebar className="mt-12">
+    <Sidebar className="mt-10">
       <SidebarHeader>
         <Select onValueChange={handleArticleTypeChange}>
           <SelectTrigger className="w-full text-start">
@@ -62,9 +62,9 @@ const AppSidebar = ({
                 <SelectItem key={index} value={value.title}>
                   <NavItem
                     key={index}
+                    isActive={isActive}
                     url={value.url}
                     index={index}
-                    isActive={isActive}
                     title={value.title}
                   />
                 </SelectItem>
