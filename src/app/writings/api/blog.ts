@@ -20,14 +20,12 @@ export interface FileSystemNode {
   name: string;
   path: string;
   parentPath: string | null;
-  lastModified: string; // ISO string, used for sorting
-  /** Human-readable date exactly as in the article frontmatter (files only). */
+  lastModified: string; 
   dateDisplay?: string;
   isDirectory: boolean;
   children?: FileSystemNode[];
 }
 
-/** Read frontmatter date from a .md file. Returns sortable ISO and display string (as written). */
 function getFrontmatterDate(
   filePath: string,
 ): { sortable: string; display: string } | undefined {

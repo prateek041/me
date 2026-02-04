@@ -9,13 +9,19 @@ import { Button } from "./ui/button";
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
 import { Separator } from "./ui/separator";
 
-/** Sort nodes by publication date (newest first). Items without a date go last. */
-function sortNodesByDate(nodes: FileSystemNode[]): FileSystemNode[] {
+function sortByDate(nodes: FileSystemNode[]): FileSystemNode[] {
   return [...nodes].sort((a, b) => {
     const timeA = a.lastModified ? new Date(a.lastModified).getTime() : 0;
     const timeB = b.lastModified ? new Date(b.lastModified).getTime() : 0;
     return timeB - timeA;
   });
+}
+
+/** Directories first (by date), then files (by date), so top-level articles like "home" don't sit between folders. */
+function sortNodesForExplorer(nodes: FileSystemNode[]): FileSystemNode[] {
+  const dirs = nodes.filter((n) => n.isDirectory);
+  const files = nodes.filter((n) => !n.isDirectory && n.name.endsWith(".md"));
+  return [...sortByDate(dirs), ...sortByDate(files)];
 }
 
 const FileExplorer = ({
@@ -27,7 +33,7 @@ const FileExplorer = ({
   isMobile: boolean;
 }) => {
   const children = nodes[0]?.children ?? [];
-  const sorted = sortNodesByDate(children);
+  const sorted = sortNodesForExplorer(children);
   return (
     <div className={`${isMobile ? "w-full" : ""} border-black h-full`}>
       <ul>
@@ -75,7 +81,7 @@ const FileNode = ({ node }: { node: FileSystemNode }) => {
             <CollapsibleContent>
               <SidebarMenuSub>
                 {node.children &&
-                  sortNodesByDate(node.children).map((child) => (
+                  sortNodesForExplorer(node.children).map((child) => (
                     <FileNode key={child.id} node={child} />
                   ))}
               </SidebarMenuSub>

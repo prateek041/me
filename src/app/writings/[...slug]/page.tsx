@@ -7,10 +7,12 @@ import emoji from "remark-emoji";
 import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import Script from "next/script";
+import { redirect } from "next/navigation";
 
 import type { Metadata, ResolvingMetadata } from "next";
 
 import readDirectoryRecursively, { FileSystemNode } from "../api/blog";
+import { getLatestArticleUnderPath, getLatestArticleSlugPerSection, getNodeBySlug } from "../api/tree";
 import AudioPlayer from "@/components/AudioPlayer";
 import ArticleContent from "@/components/ArticleContent";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -43,6 +45,23 @@ export async function generateMetadata(
   { params }: LifeArticleProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const rootNodes = readDirectoryRecursively(process.cwd() + "/writings");
+  const node = getNodeBySlug(rootNodes, params.slug);
+  const isArticle = node && !node.isDirectory && node.name.endsWith(".md");
+  if (!isArticle) {
+    const redirectSlug =
+      getLatestArticleUnderPath(rootNodes, params.slug) ??
+      (params.slug.length > 0
+        ? getLatestArticleUnderPath(rootNodes, params.slug.slice(0, 1))
+        : null) ??
+      (() => {
+        const sectionMap = getLatestArticleSlugPerSection(rootNodes);
+        return sectionMap.tech ?? sectionMap.thoughts ?? sectionMap.life ?? null;
+      })();
+    if (redirectSlug?.length) redirect(`/writings/${redirectSlug.join("/")}`);
+    redirect("/writings");
+  }
+
   const { frontmatter } = await getArticleData(params.slug);
 
   const title = frontmatter.title || "Untitled Article";
@@ -139,12 +158,42 @@ export async function generateMetadata(
 }
 
 const LifeArticle = async ({ params }: LifeArticleProps) => {
+  const rootNodes = readDirectoryRecursively(process.cwd() + "/writings");
+  const node = getNodeBySlug(rootNodes, params.slug);
+
+  // If slug is section-only, a directory, or invalid path, redirect to the latest article in that section/path.
+  const isArticle = node && !node.isDirectory && node.name.endsWith(".md");
+  if (!isArticle) {
+    const redirectSlug =
+      getLatestArticleUnderPath(rootNodes, params.slug) ??
+      (params.slug.length > 0
+        ? getLatestArticleUnderPath(rootNodes, params.slug.slice(0, 1))
+        : null) ??
+      (() => {
+        const sectionMap = getLatestArticleSlugPerSection(rootNodes);
+        return sectionMap.tech ?? sectionMap.thoughts ?? sectionMap.life ?? null;
+      })();
+    if (redirectSlug && redirectSlug.length > 0) {
+      redirect(`/writings/${redirectSlug.join("/")}`);
+    }
+    redirect("/writings");
+  }
+
   const { frontmatter, content } = await getArticleData(params.slug);
   const isTech = params.slug.includes("tech");
 
   const imagePathForNextImageComponent = `/${params.slug.join("/")}.jpg`;
   const absoluteImagePathForJsonLd = `${SITE_URL}${imagePathForNextImageComponent}`;
   const pageUrl = `${SITE_URL}/writings/${params.slug.join("/")}`;
+
+  const segmentHrefs: (string[] | null)[] = [];
+  for (let i = 0; i < params.slug.length - 1; i++) {
+    segmentHrefs.push(getLatestArticleUnderPath(rootNodes, params.slug.slice(0, i + 1)));
+  }
+  const parentHref =
+    params.slug.length > 1
+      ? getLatestArticleUnderPath(rootNodes, params.slug.slice(0, -1))
+      : null;
 
   const processedMarkdown = await remark()
     .use(emoji)
@@ -187,7 +236,11 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
         <div className="w-full flex flex-col">
           <div className="flex items-center">
             <SidebarTrigger />
-            <BreadCrumb articlePath={params.slug} />
+            <BreadCrumb
+              articlePath={params.slug}
+              segmentHrefs={segmentHrefs}
+              parentHref={parentHref}
+            />
           </div>
         </div>
         <div className="flex relative flex-col items-center md:gap-y-10 gap-y-2">
@@ -232,13 +285,19 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
   );
 };
 
-const BreadCrumb = ({ articlePath }: { articlePath: string[] }) => {
+const BreadCrumb = ({
+  articlePath,
+  segmentHrefs,
+  parentHref,
+}: {
+  articlePath: string[];
+  segmentHrefs: (string[] | null)[];
+  parentHref: string[] | null;
+}) => {
   const currentPathSegments = articlePath.slice(0, -1);
   const currentPageLabel = articlePath[articlePath.length - 1].replace(/-/g, " ");
-  const parentPath =
-    articlePath.length > 1
-      ? `/writings/${articlePath.slice(0, -1).join("/")}`
-      : "/writings";
+  const parentLink =
+    parentHref != null ? `/writings/${parentHref.join("/")}` : "/writings";
 
   const fullTrail = (
     <BreadcrumbList className="hidden md:flex">
@@ -247,19 +306,23 @@ const BreadCrumb = ({ articlePath }: { articlePath: string[] }) => {
           Writings
         </BreadcrumbLink>
       </BreadcrumbItem>
-      {currentPathSegments.map((segment, index) => (
-        <React.Fragment key={segment + index}>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              href={`/writings/${articlePath.slice(0, index + 1).join("/")}`}
-              className="text-xs capitalize"
-            >
-              {segment.replace(/-/g, " ")}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </React.Fragment>
-      ))}
+      {currentPathSegments.map((segment, index) => {
+        const href = segmentHrefs[index];
+        const link = href != null ? `/writings/${href.join("/")}` : "#";
+        return (
+          <React.Fragment key={segment + index}>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                href={link}
+                className="text-xs capitalize"
+              >
+                {segment.replace(/-/g, " ")}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </React.Fragment>
+        );
+      })}
       <BreadcrumbSeparator />
       <BreadcrumbItem>
         <BreadcrumbPage className="text-xs capitalize">
@@ -281,7 +344,7 @@ const BreadCrumb = ({ articlePath }: { articlePath: string[] }) => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
-              href={parentPath}
+              href={parentLink}
               className="text-xs capitalize"
               aria-label="Go to parent section"
             >

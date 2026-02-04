@@ -1,52 +1,53 @@
 "use client";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FileExplorer from "./FileExplorer";
 import { FileSystemNode } from "@/app/writings/api/blog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarRail } from "./ui/sidebar";
 
-const Navlinks = [
-  {
-    url: "/writings/tech/home",
-    title: "Tech",
-  },
-  {
-    url: `/writings/thoughts/home`,
-    title: "Thoughts",
-  },
-  {
-    url: "/writings/life/journey-so-far",
-    title: "Life",
-  },
-];
+const SECTION_ORDER = ["tech", "thoughts", "life"] as const;
+const SECTION_TITLE: Record<string, string> = {
+  tech: "Tech",
+  thoughts: "Thoughts",
+  life: "Life",
+};
+
 const AppSidebar = ({
   nodes,
+  sectionLatestMap,
 }: {
   nodes: FileSystemNode[];
+  sectionLatestMap: Record<string, string[]>;
 }) => {
   const pathName = usePathname();
+  const router = useRouter();
   const route = pathName.split("/");
-  const [path, setPath] = useState(nodes[0].name);
-  const [isActive, setIsActive] = useState(2);
-  const router = useRouter()
+  const currentSection = route[2] ?? "";
+
+  const Navlinks = useMemo(() => {
+    return SECTION_ORDER.filter((key) => sectionLatestMap[key]).map((key) => ({
+      url: `/writings/${sectionLatestMap[key].join("/")}`,
+      title: SECTION_TITLE[key] ?? key,
+      key,
+    }));
+  }, [sectionLatestMap]);
+
+  const [path, setPath] = useState(nodes[0]?.name ?? currentSection);
+  const isActive = Navlinks.findIndex((item) => item.key === currentSection);
+  const activeIndex = isActive >= 0 ? isActive : 0;
 
   useEffect(() => {
-    Navlinks.map((item, index) => {
-      if (item.title.toLowerCase() === route[2]) {
-        setIsActive(index);
-        setPath(item.title.toLowerCase());
-      }
-    });
-  }, [route]);
+    if (currentSection && SECTION_ORDER.includes(currentSection as "tech" | "thoughts" | "life")) {
+      setPath(currentSection);
+    }
+  }, [currentSection]);
 
   const blogType = nodes.filter((item) => item.name === path) || [];
 
   const handleArticleTypeChange = (value: string) => {
-    const newActiveIndex = Navlinks.findIndex((item) => item.title === value)
-    setIsActive(newActiveIndex)
-    router.push(Navlinks[newActiveIndex].url)
+    const item = Navlinks.find((n) => n.title === value);
+    if (item) router.push(item.url);
   }
 
   return (
@@ -54,17 +55,14 @@ const AppSidebar = ({
       <SidebarHeader>
         <Select onValueChange={handleArticleTypeChange}>
           <SelectTrigger className="w-full text-start">
-            <SelectValue placeholder={Navlinks[isActive].title} />
+            <SelectValue placeholder={Navlinks[activeIndex]?.title ?? "Writings"} />
           </SelectTrigger>
           <SelectContent >
             {Navlinks.map((value, index) => {
               return (
-                <SelectItem key={index} value={value.title}>
+                <SelectItem key={value.key} value={value.title}>
                   <NavItem
-                    key={index}
-                    isActive={isActive}
-                    url={value.url}
-                    index={index}
+                    isActive={activeIndex === index}
                     title={value.title}
                   />
                 </SelectItem>
@@ -86,18 +84,15 @@ const AppSidebar = ({
 };
 
 const NavItem = ({
-  index,
   isActive,
   title,
 }: {
-  index: number;
-  isActive: number;
-  url: string;
+  isActive: boolean;
   title: string;
 }) => {
   return (
     <div
-      className={isActive === index ? "underline font-semibold" : ""}
+      className={isActive ? "underline font-semibold" : ""}
     >
       {title}
     </div>

@@ -35,9 +35,11 @@ const ClosedNav = ({ toggleOpen }: { toggleOpen: () => void }) => {
 
 const OpenNav = ({
   nodes,
+  sectionLatestMap,
   toggleOpen,
 }: {
   nodes: FileSystemNode[];
+  sectionLatestMap: Record<string, string[]>;
   toggleOpen: () => void;
 }) => {
   return (
@@ -46,7 +48,7 @@ const OpenNav = ({
         <IoIosArrowBack />
       </div>
       <div className="mt-5">
-        <WritingNav nodes={nodes} />
+        <WritingNav nodes={nodes} sectionLatestMap={sectionLatestMap} />
       </div>
     </div>
   );
