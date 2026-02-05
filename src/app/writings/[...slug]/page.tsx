@@ -232,7 +232,7 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
           }),
         }}
       />
-      <div className="container mx-auto relative w-full md:px-10 md:my-5 my-10 scroll-smooth">
+      <div className="container mx-auto relative w-full md:px-10 gap-y-2 space-y-8 md:my-5 my-10 scroll-smooth">
         <div className="w-full flex flex-col">
           <div className="flex items-center">
             <SidebarTrigger />
@@ -243,41 +243,64 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
             />
           </div>
         </div>
-        <div className="flex relative flex-col items-center md:gap-y-10 gap-y-2">
+
+        {frontmatter.date && (
+          <p className="text-muted-foreground text-center text-sm mt-1">
+            Published on:{" "}
+            {new Date(frontmatter.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        )}
+
+        <div className="flex relative flex-col mt-4  md:gap-y-10 gap-y-2">
           <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center font-bold">
             {frontmatter.title}
           </h1>
-          {frontmatter.date && (
-            <p className="text-muted-foreground text-sm">
-              Published on:{" "}
-              {new Date(frontmatter.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          )}
+          <div className="flex items-center gap-3">
+            <Image
+              src="/prateek-singh.jpg"
+              alt="Prateek Singh"
+              width={32}
+              height={32}
+              className="rounded-full object-cover ring-2 ring-border/50"
+            />
+            <div className="flex flex-col items-start">
+              <span className="font-medium text-xs text-foreground">Prateek Singh</span>
+            </div>
+          </div>
+
           {!isTech && frontmatter.audio && (
             <div className="mt-4">
               <AudioPlayer audioFile={frontmatter.audio} />
             </div>
           )}
         </div>
-        <div className="md:sticky top-10 flex justify-center w-full mt-10 mb-8 md:mb-0">
-          <div className="relative w-full" style={{ maxWidth: "800px" }}>
-            <Image
-              className="object-cover rounded-lg shadow-lg"
-              src={imagePathForNextImageComponent}
-              alt={frontmatter.title || "Article Header Image"}
-              width={1200}
-              height={675}
-              style={{ width: "100%", height: "auto" }}
-              quality={85}
-              priority
-            />
+        {!isTech && (
+          <div className="md:sticky top-10 flex justify-center w-full mt-10 mb-8 md:mb-0">
+            <div className="relative w-full" style={{ maxWidth: "800px" }}>
+              <Image
+                className="object-cover rounded-lg shadow-lg"
+                src={imagePathForNextImageComponent}
+                alt={frontmatter.title || "Article Header Image"}
+                width={1200}
+                height={675}
+                style={{ width: "100%", height: "auto" }}
+                quality={85}
+                priority
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex w-full max-w-screen-2xl relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]">
+        )}
+        <div
+          className={
+            isTech
+              ? "flex w-full max-w-screen-2xl relative"
+              : "flex w-full max-w-screen-2xl relative md:-mt-[calc(80%-300px)] lg:p-[3rem] lg:-mt-[calc(60%-300px)] xl:p-[3rem] xl:-mt-[calc(40%-300px)]"
+          }
+        >
           <ArticleContent pageContent={contentHtml} />
         </div>
       </div>
@@ -385,7 +408,7 @@ export async function generateStaticParams() {
         node.isDirectory === false &&
         typeof node.path === "string" && // Ensure node.path is a string
         node.path.startsWith(writingsBaseDir) && // Ensure it's an absolute path within our writings dir
-        node.path.endsWith(".md") 
+        node.path.endsWith(".md")
       ) {
         // 1. Make path relative to writingsBaseDir
         // e.g., /home/user/proj/writings/tech/article.md -> /tech/article.md
