@@ -246,7 +246,6 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
 
         {frontmatter.date && (
           <p className="text-muted-foreground text-center text-sm mt-1">
-            Published on:{" "}
             {new Date(frontmatter.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -255,11 +254,11 @@ const LifeArticle = async ({ params }: LifeArticleProps) => {
           </p>
         )}
 
-        <div className="flex relative flex-col mt-4  md:gap-y-10 gap-y-2">
+        <div className="flex relative flex-col gap-y-6 mt-4 md:gap-y-10 gap-y-2">
           <h1 className="xl:text-8xl lg:text-7xl text-4xl text-center font-bold">
             {frontmatter.title}
           </h1>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center w-full gap-3">
             <Image
               src="/prateek-singh.jpg"
               alt="Prateek Singh"
