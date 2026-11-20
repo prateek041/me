@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, FileText, Moon, Sun } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "next-themes";
@@ -65,11 +65,22 @@ function ThemeSwitcher() {
 
 export default function SiteNav() {
   const path = usePathname();
+  // Publish the nav's real height (it wraps on phones in the paper themes) for sticky offsets and anchor jumps.
+  const header = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = header.current;
+    if (!el) return;
+    const set = () => document.documentElement.style.setProperty("--nav-h", `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const link = (active: boolean) =>
     `inline-flex min-h-11 items-center ${active ? "text-foreground" : "text-muted-foreground"} hover:text-foreground`;
 
   return (
-    <header data-chrome className="sticky top-0 z-40 border-b border-border bg-background paper:border-0">
+    <header ref={header} data-chrome className="sticky top-0 z-40 border-b border-border bg-background paper:border-0">
       <nav
         aria-label="Main"
         className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-3 px-5 py-2 sm:gap-x-4 sm:px-8 paper:max-w-3xl paper:items-baseline"
