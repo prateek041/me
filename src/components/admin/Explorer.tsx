@@ -99,7 +99,8 @@ export default function Explorer({
   const toggle = (id: string) =>
     setOpen((cur) => {
       const next = new Set(cur);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       try {
         localStorage.setItem("admin:open", JSON.stringify(Array.from(next)));
       } catch {}
