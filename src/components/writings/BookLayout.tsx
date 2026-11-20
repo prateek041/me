@@ -19,17 +19,17 @@ export default function BookLayout({ book }: { book: Book }) {
           {book.cover && (
             <Image src={book.cover} alt="" width={480} height={640} priority sizes="240px" className="mb-4 aspect-[3/4] w-[200px] border border-border object-cover md:w-[240px]" />
           )}
-          <div className="text-[15px] tracking-[0.14em] text-subtle [font-variant:small-caps]">a book</div>
+          <div className="font-read text-[16px] tracking-[0.14em] text-subtle [font-variant:small-caps]">a book</div>
           <h1 className="max-w-[16ch] font-read text-5xl font-semibold leading-[1.02] tracking-[-0.02em] sm:text-6xl lg:text-[72px]">{book.title}</h1>
           {book.description && <p className="max-w-[46ch] font-read text-lg italic leading-normal text-muted-foreground md:text-[21px]">{book.description}</p>}
-          <div className="text-sm text-subtle">{statusLabel(book)}</div>
+          <div className="font-read text-[15px] italic text-subtle">{statusLabel(book)}</div>
           <Link href={postHref(first)} className="mt-2 inline-flex min-h-12 items-center gap-2.5 bg-brand px-6 text-[15px] font-semibold text-brand-foreground hover:opacity-90">
             Start reading <span aria-hidden="true">→</span>
           </Link>
         </section>
 
         <section aria-labelledby="contents" className="border-t border-border pt-12">
-          <h2 id="contents" className="mb-6 text-center text-[15px] tracking-[0.14em] text-subtle [font-variant:small-caps]">contents</h2>
+          <h2 id="contents" className="mb-6 text-center font-read text-[16px] tracking-[0.14em] text-subtle [font-variant:small-caps]">contents</h2>
           <ol className="flex flex-col">
             {book.chapters.map((c, i) => (
               <li key={c.slug.join("/")}>

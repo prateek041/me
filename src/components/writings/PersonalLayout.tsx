@@ -36,7 +36,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
         {book ? (
           <>
             {/* Like the running head of a printed book: the book's title, then the chapter number. */}
-            <Link href={book.href} className="mb-3 text-[15px] tracking-[0.12em] text-subtle [font-variant:small-caps] hover:text-brand-text md:mb-6">
+            <Link href={book.href} className="mb-3 font-read text-[16px] tracking-[0.12em] text-subtle [font-variant:small-caps] hover:text-brand-text md:mb-6">
               {book.title}
             </Link>
             {/* sits close to the title it numbers */}
@@ -44,7 +44,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
           </>
         ) : (
           <>
-            <div data-chrome><Crumbs crumbs={crumbs} className="paper:hidden" /></div>
+            <div data-chrome><Crumbs crumbs={crumbs} className="!font-read !text-[15px] paper:hidden" /></div>
             <div className="hidden text-base tracking-[0.06em] text-subtle paper:block [font-variant:small-caps]">{meta.section} · essay</div>
           </>
         )}
@@ -54,7 +54,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
         {meta.description && (
           <p className={`max-w-[40ch] font-read text-xl italic leading-normal text-muted-foreground md:text-[23px] paper:hidden ${book ? "mt-2" : ""}`}>{meta.description}</p>
         )}
-        <div className={`flex flex-wrap items-center justify-center gap-2.5 font-mono text-[13px] text-muted-foreground paper:hidden ${book ? "hidden" : ""}`}>
+        <div className={`flex flex-wrap items-center justify-center gap-2.5 font-read text-[15px] text-muted-foreground paper:hidden ${book ? "hidden" : ""}`}>
           <span className="inline-flex items-center gap-2.5 border border-border py-1 pl-1 pr-3 text-foreground">
             <span aria-hidden="true" className="inline-flex h-7 w-7 items-center justify-center border border-border bg-card text-[11px] text-brand-text">PS</span>
             Prateek Singh
@@ -101,7 +101,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
               <Content />
             </div>
             <div data-chrome className="paper:hidden">
-              <div className="mt-12 text-center font-mono text-sm tracking-[0.5em] text-subtle" aria-hidden="true">· · ·</div>
+              <div className="mt-12 text-center font-read text-lg tracking-[0.5em] text-subtle" aria-hidden="true">· · ·</div>
               {!book && <AuthorCard />}
               <PrevNext prev={prev} next={next} prevLabel={book ? "← previous chapter" : "← older thought"} nextLabel={book ? "next chapter →" : "newer thought →"} serif />
             </div>
@@ -117,7 +117,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
               <h2 id="more" className="font-read text-3xl font-semibold tracking-tight md:text-4xl paper:font-sans paper:text-[22px] paper:font-bold">
                 {meta.section === "life" ? "More from life" : "More thoughts"}
               </h2>
-              <Link href={`/writings?section=${meta.section}`} className="font-mono text-sm text-muted-foreground hover:text-foreground paper:hidden">
+              <Link href={`/writings?section=${meta.section}`} className="font-read text-[15px] text-muted-foreground hover:text-foreground paper:hidden">
                 all in {meta.section} →
               </Link>
             </div>
@@ -126,7 +126,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
                 <Link key={m.slug.join("/")} href={postHref(m)} className="flex flex-col gap-4 hover:text-brand-text">
                   {img && <Image src={img} alt="" width={900} height={600} sizes="(min-width: 640px) 45vw, 100vw" className="h-[200px] w-full object-cover md:h-[260px]" />}
                   <div className="flex flex-col gap-1.5">
-                    <span className="font-mono text-[13px] text-subtle">{formatDate(m.date, "long")} · {m.readMinutes} min</span>
+                    <span className="font-read text-[15px] text-subtle">{formatDate(m.date, "long")} · {m.readMinutes} min</span>
                     <span className="font-read text-[26px] font-semibold leading-tight">{m.title}</span>
                     {m.description && <span className="font-read text-lg italic text-muted-foreground">{m.description}</span>}
                   </div>

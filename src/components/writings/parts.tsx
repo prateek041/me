@@ -66,13 +66,13 @@ export function PrevNext({ prev, next, prevLabel, nextLabel, serif = false }: {
     <nav aria-label="More articles" className="mt-6 grid gap-3 sm:grid-cols-2">
       {prev ? (
         <Link href={postHref(prev)} className="flex flex-col gap-1.5 border border-border p-5 hover:border-brand-text">
-          <span className="font-mono text-[13px] text-subtle">{prevLabel}</span>
+          <span className={`${serif ? "font-read text-[15px] italic" : "font-mono text-[13px]"} text-subtle`}>{prevLabel}</span>
           <span className={title}>{prev.title}</span>
         </Link>
       ) : <span className="hidden sm:block" />}
       {next && (
         <Link href={postHref(next)} className="flex flex-col gap-1.5 border border-border p-5 hover:border-brand-text sm:text-right">
-          <span className="font-mono text-[13px] text-subtle">{nextLabel}</span>
+          <span className={`${serif ? "font-read text-[15px] italic" : "font-mono text-[13px]"} text-subtle`}>{nextLabel}</span>
           <span className={title}>{next.title}</span>
         </Link>
       )}

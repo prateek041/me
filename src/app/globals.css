@@ -49,7 +49,7 @@
     --sidebar-border: 221 34% 26%;
     --sidebar-ring: 6 100% 68%;
     --f-display: var(--font-space);
-    --f-body: var(--font-inter);
+    --f-body: var(--font-space);
     --f-read: var(--font-source-serif);
     --f-mono: var(--font-jbm);
   }
@@ -250,6 +250,11 @@
     font-weight: 500;
   }
 
+  /* Essays, life posts and book chapters read in one voice: headings use the reading serif too. */
+  .post-personal :is(h2, h3, h4) {
+    font-family: var(--f-read);
+    letter-spacing: -0.01em;
+  }
   /* Personal posts (thoughts, life): drop cap and centred pull quotes */
   .post-personal > p:first-of-type::first-letter {
     float: left;
