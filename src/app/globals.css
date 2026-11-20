@@ -414,3 +414,33 @@
 .reading [data-chrome] {
   display: none !important;
 }
+
+/*
+ * Lists on phones: the typography plugin indents each level by ~36px, so a
+ * 4-deep list left text ~210px to wrap in. Indent less and tighten the gaps.
+ */
+@media (max-width: 639px) {
+  .post ul {
+    padding-left: 1.1em;
+  }
+  .post ol {
+    padding-left: 1.5em;
+  }
+  .post li :is(ul, ol) {
+    padding-left: 0.9em;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+  .post li :is(ol) {
+    padding-left: 1.3em;
+  }
+  .post li {
+    padding-left: 0.15em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+  }
+  .post li > p {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+  }
+}
