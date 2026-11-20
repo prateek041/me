@@ -221,6 +221,12 @@
     font-size: 1.85em;
     line-height: 1.15;
   }
+  /* No divider above a heading that opens the article: the page header already separates it. */
+  .post > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
   .post h3 {
     margin-top: 2.5rem;
     font-size: 1.35em;
