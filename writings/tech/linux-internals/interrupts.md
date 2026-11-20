@@ -2,6 +2,7 @@
 title: "Interrupts"
 description: "Everything you need to know about writing kprobes"
 date: September 24, 2024
+draft: true
 ---
 
 Hardware connected to the machine are order of magnitude slower than the CPU.

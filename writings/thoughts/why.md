@@ -2,6 +2,7 @@
 title: "Why"
 description: "The reason behind everything I do"
 date: October 28, 2024
+draft: true
 ---
 
 The initial thought of writing this article was again defining "What I want",
