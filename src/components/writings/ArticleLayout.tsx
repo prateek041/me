@@ -30,7 +30,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
   const here = series?.posts.findIndex((p) => p.slug.join("/") === meta.slug.join("/")) ?? -1;
   const isBook = series?.kind === "book";
   const unit = isBook ? "chapter" : "part";
-  const seriesLabel = series ? `${series.title} · ${unit} ${here + 1} of ${series.posts.length}` : meta.section;
+  const seriesLabel = series ? (isBook ? `${series.title} · chapter ${here + 1}` : `${series.title} · ${unit} ${here + 1} of ${series.posts.length}`) : meta.section;
   const toc = numbered(meta);
   const prevLabel = series ? `${isBook ? "Chapter" : "Part"} ${here}` : "Older";
   const nextLabel = series ? `${isBook ? "Chapter" : "Part"} ${here + 2}` : "Newer";
@@ -62,11 +62,19 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
 
       {/* header: dark and light */}
       <section className="border-b border-border paper:hidden">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-5 pb-8 pt-10 sm:px-8 md:gap-[22px] md:pb-12 md:pt-16 reading:max-w-[48rem]">
-          <div data-chrome><Crumbs crumbs={crumbs} /></div>
+        <div className="mx-auto flex w-full max-w-[88rem] flex-col gap-5 px-5 pb-8 pt-10 sm:px-8 md:gap-[22px] md:pb-12 md:pt-16 reading:max-w-[54rem]">
+          {isBook && series ? (
+            // Book chapters read like a book page: the book's title as a running head, then the chapter number.
+            <>
+              <Link href={series.href ?? "#"} className="mb-3 text-[15px] tracking-[0.12em] text-subtle [font-variant:small-caps] hover:text-brand-text md:mb-5">{series.title}</Link>
+              <div className="-mb-3 font-read text-lg italic text-muted-foreground">Chapter {here + 1}</div>
+            </>
+          ) : (
+            <div data-chrome><Crumbs crumbs={crumbs} /></div>
+          )}
           <h1 className="max-w-[18ch] font-display text-4xl font-semibold leading-none tracking-[-0.035em] sm:text-6xl lg:text-[76px]">{meta.title}</h1>
           {meta.description && <p className="max-w-[56ch] font-read text-lg leading-normal text-muted-foreground md:text-[22px]">{meta.description}</p>}
-          <Byline meta={meta} extra={series && <Chip>{isBook ? `${series.title} · chapter` : `${series.title} series ·`} {here + 1} of {series.posts.length}</Chip>} />
+          {!isBook && <Byline meta={meta} extra={series && <Chip>{series.title} series · {here + 1} of {series.posts.length}</Chip>} />}
         </div>
       </section>
 
@@ -75,10 +83,14 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
         <div className="flex flex-col gap-2 text-center">
           <div className="text-base tracking-[0.06em] text-subtle [font-variant:small-caps]">{seriesLabel}</div>
           <h1 className="text-[32px] font-semibold leading-[1.15] sm:text-[40px]">{meta.title}</h1>
-          <div className="mt-2.5 text-[19px]">Prateek Singh</div>
-          <div className="text-base italic text-subtle">
-            {formatDate(meta.date, "long")} · {meta.readMinutes} min read
-          </div>
+          {!isBook && (
+            <>
+              <div className="mt-2.5 text-[19px]">Prateek Singh</div>
+              <div className="text-base italic text-subtle">
+                {formatDate(meta.date, "long")} · {meta.readMinutes} min read
+              </div>
+            </>
+          )}
         </div>
         {meta.description && (
           <section aria-labelledby="abs" className="mx-auto mt-10 max-w-[600px] text-justify text-[17px] leading-[1.55] [hyphens:auto]">
@@ -101,7 +113,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
       </section>
 
       {/* body */}
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-start gap-x-14 px-5 sm:px-8 paper:block paper:max-w-3xl">
+      <div className="mx-auto flex w-full max-w-[88rem] flex-wrap items-start gap-x-14 px-5 sm:px-8 paper:block paper:max-w-3xl">
         {series && (
           <>
             <details data-chrome className="w-full border-b border-border py-1 text-sm lg:hidden paper:hidden">
@@ -117,7 +129,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
           </>
         )}
 
-        <article className={`min-w-0 max-w-[44rem] flex-[999_1_480px] pb-16 pt-6 md:pb-24 lg:pt-12 paper:max-w-none paper:pb-12 paper:pt-10 ${series ? "" : "lg:ml-[calc(14rem+3.5rem)] paper:ml-0"} reading:!mx-auto`}>
+        <article className={`min-w-0 max-w-[50rem] flex-[999_1_480px] pb-16 pt-6 md:pb-24 lg:pt-12 paper:max-w-none paper:pb-12 paper:pt-10 ${series ? "" : "lg:ml-[calc(14rem+3.5rem)] paper:ml-0"} reading:!mx-auto`}>
           {meta.headings.length > 1 && (
             <details data-chrome className="mb-6 border-b border-border pb-1 text-sm xl:hidden paper:hidden">
               <summary className="flex min-h-11 cursor-pointer items-center font-mono text-[13px]">On this page</summary>
@@ -134,7 +146,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
             <Content />
           </div>
           <div data-chrome className="paper:hidden">
-            <AuthorCard />
+            {!isBook && <AuthorCard />}
             <PrevNext prev={prev} next={next} prevLabel={`← ${isBook ? "previous chapter" : series ? "previous" : "older"}`} nextLabel={`${isBook ? "next chapter" : series ? "next" : "newer"} →`} />
           </div>
           <div data-chrome><PaperNav prev={prev} next={next} prevLabel={prevLabel} nextLabel={nextLabel} /></div>

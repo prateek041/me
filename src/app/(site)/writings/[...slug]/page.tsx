@@ -150,7 +150,7 @@ const SlugPage = async ({ params }: LifeArticleProps) => {
             }),
           }}
         />
-        <BookLayout book={book} crumbs={[{ label: book.section, href: `/writings?section=${book.section}` }]} />
+        <BookLayout book={book} />
       </>
     );
   }
