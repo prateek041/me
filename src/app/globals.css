@@ -409,3 +409,8 @@
   content: "Listing " counter(listing) ":\00a0";
   font-weight: 700;
 }
+
+/* Focused reading mode: everything marked data-chrome disappears (components/writings/ReaderMode.tsx). */
+.reading [data-chrome] {
+  display: none !important;
+}

@@ -88,6 +88,8 @@ const config: Config = {
     require("tailwindcss-animate"),
     // `paper:` applies a utility only in the paper theme.
     plugin(({ addVariant }) => addVariant("paper", [".paper &", ".paper-dark &"])),
+    // `reading:` applies only in focused reading mode (components/writings/ReaderMode.tsx).
+    plugin(({ addVariant }) => addVariant("reading", ".reading &")),
   ],
 };
 export default config;

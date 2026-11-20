@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ComponentType } from "react";
 import { formatDate, postHref, type PostMeta } from "@/lib/writings";
 import ReadingProgress from "./ReadingProgress";
+import ReaderMode from "./ReaderMode";
 import { AuthorCard, Crumbs, PaperNav, PrevNext, type Crumb } from "./parts";
 
 export interface MorePost {
@@ -27,9 +28,10 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
   return (
     <>
       <ReadingProgress />
+      <ReaderMode />
 
       <header className="mx-auto flex w-full max-w-3xl flex-col items-center gap-5 px-5 pb-8 pt-10 text-center sm:px-8 md:pb-10 md:pt-20 paper:gap-2 paper:pb-0 paper:pt-10 md:paper:pt-16">
-        <Crumbs crumbs={crumbs} className="paper:hidden" />
+        <div data-chrome><Crumbs crumbs={crumbs} className="paper:hidden" /></div>
         <div className="hidden text-base tracking-[0.06em] text-subtle paper:block [font-variant:small-caps]">{meta.section} · essay</div>
         <h1 className="font-read text-5xl font-semibold leading-none tracking-[-0.025em] sm:text-7xl lg:text-[92px] paper:font-sans paper:text-[34px] paper:leading-[1.15] paper:tracking-normal sm:paper:text-[44px]">
           {meta.title}
@@ -79,18 +81,18 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
             <div className="prose prose-lg post post-personal md:prose-xl">
               <Content />
             </div>
-            <div className="paper:hidden">
+            <div data-chrome className="paper:hidden">
               <div className="mt-12 text-center font-mono text-sm tracking-[0.5em] text-subtle" aria-hidden="true">· · ·</div>
               <AuthorCard />
               <PrevNext prev={prev} next={next} prevLabel="← older thought" nextLabel="newer thought →" serif />
             </div>
-            <PaperNav prev={prev} next={next} prevLabel="Older" nextLabel="Newer" />
+            <div data-chrome><PaperNav prev={prev} next={next} prevLabel="Older" nextLabel="Newer" /></div>
           </article>
         </div>
       </div>
 
       {more.length > 0 && (
-        <section aria-labelledby="more" className="border-t border-border bg-card paper:bg-transparent">
+        <section data-chrome aria-labelledby="more" className="border-t border-border bg-card paper:bg-transparent">
           <div className="mx-auto w-full max-w-[1100px] px-5 py-14 sm:px-8 md:py-[72px]">
             <div className="mb-7 flex flex-wrap items-baseline justify-between gap-3">
               <h2 id="more" className="font-read text-3xl font-semibold tracking-tight md:text-4xl paper:font-sans paper:text-[22px] paper:font-bold">

@@ -69,7 +69,7 @@ export default function SiteNav() {
     `inline-flex min-h-11 items-center ${active ? "text-foreground" : "text-muted-foreground"} hover:text-foreground`;
 
   return (
-    <header className="border-b border-border paper:border-0">
+    <header data-chrome className="border-b border-border paper:border-0">
       <nav
         aria-label="Main"
         className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-3 px-5 py-2 sm:gap-x-4 sm:px-8 paper:max-w-3xl paper:items-baseline"

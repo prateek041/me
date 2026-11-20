@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
-import { Maximize2, X } from "lucide-react";
+import { Maximize2, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createDoc, previewMdx, saveDoc, type Doc, type DocListItem, type FolderInfo } from "@/app/(site)/admin/actions";
@@ -29,6 +29,20 @@ export default function Editor({ docs, folders, doc, missing }: { docs: DocListI
   const area = useRef<HTMLTextAreaElement>(null);
   const focusArea = useRef<HTMLTextAreaElement>(null);
   const [focus, setFocus] = useState(false);
+  // Desktop sidebar, remembered in this browser. Ctrl/⌘ + \ toggles it.
+  const [side, setSide] = useState(true);
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("admin:side") === "closed") setSide(false);
+    } catch {}
+  }, []);
+  const toggleSide = () =>
+    setSide((v) => {
+      try {
+        localStorage.setItem("admin:side", v ? "closed" : "open");
+      } catch {}
+      return !v;
+    });
   const key = doc ? `draft:${doc.slug.join("/")}` : null;
   const latest = useRef({ fm, body });
   latest.current = { fm, body };
@@ -111,6 +125,10 @@ export default function Editor({ docs, folders, doc, missing }: { docs: DocListI
       if (e.key === "Escape" && focus) {
         e.preventDefault();
         setFocusMode(false);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "\\") {
+        e.preventDefault();
+        toggleSide();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -231,10 +249,19 @@ export default function Editor({ docs, folders, doc, missing }: { docs: DocListI
         </div>
       )}
       {/* Files */}
-      <aside className="flex-none border border-border lg:mr-3 lg:w-72">
-        <div className="hidden h-full lg:block">
-          <Explorer docs={docs} folders={folders} active={active} onCreate={create} error={err} />
-        </div>
+      <aside className={`flex-none border border-border lg:mr-3 ${side ? "lg:w-72" : "lg:w-11"}`}>
+        {side ? (
+          <div className="hidden h-full lg:block">
+            <Explorer docs={docs} folders={folders} active={active} onCreate={create} error={err} />
+          </div>
+        ) : (
+          <div className="hidden h-full flex-col items-center gap-3 py-2 lg:flex">
+            <button onClick={toggleSide} title="Show files (Ctrl/⌘ + \)" aria-label="Show files" className="p-2 text-subtle hover:text-foreground">
+              <PanelLeftOpen className="h-4 w-4" />
+            </button>
+            <span className="font-mono text-[11px] uppercase tracking-wider text-subtle [writing-mode:vertical-rl]">files · {docs.length}</span>
+          </div>
+        )}
         <details open={!doc} className="lg:hidden">
           <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 font-mono text-xs uppercase tracking-wider text-subtle">
             <span>writings · {docs.length}</span>
@@ -261,6 +288,9 @@ export default function Editor({ docs, folders, doc, missing }: { docs: DocListI
           <>
             {/* Top bar */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border px-4 py-2.5">
+              <button onClick={toggleSide} title={`${side ? "Hide" : "Show"} files (Ctrl/⌘ + \\)`} aria-label={side ? "Hide files" : "Show files"} className="-ml-1 hidden p-1 text-subtle hover:text-foreground lg:block">
+                {side ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+              </button>
               <div className="min-w-0 flex-1 truncate font-mono text-xs text-subtle">writings/{doc.slug.join("/")}</div>
               <span className={`font-mono text-xs ${syncColor}`}>{syncLabel}</span>
               <span className="font-mono text-xs text-subtle">{words} words</span>

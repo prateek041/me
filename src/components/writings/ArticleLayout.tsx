@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ComponentType } from "react";
-import { formatDate, postHref, SITE_URL, type PostMeta } from "@/lib/writings";
+import { formatDate, postHref, type PostMeta } from "@/lib/writings";
 import ReadingProgress from "./ReadingProgress";
+import ReaderMode from "./ReaderMode";
 import TableOfContents from "./TableOfContents";
 import { AuthorCard, Byline, Chip, Crumbs, PaperNav, PrevNext, type Crumb } from "./parts";
 
@@ -54,11 +55,12 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
   return (
     <>
       <ReadingProgress />
+      <ReaderMode />
 
       {/* header: dark and light */}
       <section className="border-b border-border paper:hidden">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-5 pb-8 pt-10 sm:px-8 md:gap-[22px] md:pb-12 md:pt-16">
-          <Crumbs crumbs={crumbs} />
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-5 pb-8 pt-10 sm:px-8 md:gap-[22px] md:pb-12 md:pt-16 reading:max-w-[48rem]">
+          <div data-chrome><Crumbs crumbs={crumbs} /></div>
           <h1 className="max-w-[18ch] font-display text-4xl font-semibold leading-none tracking-[-0.035em] sm:text-6xl lg:text-[76px]">{meta.title}</h1>
           {meta.description && <p className="max-w-[56ch] font-read text-lg leading-normal text-muted-foreground md:text-[22px]">{meta.description}</p>}
           <Byline meta={meta} extra={series && <Chip>{series.title} series · {here + 1} of {series.posts.length}</Chip>} />
@@ -72,7 +74,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
           <h1 className="text-[32px] font-semibold leading-[1.15] sm:text-[40px]">{meta.title}</h1>
           <div className="mt-2.5 text-[19px]">Prateek Singh</div>
           <div className="text-base italic text-subtle">
-            {SITE_URL.replace("https://", "")}/writings/{meta.slug.join("/")} · {formatDate(meta.date, "long")} · {meta.readMinutes} min read
+            {formatDate(meta.date, "long")} · {meta.readMinutes} min read
           </div>
         </div>
         {meta.description && (
@@ -82,7 +84,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
           </section>
         )}
         {toc.length > 0 && (
-          <nav aria-labelledby="toc" className="mt-10 border-y border-border border-t-foreground py-3.5 text-[17px]">
+          <nav data-chrome aria-labelledby="toc" className="mt-10 border-y border-border border-t-foreground py-3.5 text-[17px]">
             <div id="toc" className="mb-1.5 font-bold">Contents</div>
             <ol className="grid list-none gap-0.5">
               {toc.map((h) => (
@@ -99,20 +101,20 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-start gap-x-14 px-5 sm:px-8 paper:block paper:max-w-3xl">
         {series && (
           <>
-            <details className="w-full border-b border-border py-1 text-sm lg:hidden paper:hidden">
+            <details data-chrome className="w-full border-b border-border py-1 text-sm lg:hidden paper:hidden">
               <summary className="flex min-h-11 cursor-pointer items-center font-mono text-[13px]">{series.title} series · part {here + 1} of {series.posts.length}</summary>
               <div className="pb-3">{seriesList}</div>
             </details>
-            <aside aria-label={`${series.title} series`} className="sticky top-6 hidden w-56 shrink-0 pb-6 pt-12 text-sm lg:block paper:hidden">
+            <aside data-chrome aria-label={`${series.title} series`} className="sticky top-6 hidden w-56 shrink-0 pb-6 pt-12 text-sm lg:block paper:hidden">
               <div className="mb-3 font-mono text-[13px] text-subtle">series · {meta.slug.slice(0, 2).join("/")}</div>
               {seriesList}
             </aside>
           </>
         )}
 
-        <article className={`min-w-0 max-w-[44rem] flex-[999_1_480px] pb-16 pt-6 md:pb-24 lg:pt-12 paper:max-w-none paper:pb-12 paper:pt-10 ${series ? "" : "lg:ml-[calc(14rem+3.5rem)] paper:ml-0"}`}>
+        <article className={`min-w-0 max-w-[44rem] flex-[999_1_480px] pb-16 pt-6 md:pb-24 lg:pt-12 paper:max-w-none paper:pb-12 paper:pt-10 ${series ? "" : "lg:ml-[calc(14rem+3.5rem)] paper:ml-0"} reading:!mx-auto`}>
           {meta.headings.length > 1 && (
-            <details className="mb-6 border-b border-border pb-1 text-sm xl:hidden paper:hidden">
+            <details data-chrome className="mb-6 border-b border-border pb-1 text-sm xl:hidden paper:hidden">
               <summary className="flex min-h-11 cursor-pointer items-center font-mono text-[13px]">On this page</summary>
               <ul className="flex flex-col pb-3">
                 {meta.headings.map((h) => (
@@ -126,15 +128,15 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
           <div className="prose prose-lg post post-numbered prose-headings:font-display">
             <Content />
           </div>
-          <div className="paper:hidden">
+          <div data-chrome className="paper:hidden">
             <AuthorCard />
             <PrevNext prev={prev} next={next} prevLabel={`← ${series ? "previous" : "older"}`} nextLabel={`${series ? "next" : "newer"} →`} />
           </div>
-          <PaperNav prev={prev} next={next} prevLabel={prevLabel} nextLabel={nextLabel} />
+          <div data-chrome><PaperNav prev={prev} next={next} prevLabel={prevLabel} nextLabel={nextLabel} /></div>
         </article>
 
         {meta.headings.length > 1 && (
-          <aside aria-label="On this page" className="sticky top-6 hidden w-52 shrink-0 pb-6 pl-2 pt-12 xl:block paper:hidden">
+          <aside data-chrome aria-label="On this page" className="sticky top-6 hidden w-52 shrink-0 pb-6 pl-2 pt-12 xl:block paper:hidden">
             <TableOfContents headings={meta.headings} />
           </aside>
         )}
