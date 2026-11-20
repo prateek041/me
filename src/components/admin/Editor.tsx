@@ -4,7 +4,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, use
 import { Maximize2, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createDoc, previewMdx, saveDoc, type Doc, type DocListItem, type FolderInfo } from "@/app/(site)/admin/actions";
+import { createDoc, previewMdx, saveDoc, type BookDoc, type Doc, type DocListItem, type FolderInfo } from "@/app/(site)/admin/actions";
+import BookSettings from "./BookSettings";
 import DateField from "./DateField";
 import Explorer, { type NewRequest } from "./Explorer";
 
@@ -15,7 +16,7 @@ type Sync = "saved" | "dirty" | "saving" | "error";
 const field = "w-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand-text";
 const lbl = "mb-1 block font-mono text-[11px] uppercase tracking-wider text-subtle";
 
-export default function Editor({ docs, folders, doc, missing }: { docs: DocListItem[]; folders: FolderInfo[]; doc: Doc | null; missing: boolean }) {
+export default function Editor({ docs, folders, doc, book, missing }: { docs: DocListItem[]; folders: FolderInfo[]; doc: Doc | null; book?: BookDoc | null; missing: boolean }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [fm, setFm] = useState<FM>(doc?.fm ?? {});
@@ -209,7 +210,7 @@ export default function Editor({ docs, folders, doc, missing }: { docs: DocListI
   const words = useMemo(() => body.split(/\s+/).filter(Boolean).length, [body]);
   const isDraft = fm.draft === true;
   const tags = Array.isArray(fm.tags) ? (fm.tags as string[]).join(", ") : "";
-  const active = doc?.slug.join("/");
+  const active = doc?.slug.join("/") ?? book?.folder.join("/");
 
   const syncLabel = { saved: "saved to disk", dirty: "unsaved · kept in this browser", saving: "saving…", error: "not saved" }[sync];
   const syncColor = sync === "saved" ? "text-subtle" : sync === "error" ? "text-red-500" : "text-brand-text";
@@ -275,7 +276,9 @@ export default function Editor({ docs, folders, doc, missing }: { docs: DocListI
 
       {/* Workspace */}
       <section className="mt-3 flex min-h-0 min-w-0 flex-1 flex-col border border-border lg:mt-0">
-        {!doc ? (
+        {book ? (
+          <BookSettings book={book} />
+        ) : !doc ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 p-10 text-center">
             <p className="font-display text-2xl font-semibold">{missing ? "That file doesn't exist." : "Pick something to write."}</p>
             <p className="max-w-[44ch] text-muted-foreground">

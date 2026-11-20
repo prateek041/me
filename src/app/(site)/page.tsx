@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatDate, getAllPosts, postHref, prettify, type PostMeta } from "@/lib/writings";
+import { getChapterMap } from "@/lib/books";
 
 const AREAS = [
   {
@@ -35,7 +36,8 @@ const LINKS = {
 const years = new Date().getFullYear() - 2022;
 
 function meta(p: PostMeta) {
-  const series = p.slug.length > 2 ? ` · ${prettify(p.slug[1]).toLowerCase()}` : "";
+  const ch = getChapterMap().get(p.slug.join("/"));
+  const series = ch ? ` · ${ch.book.toLowerCase()} · ch. ${ch.n}` : p.slug.length > 2 ? ` · ${prettify(p.slug[1]).toLowerCase()}` : "";
   return `${p.section}${series} · ${p.readMinutes} min`;
 }
 

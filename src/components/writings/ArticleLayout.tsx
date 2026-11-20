@@ -10,7 +10,8 @@ interface Props {
   meta: PostMeta;
   Content: ComponentType;
   crumbs: Crumb[];
-  series: { title: string; posts: PostMeta[] } | null;
+  /** A series (folder of posts) or a book (kind "book", with a link to its page). */
+  series: { title: string; posts: PostMeta[]; kind?: "series" | "book"; href?: string } | null;
   prev?: PostMeta;
   next?: PostMeta;
 }
@@ -27,10 +28,12 @@ function numbered(meta: PostMeta) {
 
 export default function ArticleLayout({ meta, Content, crumbs, series, prev, next }: Props) {
   const here = series?.posts.findIndex((p) => p.slug.join("/") === meta.slug.join("/")) ?? -1;
-  const seriesLabel = series ? `${series.title} · part ${here + 1} of ${series.posts.length}` : meta.section;
+  const isBook = series?.kind === "book";
+  const unit = isBook ? "chapter" : "part";
+  const seriesLabel = series ? `${series.title} · ${unit} ${here + 1} of ${series.posts.length}` : meta.section;
   const toc = numbered(meta);
-  const prevLabel = series ? `Part ${here}` : "Older";
-  const nextLabel = series ? `Part ${here + 2}` : "Newer";
+  const prevLabel = series ? `${isBook ? "Chapter" : "Part"} ${here}` : "Older";
+  const nextLabel = series ? `${isBook ? "Chapter" : "Part"} ${here + 2}` : "Newer";
 
   const seriesList = series && (
     <ol className="flex flex-col gap-0.5">
@@ -63,7 +66,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
           <div data-chrome><Crumbs crumbs={crumbs} /></div>
           <h1 className="max-w-[18ch] font-display text-4xl font-semibold leading-none tracking-[-0.035em] sm:text-6xl lg:text-[76px]">{meta.title}</h1>
           {meta.description && <p className="max-w-[56ch] font-read text-lg leading-normal text-muted-foreground md:text-[22px]">{meta.description}</p>}
-          <Byline meta={meta} extra={series && <Chip>{series.title} series · {here + 1} of {series.posts.length}</Chip>} />
+          <Byline meta={meta} extra={series && <Chip>{isBook ? `${series.title} · chapter` : `${series.title} series ·`} {here + 1} of {series.posts.length}</Chip>} />
         </div>
       </section>
 
@@ -102,11 +105,13 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
         {series && (
           <>
             <details data-chrome className="w-full border-b border-border py-1 text-sm lg:hidden paper:hidden">
-              <summary className="flex min-h-11 cursor-pointer items-center font-mono text-[13px]">{series.title} series · part {here + 1} of {series.posts.length}</summary>
+              <summary className="flex min-h-11 cursor-pointer items-center font-mono text-[13px]">{isBook ? `${series.title} · chapter` : `${series.title} series · part`} {here + 1} of {series.posts.length}</summary>
               <div className="pb-3">{seriesList}</div>
             </details>
             <aside data-chrome aria-label={`${series.title} series`} className="sticky top-[calc(var(--nav-h)+1.5rem)] hidden w-56 shrink-0 pb-6 pt-12 text-sm lg:block paper:hidden">
-              <div className="mb-3 font-mono text-[13px] text-subtle">series · {meta.slug.slice(0, 2).join("/")}</div>
+              <div className="mb-3 font-mono text-[13px] text-subtle">
+                {isBook && series.href ? <Link href={series.href} className="hover:text-brand-text">book · {series.title}</Link> : <>series · {meta.slug.slice(0, 2).join("/")}</>}
+              </div>
               {seriesList}
             </aside>
           </>
@@ -130,7 +135,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
           </div>
           <div data-chrome className="paper:hidden">
             <AuthorCard />
-            <PrevNext prev={prev} next={next} prevLabel={`← ${series ? "previous" : "older"}`} nextLabel={`${series ? "next" : "newer"} →`} />
+            <PrevNext prev={prev} next={next} prevLabel={`← ${isBook ? "previous chapter" : series ? "previous" : "older"}`} nextLabel={`${isBook ? "next chapter" : series ? "next" : "newer"} →`} />
           </div>
           <div data-chrome><PaperNav prev={prev} next={next} prevLabel={prevLabel} nextLabel={nextLabel} /></div>
         </article>

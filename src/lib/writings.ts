@@ -215,9 +215,14 @@ export function prettify(segment: string) {
   return TITLES[segment] ?? segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
 }
 
-/** A series is a folder under tech/ (e.g. tech/ebpf). Posts in it are numbered in order. */
+/** A folder holding a `_book.json` is a book (see src/lib/books.ts), not a series. */
+export function isBookFolder(folder: string[]): boolean {
+  return fs.existsSync(path.join(WRITINGS_DIR, ...folder, "_book.json"));
+}
+
+/** A series is any other folder of posts (e.g. tech/ebpf). Posts in it are numbered in order. */
 export function getSeriesPosts(meta: PostMeta): PostMeta[] | null {
-  if (meta.slug.length < 3) return null;
+  if (meta.slug.length < 3 || isBookFolder(meta.slug.slice(0, 2))) return null;
   const prefix = meta.slug.slice(0, 2).join("/") + "/";
   const posts = getAllPosts()
     .filter((p) => p.slug.join("/").startsWith(prefix))
@@ -237,7 +242,7 @@ export interface SeriesInfo {
 export function getSeriesList(): SeriesInfo[] {
   const groups = new Map<string, PostMeta[]>();
   for (const p of getAllPosts()) {
-    if (p.slug.length < 3) continue;
+    if (p.slug.length < 3 || isBookFolder(p.slug.slice(0, 2))) continue;
     const id = p.slug.slice(0, 2).join("/");
     groups.set(id, [...(groups.get(id) ?? []), p]);
   }

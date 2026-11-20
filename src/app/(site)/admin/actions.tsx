@@ -13,6 +13,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkCallouts from "@/lib/remark-callouts.mjs";
 import { components } from "@/mdx-components";
 import { WRITINGS_DIR, getAllPosts } from "@/lib/writings";
+import { orderChapters, readBookFile, type BookFile, type BookStatus } from "@/lib/books";
 
 // Local mode: the editor reads and writes the files in /writings directly.
 // It is switched off in production builds. The deployed version will talk to
@@ -89,6 +90,7 @@ export interface FolderInfo {
   path: string; // e.g. "tech/my-book"
   kind: "book" | "series";
   title: string;
+  chapters?: string[]; // books: reading order (file names)
 }
 
 /** A folder holding a `_book.json` is a book. Any other folder of posts is a series. */
@@ -102,11 +104,11 @@ export async function listFolders(): Promise<FolderInfo[]> {
       const here = [...rel, name];
       const meta = path.join(full, "_book.json");
       if (fs.existsSync(meta)) {
-        let title = "";
+        let file: BookFile = {};
         try {
-          title = JSON.parse(fs.readFileSync(meta, "utf8")).title ?? "";
+          file = JSON.parse(fs.readFileSync(meta, "utf8"));
         } catch {}
-        out.push({ path: here.join("/"), kind: "book", title });
+        out.push({ path: here.join("/"), kind: "book", title: file.title ?? "", chapters: file.chapters ?? [] });
       }
       if (here.length < 2) walk(full, here);
     }
@@ -158,6 +160,9 @@ export async function createDoc(input: {
     const slug = [...parent, slugify(title)];
     if (exists(slug)) throw new Error("An article with that name already exists there");
     await firstPost(slug, title);
+    // A new chapter goes to the end of its book's reading order.
+    const book = readBookFile(parent);
+    if (book) writeBookFile(parent, { ...book, chapters: [...(book.chapters ?? []), slug[slug.length - 1]] });
     return slug;
   }
 
@@ -166,7 +171,7 @@ export async function createDoc(input: {
   if (fs.existsSync(dir)) throw new Error("A folder with that name already exists");
   fs.mkdirSync(dir, { recursive: true });
   if (input.kind === "book") {
-    fs.writeFileSync(path.join(dir, "_book.json"), JSON.stringify({ title, description: "", kind: "book" }, null, 2) + "\n");
+    writeBookFile([input.section, slugify(title)], { title, description: "", status: "writing", chapters: ["chapter-1"] });
   }
   const slug = [input.section, slugify(title), input.kind === "book" ? "chapter-1" : "part-1"];
   await firstPost(slug, input.kind === "book" ? "Chapter 1" : "Part 1");
@@ -194,4 +199,50 @@ export async function previewMdx(source: string) {
   } catch (e) {
     return { ok: false as const, error: e instanceof Error ? e.message : String(e) };
   }
+}
+
+// ---------- books ----------
+
+function bookFolder(folder: string[]): string[] {
+  if (folder.length !== 2 || !folder.every((s) => SEGMENT.test(s) && !s.includes(".."))) throw new Error("Invalid book");
+  return folder;
+}
+
+function writeBookFile(folder: string[], data: BookFile) {
+  const file = path.resolve(WRITINGS_DIR, ...bookFolder(folder), "_book.json");
+  if (!file.startsWith(WRITINGS_DIR + path.sep)) throw new Error("Invalid book");
+  fs.writeFileSync(file, JSON.stringify({ kind: "book", ...data }, null, 2) + "\n");
+}
+
+export interface BookDoc {
+  folder: string[];
+  title: string;
+  description: string;
+  status: BookStatus;
+  chapters: { name: string; slug: string[]; title: string; draft: boolean; date: string }[]; // reading order
+}
+
+/** A book and all its chapters (drafts included), in reading order. */
+export async function loadBook(folder: string[]): Promise<BookDoc | null> {
+  assertLocal();
+  const file = readBookFile(bookFolder(folder));
+  if (!file) return null;
+  const prefix = folder.join("/") + "/";
+  const posts = getAllPosts().filter((p) => p.slug.length === 3 && p.slug.join("/").startsWith(prefix));
+  return {
+    folder,
+    title: file.title ?? "",
+    description: file.description ?? "",
+    status: file.status === "complete" ? "complete" : "writing",
+    chapters: orderChapters(posts, file.chapters).map((p) => ({ name: p.slug[2], slug: p.slug, title: p.title, draft: p.draft, date: p.date })),
+  };
+}
+
+export async function saveBook(folder: string[], data: { title: string; description: string; status: BookStatus; chapters: string[] }) {
+  assertLocal();
+  const title = data.title.trim();
+  if (!title) throw new Error("Give the book a title");
+  writeBookFile(folder, { title, description: data.description.trim(), status: data.status, chapters: data.chapters });
+  revalidatePath("/writings");
+  revalidatePath(`/writings/${folder.join("/")}`);
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BookOpen, ChevronRight, FileText, Layers, Plus, X } from "lucide-react";
+import { BookOpen, ChevronRight, FileText, Layers, Plus, Settings2, X } from "lucide-react";
 import type { DocListItem, FolderInfo } from "@/app/(site)/admin/actions";
 
 type Kind = "article" | "series" | "book";
@@ -52,11 +52,17 @@ function buildTree(docs: DocListItem[], folders: FolderInfo[]): Section[] {
     for (const f of folders) if (f.path.startsWith(name + "/") && !byFolder.has(f.path)) byFolder.set(f.path, []);
     const list: Folder[] = Array.from(byFolder.entries()).map(([path, ds]) => {
       const meta = info.get(path);
+      // Books follow their chosen chapter order; anything not in it comes after, oldest first.
+      const order = meta?.chapters ?? [];
+      const rank = (d: DocListItem) => {
+        const i = order.indexOf(d.slug[d.slug.length - 1]);
+        return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+      };
       return {
         path,
         kind: meta?.kind ?? "series",
         title: meta?.title || pretty(path.split("/")[1]),
-        docs: ds.sort((a, b) => (a.date < b.date ? -1 : 1)),
+        docs: ds.sort((a, b) => rank(a) - rank(b) || (a.date < b.date ? -1 : 1)),
       };
     });
     list.sort((a, b) => a.title.localeCompare(b.title));
@@ -221,6 +227,16 @@ export default function Explorer({
                             <span className="truncate font-medium">{f.title}</span>
                             <span className="ml-auto flex-none font-mono text-[11px] text-subtle">{f.docs.length}</span>
                           </button>
+                          {f.kind === "book" && (
+                            <Link
+                              href={`/admin/${f.path}`}
+                              title="Book settings: title, description, status, chapter order"
+                              aria-label={`${f.title} settings`}
+                              className={`px-1.5 py-1.5 hover:bg-muted hover:text-brand-text ${active === f.path ? "text-brand-text" : "text-subtle"}`}
+                            >
+                              <Settings2 className="h-4 w-4" />
+                            </Link>
+                          )}
                           <button
                             onClick={() => start("article", f.path)}
                             title={f.kind === "book" ? "Add a chapter" : "Add to this series"}

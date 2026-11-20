@@ -19,6 +19,8 @@ import {
   type PostMeta,
 } from "@/lib/writings";
 import ArticleLayout from "@/components/writings/ArticleLayout";
+import BookLayout from "@/components/writings/BookLayout";
+import { bookHref, getBook, getBooks, getChapterContext } from "@/lib/books";
 import PersonalLayout from "@/components/writings/PersonalLayout";
 import type { Crumb } from "@/components/writings/parts";
 
@@ -31,6 +33,19 @@ export async function generateMetadata(
   { params }: LifeArticleProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const book = getBook(params.slug);
+  if (book) {
+    const url = `${SITE_URL}${bookHref(book)}`;
+    const description = book.description || `${book.title}, a book by Prateek Singh.`;
+    return {
+      title: book.title,
+      description,
+      authors: [{ name: "Prateek Singh", url: SITE_URL }],
+      alternates: { canonical: url },
+      openGraph: { type: "book", title: book.title, description, url, siteName: "Prateek Singh", images: book.cover ? [{ url: SITE_URL + book.cover }] : undefined },
+      twitter: { card: book.cover ? "summary_large_image" : "summary", title: book.title, description, site: "@prateek_0041", creator: "@prateek_0041" },
+    };
+  }
   const meta = getPostMetaOrRedirect(params.slug);
 
   const title = meta.title;
@@ -115,11 +130,37 @@ export async function generateMetadata(
 }
 
 const SlugPage = async ({ params }: LifeArticleProps) => {
+  // A book's folder (e.g. /writings/life/my-book) is the book's own page.
+  const book = getBook(params.slug);
+  if (book) {
+    return (
+      <>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Book",
+              name: book.title,
+              description: book.description || undefined,
+              url: `${SITE_URL}${bookHref(book)}`,
+              author: { "@type": "Person", name: "Prateek Singh", url: SITE_URL },
+              hasPart: book.chapters.map((c, i) => ({ "@type": "Chapter", position: i + 1, name: c.title, url: `${SITE_URL}/writings/${c.slug.join("/")}` })),
+            }),
+          }}
+        />
+        <BookLayout book={book} crumbs={[{ label: book.section, href: `/writings?section=${book.section}` }]} />
+      </>
+    );
+  }
+
   const rootNodes = getTree();
   getPostMetaOrRedirect(params.slug, rootNodes);
   const post = await getPost(params.slug);
   if (!post) redirect("/writings");
   const { meta, Content } = post;
+  const chapter = getChapterContext(meta);
 
   const imageForSeo = `${SITE_URL}/${params.slug.join("/")}.jpg`;
   const pageUrl = `${SITE_URL}/writings/${params.slug.join("/")}`;
@@ -127,6 +168,7 @@ const SlugPage = async ({ params }: LifeArticleProps) => {
   // writings / tech / ebpf ... : the section links to its list, folders link to their newest article.
   const crumbs: Crumb[] = params.slug.slice(0, -1).map((seg, i) => {
     const latest = i === 0 ? null : getLatestArticleUnderPath(rootNodes, params.slug.slice(0, i + 1));
+    if (i === 1 && chapter) return { label: chapter.book.title.toLowerCase(), href: bookHref(chapter.book) };
     return {
       label: prettify(seg).toLowerCase(),
       href: i === 0 ? `/writings?section=${seg}` : latest ? `/writings/${latest.join("/")}` : null,
@@ -157,6 +199,22 @@ const SlugPage = async ({ params }: LifeArticleProps) => {
       }}
     />
   );
+
+  if (meta.section === "tech" && chapter) {
+    return (
+      <>
+        {jsonLd}
+        <ArticleLayout
+          meta={meta}
+          Content={Content}
+          crumbs={crumbs}
+          series={{ title: chapter.book.title, posts: chapter.book.chapters, kind: "book", href: bookHref(chapter.book) }}
+          prev={chapter.prev}
+          next={chapter.next}
+        />
+      </>
+    );
+  }
 
   if (meta.section === "tech") {
     const seriesPosts = getSeriesPosts(meta);
@@ -193,9 +251,10 @@ const SlugPage = async ({ params }: LifeArticleProps) => {
         Content={Content}
         crumbs={crumbs}
         image={getHeaderImage(meta)}
-        prev={older}
-        next={newer}
-        more={more}
+        prev={chapter ? chapter.prev : older}
+        next={chapter ? chapter.next : newer}
+        more={chapter ? [] : more}
+        book={chapter ? { title: chapter.book.title, href: bookHref(chapter.book), index: chapter.index, total: chapter.book.chapters.length } : undefined}
       />
     </>
   );
@@ -222,7 +281,7 @@ function getPostMetaOrRedirect(slug: string[], rootNodes: FileSystemNode[] = get
 
 // Only real articles are pre-rendered; folder slugs are handled by the redirect above.
 export async function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
+  return [...getAllPosts().map((p) => ({ slug: p.slug })), ...getBooks().map((b) => ({ slug: b.slug }))];
 }
 
 export default SlugPage;

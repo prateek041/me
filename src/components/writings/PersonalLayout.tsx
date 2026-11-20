@@ -20,10 +20,12 @@ interface Props {
   prev?: PostMeta;
   next?: PostMeta;
   more: MorePost[];
+  /** Set when this post is a chapter of a book. */
+  book?: { title: string; href: string; index: number; total: number };
 }
 
 /** Thoughts and life posts: a serif reading column; the header image stays put while the text slides over it. */
-export default function PersonalLayout({ meta, Content, crumbs, image, prev, next, more }: Props) {
+export default function PersonalLayout({ meta, Content, crumbs, image, prev, next, more, book }: Props) {
   const chip = "border border-border px-3 py-1";
   return (
     <>
@@ -32,7 +34,14 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
 
       <header className="mx-auto flex w-full max-w-3xl flex-col items-center gap-5 px-5 pb-8 pt-10 text-center sm:px-8 md:pb-10 md:pt-20 paper:gap-2 paper:pb-0 paper:pt-10 md:paper:pt-16">
         <div data-chrome><Crumbs crumbs={crumbs} className="paper:hidden" /></div>
-        <div className="hidden text-base tracking-[0.06em] text-subtle paper:block [font-variant:small-caps]">{meta.section} · essay</div>
+        {book && (
+          <Link href={book.href} className="font-mono text-sm text-brand-text hover:underline paper:hidden">
+            {book.title} · chapter {book.index + 1} of {book.total}
+          </Link>
+        )}
+        <div className="hidden text-base tracking-[0.06em] text-subtle paper:block [font-variant:small-caps]">
+          {book ? <Link href={book.href}>{book.title} · chapter {book.index + 1}</Link> : <>{meta.section} · essay</>}
+        </div>
         <h1 className="font-read text-5xl font-semibold leading-none tracking-[-0.025em] sm:text-7xl lg:text-[92px] paper:font-sans paper:text-[34px] paper:leading-[1.15] paper:tracking-normal sm:paper:text-[44px]">
           {meta.title}
         </h1>
@@ -84,9 +93,9 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
             <div data-chrome className="paper:hidden">
               <div className="mt-12 text-center font-mono text-sm tracking-[0.5em] text-subtle" aria-hidden="true">· · ·</div>
               <AuthorCard />
-              <PrevNext prev={prev} next={next} prevLabel="← older thought" nextLabel="newer thought →" serif />
+              <PrevNext prev={prev} next={next} prevLabel={book ? "← previous chapter" : "← older thought"} nextLabel={book ? "next chapter →" : "newer thought →"} serif />
             </div>
-            <div data-chrome><PaperNav prev={prev} next={next} prevLabel="Older" nextLabel="Newer" /></div>
+            <div data-chrome><PaperNav prev={prev} next={next} prevLabel={book ? `Chapter ${book.index}` : "Older"} nextLabel={book ? `Chapter ${book.index + 2}` : "Newer"} /></div>
           </article>
         </div>
       </div>

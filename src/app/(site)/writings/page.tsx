@@ -11,6 +11,7 @@ import {
   prettify,
   type PostMeta,
 } from "@/lib/writings";
+import { bookHref, getBooks } from "@/lib/books";
 
 export const metadata: Metadata = {
   title: "Writings",
@@ -29,8 +30,14 @@ function groupByYear(posts: PostMeta[]) {
   return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
 }
 
-const metaLine = (p: PostMeta) =>
-  `${p.section}${p.slug.length > 2 ? ` · ${prettify(p.slug[1]).toLowerCase()}` : ""} · ${formatDate(p.date, "long")} · ${p.readMinutes} min`;
+type ChapterInfo = Map<string, { book: string; n: number }>;
+
+/** "life · a sample book · ch. 2 · ..." for chapters, "tech · ebpf · ..." for series posts. */
+const metaLine = (p: PostMeta, chapters: ChapterInfo) => {
+  const ch = chapters.get(p.slug.join("/"));
+  const group = ch ? ` · ${ch.book.toLowerCase()} · ch. ${ch.n}` : p.slug.length > 2 ? ` · ${prettify(p.slug[1]).toLowerCase()}` : "";
+  return `${p.section}${group} · ${formatDate(p.date, "long")} · ${p.readMinutes} min`;
+};
 
 export default function WritingsPage({ searchParams }: { searchParams: { section?: string } }) {
   const all = getAllPosts().filter((p) => !p.draft);
@@ -40,6 +47,8 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
   const featured = all[0];
   const featuredImage = featured ? getHeaderImage(featured) : null;
   const series = getSeriesList();
+  const books = getBooks();
+  const chapters: ChapterInfo = new Map(books.flatMap((b) => b.chapters.map((c, i) => [c.slug.join("/"), { book: b.title, n: i + 1 }] as const)));
   const numbers = getPostNumbers();
   const since = new Date(all[all.length - 1].date).getUTCFullYear();
   const until = new Date(all[0].date).getUTCFullYear();
@@ -89,6 +98,27 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
           </Link>
         )}
 
+        {books.length > 0 && (
+          <section aria-labelledby="books" className="flex flex-col gap-6 pt-14 md:pt-[72px]">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h2 id="books" className="font-display text-[26px] font-semibold tracking-[-0.02em] md:text-[32px]">Books</h2>
+              <span className="font-mono text-[13px] text-subtle">written a chapter at a time</span>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {books.map((b) => (
+                <Link key={b.id} href={bookHref(b)} className="flex flex-col gap-2 border border-border bg-card p-6 hover:border-brand-text">
+                  <div className="font-mono text-[13px] text-brand-text">book · {b.section}</div>
+                  <div className="font-display text-2xl font-semibold leading-tight">{b.title}</div>
+                  {b.description && <div className="line-clamp-2 text-[15px] text-muted-foreground">{b.description}</div>}
+                  <div className="mt-auto pt-2 text-sm text-subtle">
+                    {b.chapters.length} {b.chapters.length === 1 ? "chapter" : "chapters"} · {b.status === "complete" ? "complete" : "in progress"} · updated {formatDate(b.updated, "month")}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {series.length > 0 && (
           <section aria-labelledby="series" className="flex flex-col gap-6 pb-6 pt-14 md:pt-[72px]">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
@@ -133,6 +163,11 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
                 <Link key={p.slug.join("/")} href={postHref(p)} className="flex flex-wrap items-baseline gap-x-7 gap-y-1.5 border-b border-border py-[18px] hover:text-brand-text">
                   <div className="w-[110px] flex-none font-mono text-[13px] text-subtle">{formatDate(p.date, "day")}</div>
                   <div className="flex min-w-0 flex-[999_1_320px] flex-col gap-1">
+                    {chapters.has(p.slug.join("/")) && (
+                      <div className="font-mono text-[13px] text-brand-text">
+                        {chapters.get(p.slug.join("/"))!.book} · chapter {chapters.get(p.slug.join("/"))!.n}
+                      </div>
+                    )}
                     <div className="font-display text-[22px] font-semibold leading-tight">{p.title}</div>
                     {p.description && <div className="text-[15px] text-muted-foreground">{p.description}</div>}
                   </div>
@@ -170,6 +205,20 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
           ))}
         </div>
 
+        {books.length > 0 && (
+          <section aria-labelledby="p-books" className="mt-10">
+            <h2 id="p-books" className="mb-3 text-xl font-bold">Books</h2>
+            <ol className="flex list-none flex-col gap-1 text-lg">
+              {books.map((b) => (
+                <li key={b.id}>
+                  <Link href={bookHref(b)} className="text-brand-text">{b.title}</Link>{" "}
+                  <span className="text-subtle">· {b.chapters.length} {b.chapters.length === 1 ? "chapter" : "chapters"}, {b.status === "complete" ? "complete" : "in progress"}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
         {series.length > 0 && (
           <section aria-labelledby="p-col" className="mt-10">
             <h2 id="p-col" className="mb-3 text-xl font-bold">Collections</h2>
@@ -193,7 +242,7 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
                 <span className="flex flex-col gap-0.5">
                   <span className="text-xl font-semibold leading-snug">{p.title}</span>
                   {p.description && <span className="text-[17px] italic text-muted-foreground">{p.description}</span>}
-                  <span className="text-base tracking-[0.04em] text-subtle [font-variant:small-caps]">{metaLine(p)}</span>
+                  <span className="text-base tracking-[0.04em] text-subtle [font-variant:small-caps]">{metaLine(p, chapters)}</span>
                 </span>
               </Link>
             ))}
