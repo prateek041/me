@@ -3,8 +3,9 @@ import path from "node:path";
 import matter from "gray-matter";
 import GithubSlugger from "github-slugger";
 import type { ComponentType } from "react";
-import readDirectoryRecursively, { isPostFile, type FileSystemNode } from "@/app/writings/api/blog";
-import { getSlugFromNode } from "@/app/writings/api/tree";
+import type { MDXComponents } from "mdx/types";
+import readDirectoryRecursively, { isPostFile, type FileSystemNode } from "@/app/(site)/writings/api/blog";
+import { getSlugFromNode } from "@/app/(site)/writings/api/tree";
 import { calendarDay } from "@/lib/dates";
 
 export const WRITINGS_DIR = path.join(process.cwd(), "writings");
@@ -145,7 +146,7 @@ export async function getPost(slug: string[]) {
   // Two literal patterns so webpack bundles every .md and .mdx under /writings.
   const mod = (fileForSlug(slug)!.endsWith(".mdx")
     ? await import(`../../writings/${rel}.mdx`)
-    : await import(`../../writings/${rel}.md`)) as { default: ComponentType };
+    : await import(`../../writings/${rel}.md`)) as { default: ComponentType<{ components?: MDXComponents }> };
   return { meta, Content: mod.default };
 }
 
@@ -179,7 +180,12 @@ export function getAdjacentPosts(meta: PostMeta) {
 // Helpers used by the page layouts
 // ---------------------------------------------------------------------------
 
-export const SITE_URL = "https://prateeksingh.xyz";
+// The one place the site address lives (sitemap script and robots.txt repeat it).
+export const SITE_URL = "https://prateeksingh.life";
+/** The e-reader / Instapaper edition of the writings. */
+export const READER_URL = "https://e-read.prateeksingh.life";
+/** Instapaper's "save this page" link. */
+export const instapaperHref = (url: string) => `https://www.instapaper.com/hello2?url=${encodeURIComponent(url)}`;
 
 export const postHref = (p: { slug: string[] }) => `/writings/${p.slug.join("/")}`;
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SITE_URL } from "@/lib/writings";
 import {
   Inter,
   JetBrains_Mono,
@@ -7,9 +8,6 @@ import {
   Space_Grotesk,
   STIX_Two_Text,
 } from "next/font/google";
-import SiteNav from "@/components/site/SiteNav";
-import SiteFooter from "@/components/site/SiteFooter";
-import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space", display: "swap" });
@@ -29,6 +27,7 @@ const stix = STIX_Two_Text({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Prateek Singh",
   description: "Software engineer working with open source, full stack product development and AI.",
   alternates: { types: { "application/rss+xml": "/writings/rss.xml" } },
@@ -41,22 +40,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       suppressHydrationWarning
       className={`${inter.variable} ${space.variable} ${jbm.variable} ${sourceSerif.variable} ${stix.variable}`}
     >
-      <body className="flex min-h-screen flex-col">
-        {/* Themes: dark (default), light and paper. Applied as a class on <html>. */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          themes={["dark", "light", "paper", "paper-dark"]}
-          enableSystem={false}
-          // color-scheme comes from globals.css per theme; next-themes would force "dark" on paper.
-          enableColorScheme={false}
-          disableTransitionOnChange
-        >
-          <SiteNav />
-          <div className="flex-1">{children}</div>
-          <SiteFooter />
-        </ThemeProvider>
-      </body>
+      {/* The site and the e-reader edition each add their own chrome: see (site)/layout.tsx and e-read/layout.tsx. */}
+      <body>{children}</body>
     </html>
   );
 }

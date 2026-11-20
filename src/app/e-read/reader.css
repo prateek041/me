@@ -1,0 +1,43 @@
+/*
+ * E-reader edition: black on white, system serif, no web fonts, no colour,
+ * no JavaScript. Unlayered, so it wins over the site's Tailwind base styles.
+ */
+html,
+body {
+  background: #fff;
+  color: #111;
+  color-scheme: light;
+}
+.reader {
+  max-width: 38em;
+  margin: 0 auto;
+  padding: 1.5em 1.25em 4em;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+.reader a { color: #111; text-decoration: underline; }
+.reader h1 { font-size: 1.9em; line-height: 1.2; margin: 0.4em 0 0.3em; }
+.reader h2 { font-size: 1.4em; line-height: 1.25; margin: 1.8em 0 0.5em; }
+.reader h3 { font-size: 1.15em; margin: 1.5em 0 0.4em; }
+.reader p, .reader ul, .reader ol, .reader blockquote, .reader figure, .reader pre, .reader table { margin: 0 0 1em; }
+.reader ul, .reader ol { padding-left: 1.4em; }
+.reader ul { list-style: disc; }
+.reader ol { list-style: decimal; }
+.reader li { margin: 0.25em 0; }
+.reader img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.reader figcaption { font-size: 0.85em; text-align: center; margin-top: 0.4em; font-style: italic; }
+.reader blockquote { border-left: 3px solid #111; padding-left: 1em; margin-left: 0; }
+.reader code { font-family: "Courier New", Courier, monospace; font-size: 0.9em; }
+/* Code wraps instead of scrolling: e-readers can't scroll sideways well. */
+.reader pre { white-space: pre-wrap; word-break: break-word; border: 1px solid #111; padding: 0.75em; font-size: 0.85em; line-height: 1.45; }
+.reader pre code { font-size: 1em; }
+.reader [data-rehype-pretty-code-title] { font-family: "Courier New", Courier, monospace; font-size: 0.8em; font-weight: bold; margin-bottom: 0.25em; }
+.reader table { border-collapse: collapse; width: 100%; font-size: 0.9em; }
+.reader th, .reader td { border: 1px solid #111; padding: 0.35em 0.5em; text-align: left; vertical-align: top; }
+.reader hr { border: 0; border-top: 1px solid #111; margin: 2em 0; }
+.reader .meta { font-size: 0.85em; }
+.reader .top { font-size: 0.85em; margin-bottom: 2em; }
+.reader .entries { list-style: none; padding: 0; }
+.reader .entries li { margin: 0 0 0.9em; }
+.reader .entries small { display: block; font-size: 0.8em; }

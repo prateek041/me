@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { BookOpen, ChevronRight, FileText, Layers, Plus, X } from "lucide-react";
-import type { DocListItem, FolderInfo } from "@/app/admin/actions";
+import type { DocListItem, FolderInfo } from "@/app/(site)/admin/actions";
 
 type Kind = "article" | "series" | "book";
 export interface NewRequest {

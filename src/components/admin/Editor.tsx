@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, use
 import { Maximize2, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createDoc, previewMdx, saveDoc, type Doc, type DocListItem, type FolderInfo } from "@/app/admin/actions";
+import { createDoc, previewMdx, saveDoc, type Doc, type DocListItem, type FolderInfo } from "@/app/(site)/admin/actions";
 import DateField from "./DateField";
 import Explorer, { type NewRequest } from "./Explorer";
 

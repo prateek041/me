@@ -1,8 +1,7 @@
-import { getAllPosts } from "@/lib/writings";
+import { getAllPosts, SITE_URL } from "@/lib/writings";
 
 export const dynamic = "force-static";
 
-const SITE_URL = "https://prateeksingh.xyz";
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 

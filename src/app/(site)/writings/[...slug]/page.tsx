@@ -15,13 +15,13 @@ import {
   getSeriesPosts,
   getTree,
   prettify,
+  SITE_URL,
   type PostMeta,
 } from "@/lib/writings";
 import ArticleLayout from "@/components/writings/ArticleLayout";
 import PersonalLayout from "@/components/writings/PersonalLayout";
 import type { Crumb } from "@/components/writings/parts";
 
-const SITE_URL = "https://prateeksingh.xyz";
 
 interface LifeArticleProps {
   params: { slug: string[] };
