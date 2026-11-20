@@ -61,7 +61,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
 
       <div className="relative">
         {image && (
-          <figure className="sticky top-6 z-0 mx-auto w-full max-w-6xl px-5 sm:px-8 paper:static paper:mt-10 paper:max-w-3xl">
+          <figure className="sticky top-[calc(var(--nav-h)+1.5rem)] z-0 mx-auto w-full max-w-6xl px-5 sm:px-8 paper:static paper:mt-10 paper:max-w-3xl">
             <Image
               src={image}
               alt={meta.title}
@@ -77,7 +77,7 @@ export default function PersonalLayout({ meta, Content, crumbs, image, prev, nex
           </figure>
         )}
         <div className={`relative z-10 mx-auto w-full max-w-3xl px-2 sm:px-4 paper:mt-10 paper:px-5 ${image ? "-mt-10 md:-mt-56" : ""}`}>
-          <article className="bg-background/90 px-5 pb-16 pt-10 shadow-[0_-24px_60px_hsl(var(--foreground)/0.12)] backdrop-blur-xl md:px-20 md:pb-24 md:pt-16 paper:bg-transparent paper:px-0 paper:pb-0 paper:pt-0 paper:shadow-none paper:backdrop-blur-none">
+          <article className="border border-border bg-card px-5 pb-16 pt-10 md:px-20 md:pb-24 md:pt-16 paper:border-0 paper:bg-transparent paper:px-0 paper:pb-0 paper:pt-0">
             <div className="prose prose-lg post post-personal md:prose-xl">
               <Content />
             </div>
