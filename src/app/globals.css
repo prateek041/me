@@ -159,7 +159,12 @@
     @apply border-border;
   }
   html {
-    scroll-padding-top: 5rem;
+    /* Height of the sticky site nav; sticky asides and anchor jumps sit below it. */
+    --nav-h: 61px;
+    scroll-padding-top: calc(var(--nav-h) + 1.25rem);
+  }
+  html.reading {
+    --nav-h: 0px;
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;

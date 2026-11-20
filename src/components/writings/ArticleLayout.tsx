@@ -105,7 +105,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
               <summary className="flex min-h-11 cursor-pointer items-center font-mono text-[13px]">{series.title} series · part {here + 1} of {series.posts.length}</summary>
               <div className="pb-3">{seriesList}</div>
             </details>
-            <aside data-chrome aria-label={`${series.title} series`} className="sticky top-6 hidden w-56 shrink-0 pb-6 pt-12 text-sm lg:block paper:hidden">
+            <aside data-chrome aria-label={`${series.title} series`} className="sticky top-[calc(var(--nav-h)+1.5rem)] hidden w-56 shrink-0 pb-6 pt-12 text-sm lg:block paper:hidden">
               <div className="mb-3 font-mono text-[13px] text-subtle">series · {meta.slug.slice(0, 2).join("/")}</div>
               {seriesList}
             </aside>
@@ -136,7 +136,7 @@ export default function ArticleLayout({ meta, Content, crumbs, series, prev, nex
         </article>
 
         {meta.headings.length > 1 && (
-          <aside data-chrome aria-label="On this page" className="sticky top-6 hidden w-52 shrink-0 pb-6 pl-2 pt-12 xl:block paper:hidden">
+          <aside data-chrome aria-label="On this page" className="sticky top-[calc(var(--nav-h)+1.5rem)] hidden w-52 shrink-0 pb-6 pl-2 pt-12 xl:block paper:hidden">
             <TableOfContents headings={meta.headings} />
           </aside>
         )}
