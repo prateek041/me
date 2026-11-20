@@ -10,6 +10,7 @@
 @layer base {
   :root,
   .dark {
+    color-scheme: dark;
     --background: 220 52% 16%;
     --foreground: 40 38% 91%;
     --card: 221 47% 20%;
@@ -53,6 +54,7 @@
     --f-mono: var(--font-jbm);
   }
   .light {
+    color-scheme: light;
     --background: 40 38% 91%;
     --foreground: 220 52% 16%;
     --card: 40 50% 96%;
@@ -83,6 +85,7 @@
     --sidebar-border: 38 28% 82%;
   }
   .paper {
+    color-scheme: light;
     --background: 48 56% 98%;
     --foreground: 0 0% 10%;
     --card: 48 56% 98%;
@@ -115,6 +118,40 @@
     --f-body: var(--font-stix);
     --f-read: var(--font-stix);
   }
+  .paper-dark {
+    color-scheme: dark;
+    --background: 45 10% 8%;
+    --foreground: 45 22% 89%;
+    --card: 45 10% 10%;
+    --card-foreground: 45 22% 89%;
+    --popover: 45 10% 10%;
+    --popover-foreground: 45 22% 89%;
+    --primary: 45 22% 89%;
+    --primary-foreground: 45 10% 8%;
+    --secondary: 45 8% 14%;
+    --secondary-foreground: 45 22% 89%;
+    --muted: 45 8% 14%;
+    --muted-foreground: 45 12% 75%;
+    --subtle: 45 8% 62%;
+    --accent: 45 8% 14%;
+    --accent-foreground: 45 22% 89%;
+    --border: 45 6% 25%;
+    --input: 45 6% 25%;
+    --ring: 214 82% 72%;
+    --brand: 214 82% 72%;
+    --brand-text: 214 82% 72%;
+    --brand-foreground: 45 10% 8%;
+    --sidebar-background: 45 10% 8%;
+    --sidebar-foreground: 45 22% 89%;
+    --sidebar-primary: 214 82% 72%;
+    --sidebar-primary-foreground: 45 10% 8%;
+    --sidebar-accent: 45 8% 14%;
+    --sidebar-accent-foreground: 45 22% 89%;
+    --sidebar-border: 45 6% 25%;
+    --f-display: var(--font-stix);
+    --f-body: var(--font-stix);
+    --f-read: var(--font-stix);
+  }
 }
 
 @layer base {
@@ -127,11 +164,11 @@
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
-  .paper body {
+  :is(.paper, .paper-dark) body {
     font-size: 19px;
     line-height: 1.6;
   }
-  .paper a:hover {
+  :is(.paper, .paper-dark) a:hover {
     text-decoration: underline;
   }
 }
@@ -223,7 +260,7 @@
     color: hsl(var(--foreground));
   }
   .post-personal blockquote::before {
-    content: "— ✦ —";
+    content: "· ✦ ·";
     display: block;
     margin-bottom: 0.6rem;
     font-family: var(--f-mono);
@@ -233,23 +270,23 @@
   }
 
   /* Paper theme: numbered headings, justified text, black-and-white listings */
-  .paper .post-numbered {
+  :is(.paper, .paper-dark) .post-numbered {
     counter-reset: h2c listing;
   }
-  .paper .post-numbered h2 {
+  :is(.paper, .paper-dark) .post-numbered h2 {
     counter-increment: h2c;
     counter-reset: h3c;
   }
-  .paper .post-numbered h2::before {
+  :is(.paper, .paper-dark) .post-numbered h2::before {
     content: counter(h2c) "\00a0\00a0\00a0";
   }
-  .paper .post-numbered h3 {
+  :is(.paper, .paper-dark) .post-numbered h3 {
     counter-increment: h3c;
   }
-  .paper .post-numbered h3::before {
+  :is(.paper, .paper-dark) .post-numbered h3::before {
     content: counter(h2c) "." counter(h3c) "\00a0\00a0\00a0";
   }
-  .paper .post h2 {
+  :is(.paper, .paper-dark) .post h2 {
     margin-top: 2.5rem;
     padding-top: 0;
     border: 0;
@@ -257,46 +294,46 @@
     font-weight: 700;
     letter-spacing: 0;
   }
-  .paper .post h3 {
+  :is(.paper, .paper-dark) .post h3 {
     margin-top: 2rem;
     font-size: 19px;
     font-weight: 700;
     letter-spacing: 0;
   }
-  .paper .post h2 a,
-  .paper .post h3 a {
+  :is(.paper, .paper-dark) .post h2 a,
+  :is(.paper, .paper-dark) .post h3 a {
     display: none;
   }
-  .paper .post p {
+  :is(.paper, .paper-dark) .post p {
     margin: 0;
     text-align: justify;
     text-indent: 1.5em;
     hyphens: auto;
   }
-  .paper .post :is(p:first-child, h2 + p, h3 + p, figure + p, ul + p, ol + p, pre + p, blockquote + p, table + p) {
+  :is(.paper, .paper-dark) .post :is(p:first-child, h2 + p, h3 + p, figure + p, ul + p, ol + p, pre + p, blockquote + p, table + p) {
     text-indent: 0;
   }
-  .paper .post :is(ul, ol) {
+  :is(.paper, .paper-dark) .post :is(ul, ol) {
     margin: 0.6rem 0;
   }
-  .paper .post blockquote {
+  :is(.paper, .paper-dark) .post blockquote {
     margin: 1.5rem 2.5em;
     padding: 0;
     border: 0;
     font-style: italic;
     text-align: left;
   }
-  .paper .post-personal blockquote {
+  :is(.paper, .paper-dark) .post-personal blockquote {
     font-size: 1em;
     text-align: left;
   }
-  .paper .post-personal blockquote::before {
+  :is(.paper, .paper-dark) .post-personal blockquote::before {
     content: none;
   }
-  .paper .post-personal > p:first-of-type::first-letter {
+  :is(.paper, .paper-dark) .post-personal > p:first-of-type::first-letter {
     all: unset;
   }
-  .paper .post-personal > :last-child::after {
+  :is(.paper, .paper-dark) .post-personal > :last-child::after {
     content: "\00a0∎";
   }
 }
@@ -346,19 +383,19 @@
 }
 
 /* Paper theme: listings in black and white with rules, numbered captions */
-.paper [data-rehype-pretty-code-figure] {
+:is(.paper, .paper-dark) [data-rehype-pretty-code-figure] {
   margin: 1.75rem 0;
 }
-.paper [data-rehype-pretty-code-figure] pre {
+:is(.paper, .paper-dark) [data-rehype-pretty-code-figure] pre {
   background: transparent;
   border-width: 1px 0;
   border-color: hsl(var(--foreground));
   font-size: 13.5px;
 }
-.paper [data-rehype-pretty-code-figure] code span {
+:is(.paper, .paper-dark) [data-rehype-pretty-code-figure] code span {
   color: inherit !important;
 }
-.paper [data-rehype-pretty-code-title] {
+:is(.paper, .paper-dark) [data-rehype-pretty-code-title] {
   margin: 0 0 0.35rem;
   padding: 0;
   border: 0;
@@ -367,7 +404,7 @@
   font-size: 16px;
   color: hsl(var(--foreground));
 }
-.paper .post-numbered [data-rehype-pretty-code-title]::before {
+:is(.paper, .paper-dark) .post-numbered [data-rehype-pretty-code-title]::before {
   counter-increment: listing;
   content: "Listing " counter(listing) ":\00a0";
   font-weight: 700;

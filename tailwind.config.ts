@@ -87,7 +87,7 @@ const config: Config = {
     require("@tailwindcss/typography"),
     require("tailwindcss-animate"),
     // `paper:` applies a utility only in the paper theme.
-    plugin(({ addVariant }) => addVariant("paper", ".paper &")),
+    plugin(({ addVariant }) => addVariant("paper", [".paper &", ".paper-dark &"])),
   ],
 };
 export default config;

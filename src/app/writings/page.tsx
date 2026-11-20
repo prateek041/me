@@ -177,7 +177,7 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
               {series.map((s) => (
                 <li key={s.id}>
                   <Link href={s.href} className="text-brand-text">{s.title}</Link>{" "}
-                  <span className="text-subtle">— {s.count} entries, {formatDate(s.first, "month")}{s.first.slice(0, 7) === s.last.slice(0, 7) ? "" : ` to ${formatDate(s.last, "month")}`}</span>
+                  <span className="text-subtle">· {s.count} entries, {formatDate(s.first, "month")}{s.first.slice(0, 7) === s.last.slice(0, 7) ? "" : ` to ${formatDate(s.last, "month")}`}</span>
                 </li>
               ))}
             </ol>

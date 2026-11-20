@@ -46,8 +46,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          themes={["dark", "light", "paper"]}
+          themes={["dark", "light", "paper", "paper-dark"]}
           enableSystem={false}
+          // color-scheme comes from globals.css per theme; next-themes would force "dark" on paper.
+          enableColorScheme={false}
           disableTransitionOnChange
         >
           <SiteNav />

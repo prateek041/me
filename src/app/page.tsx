@@ -165,7 +165,7 @@ function PaperHome({ posts, total }: { posts: PostMeta[]; total: number }) {
         <ul className="flex flex-col gap-3">
           {WORK.map((w) => (
             <li key={w.name} className={row}>
-              <span><a href={w.link} className={plink}>{w.name}</a> <span className="text-subtle">— {w.short}</span></span>
+              <span><a href={w.link} className={plink}>{w.name}</a> <span className="text-subtle">· {w.short}</span></span>
               <span className="text-base text-subtle">{w.year}</span>
             </li>
           ))}
@@ -189,7 +189,7 @@ function PaperHome({ posts, total }: { posts: PostMeta[]; total: number }) {
         <h2 id="p-open" className={label}>open to</h2>
         <p>
           Developer relations, eBPF, observability and kernel engineering, and AI powered product development.
-          Let’s talk about a project, collaboration or an idea you may have — <a href={LINKS.mail} className={plink}>say hello</a>.
+          Let’s talk about a project, collaboration or an idea you may have. <a href={LINKS.mail} className={plink}>Say hello</a>.
         </p>
       </section>
     </main>

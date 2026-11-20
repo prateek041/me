@@ -39,7 +39,7 @@ export function Callout({
   );
 }
 
-/** `<Figure src="..." caption="..." />` — an image with a caption. */
+/** `<Figure src="..." caption="..." />`: an image with a caption. */
 export function Figure({ src, alt = "", caption }: { src: string; alt?: string; caption?: ReactNode }) {
   return (
     <figure className="my-8">
