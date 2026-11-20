@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, use
 import { Maximize2, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createDoc, previewMdx, saveDoc, type BookDoc, type Doc, type DocListItem, type FolderInfo } from "@/app/(site)/admin/actions";
+import { createDoc, previewMdx, saveDoc, setPublished, signOutAction, type BookDoc, type Doc, type DocListItem, type EditorInfo, type FolderInfo, type SaveResult } from "@/app/(site)/admin/actions";
 import BookSettings from "./BookSettings";
 import DateField from "./DateField";
 import Explorer, { type NewRequest } from "./Explorer";
@@ -12,20 +12,32 @@ import Explorer, { type NewRequest } from "./Explorer";
 type FM = Record<string, unknown>;
 type Sync = "saved" | "dirty" | "saving" | "error";
 
+// Unsaved edits are committed at most this often while typing (and always when leaving the page).
+const AUTOSAVE_MS = 5 * 60 * 1000;
+
 
 const field = "w-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand-text";
 const lbl = "mb-1 block font-mono text-[11px] uppercase tracking-wider text-subtle";
 
-export default function Editor({ docs, folders, doc, book, missing }: { docs: DocListItem[]; folders: FolderInfo[]; doc: Doc | null; book?: BookDoc | null; missing: boolean }) {
+export default function Editor({ docs, folders, doc, book, missing, info }: { docs: DocListItem[]; folders: FolderInfo[]; doc: Doc | null; book?: BookDoc | null; missing: boolean; info: EditorInfo }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [fm, setFm] = useState<FM>(doc?.fm ?? {});
   const [body, setBody] = useState(doc?.body ?? "");
   const [sync, setSync] = useState<Sync>("saved");
+  const syncRef = useRef(sync);
+  syncRef.current = sync;
   const [pane, setPane] = useState<"write" | "preview">("write");
   const [preview, setPreview] = useState<ReactNode>(null);
   const [previewErr, setPreviewErr] = useState<string | null>(null);
   const [restored, setRestored] = useState(false);
+  // The version this edit is based on. A save sends it; if another device saved since, the save is refused.
+  const [version, setVersion] = useState<string | null>(doc?.version ?? null);
+  const versionRef = useRef(version);
+  versionRef.current = version;
+  const [conflict, setConflict] = useState<{ theirs: Doc | null } | null>(null);
+  const [staleLocal, setStaleLocal] = useState<{ fm: FM; body: string } | null>(null);
+  const autosave = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const area = useRef<HTMLTextAreaElement>(null);
   const focusArea = useRef<HTMLTextAreaElement>(null);
@@ -48,19 +60,22 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
   const latest = useRef({ fm, body });
   latest.current = { fm, body };
 
-  // Restore unsaved text from this device, if any is newer than what is on disk.
+  // Unsaved text kept in this browser: restore it if it was based on the same saved version;
+  // if the file was saved somewhere else since, ask instead of silently restoring.
   useEffect(() => {
     if (!key || !doc) return;
     try {
       const raw = localStorage.getItem(key);
       if (!raw) return;
-      const saved = JSON.parse(raw) as { fm: FM; body: string; at: number };
-      if (saved.at > doc.mtime && (saved.body !== doc.body || JSON.stringify(saved.fm) !== JSON.stringify(doc.fm))) {
+      const saved = JSON.parse(raw) as { fm: FM; body: string; version?: string | null };
+      const differs = saved.body !== doc.body || JSON.stringify(saved.fm) !== JSON.stringify(doc.fm);
+      if (!differs) return localStorage.removeItem(key);
+      if (saved.version === doc.version) {
         setFm(saved.fm);
         setBody(saved.body);
         setSync("dirty");
         setRestored(true);
-      }
+      } else setStaleLocal({ fm: saved.fm, body: saved.body });
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,7 +85,7 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
     if (!key || sync === "saved") return;
     const t = setTimeout(() => {
       try {
-        localStorage.setItem(key, JSON.stringify({ fm, body, at: Date.now() }));
+        localStorage.setItem(key, JSON.stringify({ fm, body, version: versionRef.current, at: Date.now() }));
       } catch {}
     }, 400);
     return () => clearTimeout(t);
@@ -94,24 +109,77 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
     };
   }, [body, doc]);
 
-  const save = useCallback(
-    async (nextFm?: FM) => {
-      if (!doc) return;
-      setSync("saving");
-      setErr(null);
-      try {
-        const f = nextFm ?? latest.current.fm;
-        await saveDoc(doc.slug, f, latest.current.body);
+  const handle = useCallback(
+    (r: SaveResult, savedFm: FM) => {
+      if (r.ok) {
+        setVersion(r.version);
+        versionRef.current = r.version;
+        setFm(savedFm);
         if (key) localStorage.removeItem(key);
         setSync("saved");
         setRestored(false);
+        setConflict(null);
+        if (autosave.current) clearTimeout(autosave.current);
+        autosave.current = null;
+        return true;
+      }
+      if (r.conflict) setConflict({ theirs: r.theirs });
+      else setErr(r.error);
+      setSync("error");
+      return false;
+    },
+    [key]
+  );
+
+  /** Save draft: a commit on the drafts branch (GitHub) or the file on disk (local). */
+  const save = useCallback(
+    async (expected?: string | null) => {
+      if (!doc) return;
+      setSync("saving");
+      setErr(null);
+      const f = latest.current.fm;
+      try {
+        handle(await saveDoc(doc.path, f, latest.current.body, expected === undefined ? versionRef.current : expected), f);
       } catch (e) {
         setErr(e instanceof Error ? e.message : "Could not save");
         setSync("error");
       }
     },
-    [doc, key]
+    [doc, handle]
   );
+
+  /** Publish puts the post live (GitHub: one commit on main); unpublish hides it again. */
+  const publish = async (on: boolean) => {
+    if (!doc) return;
+    setSync("saving");
+    setErr(null);
+    const f = { ...latest.current.fm, draft: on ? undefined : true };
+    try {
+      handle(await setPublished(doc.path, latest.current.fm, latest.current.body, versionRef.current, on), f);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Could not publish");
+      setSync("error");
+    }
+  };
+
+  // Autosave: once there are unsaved edits, commit them within AUTOSAVE_MS, and when leaving the page.
+  useEffect(() => {
+    if (sync !== "dirty" || autosave.current) return;
+    autosave.current = setTimeout(() => {
+      autosave.current = null;
+      void save();
+    }, AUTOSAVE_MS);
+  }, [sync, save]);
+  useEffect(() => {
+    const onHide = () => {
+      if (document.visibilityState === "hidden" && syncRef.current === "dirty") void save();
+    };
+    document.addEventListener("visibilitychange", onHide);
+    return () => {
+      document.removeEventListener("visibilitychange", onHide);
+      if (autosave.current) clearTimeout(autosave.current);
+    };
+  }, [save]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -212,10 +280,31 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
   const tags = Array.isArray(fm.tags) ? (fm.tags as string[]).join(", ") : "";
   const active = doc?.slug.join("/") ?? book?.folder.join("/");
 
-  const syncLabel = { saved: "saved to disk", dirty: "unsaved · kept in this browser", saving: "saving…", error: "not saved" }[sync];
+  const syncLabel = {
+    saved: info.mode === "github" ? "saved to drafts" : "saved to disk",
+    dirty: "unsaved · kept in this browser · autosaves soon",
+    saving: "saving…",
+    error: "not saved",
+  }[sync];
   const syncColor = sync === "saved" ? "text-subtle" : sync === "error" ? "text-red-500" : "text-brand-text";
 
+  const statusBar = (info.mode === "github" || info.syncError) && (
+    <div className="mx-auto flex w-full max-w-[1500px] flex-wrap items-center justify-between gap-x-4 gap-y-1 px-3 pt-3 font-mono text-xs text-subtle sm:px-5">
+      <span>
+        {info.mode === "github" ? "editing on GitHub · saves go to the drafts branch, Publish goes live" : "editing local files"}
+        {info.syncError && <span className="ml-3 text-red-500">sync with main failed: {info.syncError}</span>}
+      </span>
+      {info.mode === "github" && (
+        <form action={signOutAction}>
+          <button className="underline hover:text-foreground">sign out</button>
+        </form>
+      )}
+    </div>
+  );
+
   return (
+    <>
+    {statusBar}
     <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-0 px-3 py-3 sm:px-5 lg:h-[calc(100vh-9rem)] lg:flex-row">
       {focus && doc && (
         <div role="dialog" aria-modal="true" aria-label="Focus writing" className="fixed inset-0 z-[100] overflow-y-auto bg-background">
@@ -305,12 +394,10 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
                 Save draft
               </button>
               <button
-                onClick={() => {
-                  const next = { ...fm, draft: isDraft ? undefined : true };
-                  setFm(next);
-                  void save(next);
-                }}
-                className="bg-brand px-3 py-1.5 text-sm font-semibold text-brand-foreground hover:opacity-90"
+                onClick={() => void publish(isDraft)}
+                disabled={sync === "saving"}
+                title={info.mode === "github" ? (isDraft ? "Put it live: commits to main, live in about a minute" : "Hide it from the site again") : undefined}
+                className="bg-brand px-3 py-1.5 text-sm font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60"
               >
                 {isDraft ? "Publish" : "Unpublish"}
               </button>
@@ -319,6 +406,41 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
               <div className="flex items-center justify-between gap-3 border-b border-border bg-muted px-4 py-2 text-sm">
                 <span>Restored unsaved changes from this browser.</span>
                 <button className="underline" onClick={() => { if (key) localStorage.removeItem(key); location.reload(); }}>discard</button>
+              </div>
+            )}
+            {conflict && (
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-muted px-4 py-2 text-sm">
+                <span>This was saved on another device after you opened it.</span>
+                <span className="flex gap-4">
+                  {conflict.theirs && (
+                    <button
+                      className="underline"
+                      onClick={() => {
+                        const t = conflict.theirs!;
+                        setFm(t.fm);
+                        setBody(t.body);
+                        setVersion(t.version);
+                        if (key) localStorage.removeItem(key);
+                        setConflict(null);
+                        setSync("saved");
+                      }}
+                    >
+                      load that version
+                    </button>
+                  )}
+                  <button className="font-semibold underline" onClick={() => void save(conflict.theirs ? conflict.theirs.version : null)}>
+                    keep mine (overwrite)
+                  </button>
+                </span>
+              </div>
+            )}
+            {staleLocal && (
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-muted px-4 py-2 text-sm">
+                <span>This browser has unsaved edits from before a newer save elsewhere.</span>
+                <span className="flex gap-4">
+                  <button className="underline" onClick={() => { setFm(staleLocal.fm); setBody(staleLocal.body); setSync("dirty"); setStaleLocal(null); }}>use them</button>
+                  <button className="underline" onClick={() => { if (key) localStorage.removeItem(key); setStaleLocal(null); }}>discard</button>
+                </span>
               </div>
             )}
             {err && <div className="border-b border-border px-4 py-2 text-sm text-red-500">{err}</div>}
@@ -372,5 +494,6 @@ export default function Editor({ docs, folders, doc, book, missing }: { docs: Do
         )}
       </section>
     </div>
+    </>
   );
 }

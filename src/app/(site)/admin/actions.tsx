@@ -1,10 +1,8 @@
 "use server";
 
-import fs from "node:fs";
-import path from "node:path";
 import matter from "gray-matter";
+import { cache } from "react";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import remarkEmoji from "remark-emoji";
@@ -12,29 +10,76 @@ import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkCallouts from "@/lib/remark-callouts.mjs";
 import { components } from "@/mdx-components";
-import { WRITINGS_DIR, getAllPosts } from "@/lib/writings";
-import { orderChapters, readBookFile, type BookFile, type BookStatus } from "@/lib/books";
+import { calendarDay } from "@/lib/dates";
+import { orderChapters, type BookFile, type BookStatus } from "@/lib/books";
+import { ConflictError, getStore, type StoredFile } from "@/lib/store";
+import { canEdit, signOut } from "@/auth";
 
-// Local mode: the editor reads and writes the files in /writings directly.
-// It is switched off in production builds. The deployed version will talk to
-// GitHub instead (drafts branch for autosave, main for publish).
-function assertLocal() {
-  if (process.env.NODE_ENV === "production") throw new Error("The editor is only available locally for now.");
-  // The dev server can be exposed through a tunnel; never let a tunnelled request write files.
-  const host = (headers().get("host") ?? "").split(":")[0];
-  if (host !== "localhost" && host !== "127.0.0.1") throw new Error("The editor only works on localhost.");
+/*
+ * The editor's server actions. They work on a content store (src/lib/store):
+ * local files under `next dev`, GitHub when deployed (drafts branch for saves,
+ * main for publishing). Every action checks that the caller may edit.
+ */
+
+async function guard() {
+  if (!(await canEdit())) throw new Error("Not allowed");
 }
 
 const SEGMENT = /^[A-Za-z0-9][A-Za-z0-9 _.-]*$/;
 
-function resolveFile(slug: string[], create = false): string {
+function checkSlug(slug: string[]) {
   if (!slug.length || !slug.every((s) => SEGMENT.test(s) && !s.includes(".."))) throw new Error("Invalid path");
-  const base = path.resolve(WRITINGS_DIR, ...slug);
-  if (!base.startsWith(WRITINGS_DIR + path.sep)) throw new Error("Invalid path");
-  for (const ext of [".mdx", ".md"]) if (fs.existsSync(base + ext)) return base + ext;
-  if (!create) throw new Error("Not found");
-  return base + ".mdx";
 }
+
+/** One snapshot of the content per request. */
+const snapshot = cache(async () => getStore().snapshot());
+
+function pathFor(snap: Map<string, StoredFile>, slug: string[]): string | null {
+  for (const ext of [".mdx", ".md"]) {
+    const p = `writings/${slug.join("/")}${ext}`;
+    if (snap.has(p)) return p;
+  }
+  return null;
+}
+
+const isPost = (p: string) => /\.mdx?$/.test(p) && !/\/[_.][^/]*$/.test(p);
+const slugOf = (p: string) => p.replace(/^writings\//, "").replace(/\.mdx?$/, "").split("/");
+
+function parse(text: string) {
+  const { data, content } = matter(text);
+  const fm: Record<string, unknown> = { ...data };
+  for (const k of ["date", "modifiedDate"]) if (fm[k] instanceof Date) fm[k] = (fm[k] as Date).toISOString().slice(0, 10);
+  return { fm, body: content.replace(/^\n+/, "") };
+}
+
+function serialize(fm: Record<string, unknown>, body: string) {
+  const clean = Object.fromEntries(Object.entries(fm).filter(([, v]) => v !== "" && v != null && !(Array.isArray(v) && v.length === 0)));
+  return matter.stringify(body.replace(/\s+$/, "") + "\n", clean);
+}
+
+export interface EditorInfo {
+  mode: "local" | "github";
+  syncError: string | null;
+}
+
+/** Called when the editor opens: GitHub mode first pulls anything pushed to main into drafts. */
+export async function openEditor(): Promise<EditorInfo> {
+  await guard();
+  const store = getStore();
+  let syncError: string | null = null;
+  try {
+    await store.sync();
+  } catch (e) {
+    syncError = e instanceof Error ? e.message : String(e);
+  }
+  return { mode: store.mode, syncError };
+}
+
+export async function signOutAction() {
+  await signOut({ redirectTo: "/" });
+}
+
+// ---------- posts ----------
 
 export interface DocListItem {
   slug: string[];
@@ -45,46 +90,94 @@ export interface DocListItem {
 }
 
 export async function listDocs(): Promise<DocListItem[]> {
-  assertLocal();
-  return getAllPosts().map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    draft: p.draft,
-    date: p.date,
-    words: p.readMinutes * 220,
-  }));
+  await guard();
+  const out: DocListItem[] = [];
+  for (const [p, f] of Array.from((await snapshot()).entries())) {
+    if (!isPost(p)) continue;
+    const { fm, body } = parse(f.text);
+    out.push({
+      slug: slugOf(p),
+      title: typeof fm.title === "string" && fm.title.trim() ? fm.title.trim() : slugOf(p).slice(-1)[0],
+      draft: fm.draft === true,
+      date: calendarDay(fm.date)?.toISOString() ?? "",
+      words: body.split(/\s+/).filter(Boolean).length,
+    });
+  }
+  return out.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export interface Doc {
   slug: string[];
+  path: string;
   fm: Record<string, unknown>;
   body: string;
-  mtime: number;
+  version: string;
 }
 
-export async function loadDoc(slug: string[]): Promise<Doc> {
-  assertLocal();
-  const file = resolveFile(slug);
-  const { data, content } = matter(fs.readFileSync(file, "utf8"));
-  const fm: Record<string, unknown> = { ...data };
-  for (const k of ["date", "modifiedDate"]) {
-    if (fm[k] instanceof Date) fm[k] = (fm[k] as Date).toISOString().slice(0, 10);
+export async function loadDoc(slug: string[]): Promise<Doc | null> {
+  await guard();
+  checkSlug(slug);
+  const snap = await snapshot();
+  const p = pathFor(snap, slug);
+  if (!p) return null;
+  const f = snap.get(p)!;
+  return { slug, path: p, ...parse(f.text), version: f.version };
+}
+
+export type SaveResult =
+  | { ok: true; version: string }
+  | { ok: false; conflict: true; theirs: Doc | null }
+  | { ok: false; conflict: false; error: string };
+
+async function conflictResult(slug: string[], path: string): Promise<SaveResult> {
+  const f = await getStore().read(path);
+  return { ok: false, conflict: true, theirs: f ? { slug, path, ...parse(f.text), version: f.version } : null };
+}
+
+/** Save the working copy (GitHub: a commit on drafts). `expected` = the version this edit started from. */
+export async function saveDoc(path: string, fm: Record<string, unknown>, body: string, expected: string | null): Promise<SaveResult> {
+  await guard();
+  const slug = slugOf(path);
+  checkSlug(slug);
+  try {
+    const { version } = await getStore().write(path, serialize(fm, body), { expected, message: `Draft: ${slug.join("/")}` });
+    revalidatePath(`/writings/${slug.join("/")}`);
+    return { ok: true, version };
+  } catch (e) {
+    if (e instanceof ConflictError) return conflictResult(slug, path);
+    return { ok: false, conflict: false, error: e instanceof Error ? e.message : String(e) };
   }
-  return { slug, fm, body: content.replace(/^\n+/, ""), mtime: fs.statSync(file).mtimeMs };
 }
 
-export async function saveDoc(slug: string[], fm: Record<string, unknown>, body: string) {
-  assertLocal();
-  const file = resolveFile(slug, true);
-  fs.mkdirSync(path.dirname(file), { recursive: true });
-  const clean = Object.fromEntries(
-    Object.entries(fm).filter(([, v]) => v !== "" && v != null && !(Array.isArray(v) && v.length === 0))
-  );
-  fs.writeFileSync(file, matter.stringify(body.replace(/\s+$/, "") + "\n", clean));
-  revalidatePath("/writings");
-  revalidatePath(`/writings/${slug.join("/")}`);
-  return { mtime: fs.statSync(file).mtimeMs };
+/**
+ * Publish (draft removed) or unpublish (draft: true): saves the working copy, then
+ * puts it live (GitHub: one commit on main). A chapter's _book.json goes live with it.
+ */
+export async function setPublished(path: string, fm: Record<string, unknown>, body: string, expected: string | null, publish: boolean): Promise<SaveResult> {
+  await guard();
+  const slug = slugOf(path);
+  checkSlug(slug);
+  const next = { ...fm, draft: publish ? undefined : true };
+  const text = serialize(next, body);
+  const store = getStore();
+  try {
+    const { version } = await store.write(path, text, { expected, message: `${publish ? "Publish" : "Unpublish"}: ${slug.join("/")}` });
+    await store.publish(path, text, `${publish ? "Publish" : "Unpublish"}: ${slug.join("/")}`, { onlyIfLive: !publish });
+    if (publish && slug.length === 3) {
+      const bookPath = `writings/${slug.slice(0, 2).join("/")}/_book.json`;
+      const book = await store.read(bookPath);
+      if (book) await store.publish(bookPath, book.text, `Publish book: ${slug.slice(0, 2).join("/")}`);
+    }
+    revalidatePath("/writings");
+    revalidatePath(`/writings/${slug.join("/")}`);
+    return { ok: true, version };
+  } catch (e) {
+    if (e instanceof ConflictError) return conflictResult(slug, path);
+    return { ok: false, conflict: false, error: e instanceof Error ? e.message : String(e) };
+  }
 }
+
+// ---------- folders and creating ----------
 
 export interface FolderInfo {
   path: string; // e.g. "tech/my-book"
@@ -93,27 +186,26 @@ export interface FolderInfo {
   chapters?: string[]; // books: reading order (file names)
 }
 
+function readBookJson(snap: Map<string, StoredFile>, folder: string[]): { file: BookFile; version: string } | null {
+  const f = snap.get(`writings/${folder.join("/")}/_book.json`);
+  if (!f) return null;
+  try {
+    return { file: JSON.parse(f.text) as BookFile, version: f.version };
+  } catch {
+    return { file: {}, version: f.version };
+  }
+}
+
 /** A folder holding a `_book.json` is a book. Any other folder of posts is a series. */
 export async function listFolders(): Promise<FolderInfo[]> {
-  assertLocal();
+  await guard();
   const out: FolderInfo[] = [];
-  const walk = (dir: string, rel: string[]) => {
-    for (const name of fs.readdirSync(dir)) {
-      const full = path.join(dir, name);
-      if (!fs.statSync(full).isDirectory()) continue;
-      const here = [...rel, name];
-      const meta = path.join(full, "_book.json");
-      if (fs.existsSync(meta)) {
-        let file: BookFile = {};
-        try {
-          file = JSON.parse(fs.readFileSync(meta, "utf8"));
-        } catch {}
-        out.push({ path: here.join("/"), kind: "book", title: file.title ?? "", chapters: file.chapters ?? [] });
-      }
-      if (here.length < 2) walk(full, here);
-    }
-  };
-  walk(WRITINGS_DIR, []);
+  for (const p of Array.from((await snapshot()).keys())) {
+    const m = p.match(/^writings\/([^/]+\/[^/]+)\/_book\.json$/);
+    if (!m) continue;
+    const book = readBookJson(await snapshot(), m[1].split("/"));
+    out.push({ path: m[1], kind: "book", title: book?.file.title ?? "", chapters: book?.file.chapters ?? [] });
+  }
   return out;
 }
 
@@ -126,9 +218,7 @@ function today() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-function firstPost(slug: string[], title: string) {
-  return saveDoc(slug, { title, description: "", date: today(), draft: true }, "Start writing here.");
-}
+const bookJson = (data: BookFile) => JSON.stringify({ kind: "book", ...data }, null, 2) + "\n";
 
 /**
  * article: one post, standalone or inside an existing book/series (`folder`).
@@ -142,45 +232,53 @@ export async function createDoc(input: {
   title: string;
   folder?: string; // article only: "tech/my-book"
 }): Promise<string[]> {
-  assertLocal();
+  await guard();
   const title = input.title.trim();
   if (!title) throw new Error("Give it a title");
   if (!SEGMENT.test(input.section)) throw new Error("Invalid section");
-  const exists = (slug: string[]) => {
-    try {
-      resolveFile(slug);
-      return true;
-    } catch {
-      return false;
-    }
+  const store = getStore();
+  const snap = await store.snapshot();
+  const newPost = async (slug: string[], postTitle: string) => {
+    checkSlug(slug);
+    if (pathFor(snap, slug)) throw new Error("Something with that name already exists there");
+    await store.write(`writings/${slug.join("/")}.mdx`, serialize({ title: postTitle, description: "", date: today(), draft: true }, "Start writing here."), {
+      expected: null,
+      message: `New: ${slug.join("/")}`,
+    });
   };
 
   if (input.kind === "article") {
     const parent = input.folder ? input.folder.split("/") : [input.section];
     const slug = [...parent, slugify(title)];
-    if (exists(slug)) throw new Error("An article with that name already exists there");
-    await firstPost(slug, title);
+    await newPost(slug, title);
     // A new chapter goes to the end of its book's reading order.
-    const book = readBookFile(parent);
-    if (book) writeBookFile(parent, { ...book, chapters: [...(book.chapters ?? []), slug[slug.length - 1]] });
+    const book = readBookJson(snap, parent);
+    if (book) {
+      await store.write(`writings/${parent.join("/")}/_book.json`, bookJson({ ...book.file, chapters: [...(book.file.chapters ?? []), slug[slug.length - 1]] }), {
+        expected: book.version,
+        message: `Add chapter: ${slug.join("/")}`,
+      });
+    }
     return slug;
   }
 
-  const dir = path.resolve(WRITINGS_DIR, input.section, slugify(title));
-  if (!dir.startsWith(WRITINGS_DIR + path.sep)) throw new Error("Invalid path");
-  if (fs.existsSync(dir)) throw new Error("A folder with that name already exists");
-  fs.mkdirSync(dir, { recursive: true });
+  const folder = [input.section, slugify(title)];
+  checkSlug(folder);
+  if (Array.from(snap.keys()).some((p) => p.startsWith(`writings/${folder.join("/")}/`))) throw new Error("A folder with that name already exists");
   if (input.kind === "book") {
-    writeBookFile([input.section, slugify(title)], { title, description: "", status: "writing", chapters: ["chapter-1"] });
+    await store.write(`writings/${folder.join("/")}/_book.json`, bookJson({ title, description: "", status: "writing", chapters: ["chapter-1"] }), {
+      expected: null,
+      message: `New book: ${folder.join("/")}`,
+    });
   }
-  const slug = [input.section, slugify(title), input.kind === "book" ? "chapter-1" : "part-1"];
-  await firstPost(slug, input.kind === "book" ? "Chapter 1" : "Part 1");
+  const slug = [...folder, input.kind === "book" ? "chapter-1" : "part-1"];
+  await newPost(slug, input.kind === "book" ? "Chapter 1" : "Part 1");
   return slug;
 }
 
 /** Renders the MDX being written with the same plugins and components as the real post. */
 export async function previewMdx(source: string) {
-  assertLocal();
+  await guard();
   try {
     const { content } = await compileMDX({
       source,
@@ -203,17 +301,6 @@ export async function previewMdx(source: string) {
 
 // ---------- books ----------
 
-function bookFolder(folder: string[]): string[] {
-  if (folder.length !== 2 || !folder.every((s) => SEGMENT.test(s) && !s.includes(".."))) throw new Error("Invalid book");
-  return folder;
-}
-
-function writeBookFile(folder: string[], data: BookFile) {
-  const file = path.resolve(WRITINGS_DIR, ...bookFolder(folder), "_book.json");
-  if (!file.startsWith(WRITINGS_DIR + path.sep)) throw new Error("Invalid book");
-  fs.writeFileSync(file, JSON.stringify({ kind: "book", ...data }, null, 2) + "\n");
-}
-
 export interface BookDoc {
   folder: string[];
   title: string;
@@ -224,25 +311,46 @@ export interface BookDoc {
 
 /** A book and all its chapters (drafts included), in reading order. */
 export async function loadBook(folder: string[]): Promise<BookDoc | null> {
-  assertLocal();
-  const file = readBookFile(bookFolder(folder));
-  if (!file) return null;
-  const prefix = folder.join("/") + "/";
-  const posts = getAllPosts().filter((p) => p.slug.length === 3 && p.slug.join("/").startsWith(prefix));
+  await guard();
+  if (folder.length !== 2) return null;
+  checkSlug(folder);
+  const snap = await snapshot();
+  const book = readBookJson(snap, folder);
+  if (!book) return null;
+  const prefix = `writings/${folder.join("/")}/`;
+  const chapters = Array.from(snap.entries())
+    .filter(([p]) => p.startsWith(prefix) && isPost(p) && p.slice(prefix.length).split("/").length === 1)
+    .map(([p, f]) => {
+      const { fm } = parse(f.text);
+      const slug = slugOf(p);
+      return {
+        name: slug[2],
+        slug,
+        title: typeof fm.title === "string" ? fm.title : slug[2],
+        draft: fm.draft === true,
+        date: calendarDay(fm.date)?.toISOString() ?? "",
+      };
+    });
   return {
     folder,
-    title: file.title ?? "",
-    description: file.description ?? "",
-    status: file.status === "complete" ? "complete" : "writing",
-    chapters: orderChapters(posts, file.chapters).map((p) => ({ name: p.slug[2], slug: p.slug, title: p.title, draft: p.draft, date: p.date })),
+    title: book.file.title ?? "",
+    description: book.file.description ?? "",
+    status: book.file.status === "complete" ? "complete" : "writing",
+    chapters: orderChapters(chapters, book.file.chapters),
   };
 }
 
+/** Save a book's settings; if the book is already live, its settings go live too. */
 export async function saveBook(folder: string[], data: { title: string; description: string; status: BookStatus; chapters: string[] }) {
-  assertLocal();
+  await guard();
+  checkSlug(folder);
   const title = data.title.trim();
   if (!title) throw new Error("Give the book a title");
-  writeBookFile(folder, { title, description: data.description.trim(), status: data.status, chapters: data.chapters });
+  const path = `writings/${folder.join("/")}/_book.json`;
+  const text = bookJson({ title, description: data.description.trim(), status: data.status, chapters: data.chapters });
+  const store = getStore();
+  await store.write(path, text, { message: `Book settings: ${folder.join("/")}` });
+  await store.publish(path, text, `Book settings: ${folder.join("/")}`, { onlyIfLive: true });
   revalidatePath("/writings");
   revalidatePath(`/writings/${folder.join("/")}`);
 }
