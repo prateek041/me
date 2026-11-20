@@ -371,8 +371,7 @@ export default function Editor({ docs, folders, doc, book, missing, info }: { do
           <div className="flex flex-1 flex-col items-center justify-center gap-3 p-10 text-center">
             <p className="font-display text-2xl font-semibold">{missing ? "That file doesn't exist." : "Pick something to write."}</p>
             <p className="max-w-[44ch] text-muted-foreground">
-              Choose a post or chapter on the left, or create a new one with a path like <code className="font-mono">tech/my-book/chapter-1</code>.
-              A folder with two or more chapters becomes a book.
+              Choose a post or chapter on the left, or start an article, series or book with <span className="font-semibold">New</span>.
             </p>
             {err && <p className="text-sm text-red-500">{err}</p>}
           </div>
