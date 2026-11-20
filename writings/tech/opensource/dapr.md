@@ -1,6 +1,6 @@
 ---
 title: "Dapr"
-description: ""
+description: "How I added metrics to the Dapr Workflow building block, and what I learnt about actors, the workflow engine and concurrency in Go."
 date: "October 19, 2024"
 ---
 
