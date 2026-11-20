@@ -2,7 +2,6 @@
 title: "Why"
 description: "The reason behind everything I do"
 date: October 28, 2024
-audio: "naruto-main-theme.mp3"
 ---
 
 The initial thought of writing this article was again defining "What I want",

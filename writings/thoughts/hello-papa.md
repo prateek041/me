@@ -2,7 +2,6 @@
 title: "Hello Papa"
 description: "Thank you for everything, I will do great things."
 date: December 12, 2024
-audio: "Samidare-(Early summer Rain).mp3"
 ---
 
 Hello, Papa. I hope you are watching me, and proud.

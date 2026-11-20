@@ -2,7 +2,6 @@
 title: "I was in Vienna"
 description: "I was in Vienna for Open Source Summit, but it changed how I thought about things."
 date: November 12, 2024
-audio: "ochihabune.mp3"
 ---
 
 I reached there, life felt different, people were different. I did not

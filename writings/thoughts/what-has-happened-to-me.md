@@ -2,7 +2,6 @@
 title: "What has happened to me"
 description: "Why do I not feel the same as I used to do?"
 date: "September 18, 2025"
-audio: "without-you.mp3"
 ---
 
 What has happened to me? Writing this while listening to "Without You"

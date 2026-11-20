@@ -2,7 +2,6 @@
 title: "Journey So Far"
 date: "March 5, 2021"
 description: "How my journey has been so far"
-audio: "you-say-run.mp3"
 ---
 
 The chronological order of reading this article is from Bottom to Top.

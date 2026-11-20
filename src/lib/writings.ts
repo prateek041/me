@@ -5,11 +5,11 @@ import GithubSlugger from "github-slugger";
 import type { ComponentType } from "react";
 import readDirectoryRecursively, { isPostFile, type FileSystemNode } from "@/app/writings/api/blog";
 import { getSlugFromNode } from "@/app/writings/api/tree";
+import { calendarDay } from "@/lib/dates";
 
 export const WRITINGS_DIR = path.join(process.cwd(), "writings");
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 const SHOW_DRAFTS = process.env.NODE_ENV !== "production";
-const warned = new Set<string>();
 
 // Every frontmatter key a post may use. A typo (e.g. "desciption") fails the build.
 const KNOWN_KEYS = new Set([
@@ -17,7 +17,6 @@ const KNOWN_KEYS = new Set([
   "description",
   "date",
   "modifiedDate",
-  "audio",
   "status",
   "tags",
   "keywords",
@@ -36,9 +35,7 @@ export interface PostMeta {
   title: string;
   description: string;
   date: string; // ISO
-  dateDisplay: string;
   modifiedDate?: string; // ISO
-  audio?: string;
   status?: string;
   tags: string[];
   keywords?: string[];
@@ -52,8 +49,8 @@ function fail(file: string, msg: string): never {
 }
 
 function parseDate(file: string, key: string, value: unknown): Date {
-  const d = value instanceof Date ? value : new Date(String(value));
-  if (Number.isNaN(d.getTime())) fail(file, `"${key}" is not a valid date: ${JSON.stringify(value)}`);
+  const d = calendarDay(value);
+  if (!d) fail(file, `"${key}" is not a valid date: ${JSON.stringify(value)}`);
   return d;
 }
 
@@ -72,18 +69,8 @@ function parseMeta(file: string, slug: string[], fm: Record<string, unknown>, bo
   if (fm.date == null) fail(file, `"date" is required`);
   if (fm.description != null && typeof fm.description !== "string") fail(file, `"description" must be text`);
   if (fm.draft != null && typeof fm.draft !== "boolean") fail(file, `"draft" must be true or false`);
-  if (fm.audio != null && typeof fm.audio !== "string") fail(file, `"audio" must be a file name in /public`);
 
   const date = parseDate(file, "date", fm.date);
-  const audio = fm.audio as string | undefined;
-  if (audio && !fs.existsSync(path.join(PUBLIC_DIR, audio))) {
-    // Missing media should not take the whole site down, so this only warns (once).
-    const msg = `[writings] ${path.relative(process.cwd(), file)}: audio "${audio}" is not in /public`;
-    if (!warned.has(msg)) {
-      warned.add(msg);
-      console.warn(msg);
-    }
-  }
 
   return {
     slug,
@@ -91,9 +78,7 @@ function parseMeta(file: string, slug: string[], fm: Record<string, unknown>, bo
     title: fm.title.trim(),
     description: (fm.description as string | undefined)?.trim() ?? "",
     date: date.toISOString(),
-    dateDisplay: typeof fm.date === "string" ? fm.date : date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
     modifiedDate: fm.modifiedDate != null ? parseDate(file, "modifiedDate", fm.modifiedDate).toISOString() : undefined,
-    audio,
     status: typeof fm.status === "string" ? fm.status : undefined,
     tags: stringList(file, "tags", fm.tags) ?? [],
     keywords: stringList(file, "keywords", fm.keywords),
@@ -208,7 +193,7 @@ export function formatDate(iso: string, style: "long" | "short" | "day" | "month
         : style === "day"
           ? { month: "short", day: "numeric" }
           : { year: "numeric", month: "short" };
-  return d.toLocaleDateString("en-US", opts);
+  return d.toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
 }
 
 const TITLES: Record<string, string> = {
@@ -276,8 +261,4 @@ export function getPostNumbers(): Map<string, number> {
 export function getHeaderImage(meta: PostMeta): string | null {
   const rel = meta.slug.join("/") + ".jpg";
   return fs.existsSync(path.join(PUBLIC_DIR, rel)) ? "/" + rel : null;
-}
-
-export function audioExists(file: string | undefined) {
-  return !!file && fs.existsSync(path.join(PUBLIC_DIR, file));
 }

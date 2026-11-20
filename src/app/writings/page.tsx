@@ -23,7 +23,7 @@ const wrap = "mx-auto w-full max-w-6xl px-5 sm:px-8";
 function groupByYear(posts: PostMeta[]) {
   const map = new Map<number, PostMeta[]>();
   for (const p of posts) {
-    const y = new Date(p.date).getFullYear();
+    const y = new Date(p.date).getUTCFullYear();
     map.set(y, [...(map.get(y) ?? []), p]);
   }
   return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
@@ -41,8 +41,8 @@ export default function WritingsPage({ searchParams }: { searchParams: { section
   const featuredImage = featured ? getHeaderImage(featured) : null;
   const series = getSeriesList();
   const numbers = getPostNumbers();
-  const since = new Date(all[all.length - 1].date).getFullYear();
-  const until = new Date(all[0].date).getFullYear();
+  const since = new Date(all[all.length - 1].date).getUTCFullYear();
+  const until = new Date(all[0].date).getUTCFullYear();
   const count = (s: string) => all.filter((p) => p.section === s).length;
 
   const filters = [

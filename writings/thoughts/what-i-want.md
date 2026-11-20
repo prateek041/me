@@ -2,7 +2,6 @@
 title: "What I want"
 description: "What do I want out of life, what am I really looking for"
 date: "September 24, 2025"
-audio: "Joji - Ew.mp3"
 ---
 
 There is a lot to think about really, so many things cross my mind on a regular

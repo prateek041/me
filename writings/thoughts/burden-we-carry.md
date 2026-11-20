@@ -2,7 +2,6 @@
 title: "Burdens we Carry"
 description: "Every life experience is a burden, please don't add more."
 date: October 26, 2024
-audio: "going-for-a-walk.mp3"
 ---
 
 We are born, life starts. We all start at a different point in time, place,

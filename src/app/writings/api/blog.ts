@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import matter from "gray-matter";
 import * as path from "path";
+import { calendarDay } from "@/lib/dates";
 
 export interface FileSystemNode {
   articlePath: string;
@@ -28,11 +29,10 @@ function getFrontmatterDate(
   data: Record<string, unknown>,
 ): { sortable: string; display: string } | undefined {
   const d = data.date;
-  if (d == null) return undefined;
-  const date = d instanceof Date ? d : new Date(String(d));
-  if (Number.isNaN(date.getTime())) return undefined;
+  const date = calendarDay(d);
+  if (!date) return undefined;
   const sortable = date.toISOString();
-  const display = typeof d === "string" ? d : date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const display = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
   return { sortable, display };
 }
 

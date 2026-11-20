@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType } from "react";
-import AudioPlayer from "@/components/AudioPlayer";
 import { formatDate, postHref, type PostMeta } from "@/lib/writings";
 import ReadingProgress from "./ReadingProgress";
 import { AuthorCard, Crumbs, PaperNav, PrevNext, type Crumb } from "./parts";
@@ -17,14 +16,13 @@ interface Props {
   Content: ComponentType;
   crumbs: Crumb[];
   image: string | null;
-  audio: boolean;
   prev?: PostMeta;
   next?: PostMeta;
   more: MorePost[];
 }
 
 /** Thoughts and life posts: a serif reading column; the header image stays put while the text slides over it. */
-export default function PersonalLayout({ meta, Content, crumbs, image, audio, prev, next, more }: Props) {
+export default function PersonalLayout({ meta, Content, crumbs, image, prev, next, more }: Props) {
   const chip = "border border-border px-3 py-1";
   return (
     <>
@@ -56,11 +54,6 @@ export default function PersonalLayout({ meta, Content, crumbs, image, audio, pr
             <span id="abs" className="mb-1 block font-bold">Abstract</span>
             <span className="italic">{meta.description}</span>
           </section>
-        )}
-        {audio && meta.audio && (
-          <div className="mt-2 paper:mt-6">
-            <AudioPlayer audioFile={meta.audio} />
-          </div>
         )}
       </header>
 

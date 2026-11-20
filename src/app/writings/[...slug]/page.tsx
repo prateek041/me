@@ -6,7 +6,6 @@ import type { Metadata, ResolvingMetadata } from "next";
 import type { FileSystemNode } from "../api/blog";
 import { getLatestArticleUnderPath, getLatestArticleSlugPerSection, getNodeBySlug } from "../api/tree";
 import {
-  audioExists,
   getAdjacentPosts,
   getAllPosts,
   getHeaderImage,
@@ -194,7 +193,6 @@ const SlugPage = async ({ params }: LifeArticleProps) => {
         Content={Content}
         crumbs={crumbs}
         image={getHeaderImage(meta)}
-        audio={audioExists(meta.audio)}
         prev={older}
         next={newer}
         more={more}
