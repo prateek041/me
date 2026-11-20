@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
     darkMode: ["class"],
@@ -6,6 +7,8 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/*.{ts,tsx}",
+    "./writings/**/*.mdx",
   ],
   theme: {
   	extend: {
@@ -40,6 +43,12 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+  			subtle: 'hsl(var(--subtle))',
+  			brand: {
+  				DEFAULT: 'hsl(var(--brand))',
+  				text: 'hsl(var(--brand-text))',
+  				foreground: 'hsl(var(--brand-foreground))'
+  			},
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
@@ -61,13 +70,24 @@ const config: Config = {
   				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
+  		fontFamily: {
+  			sans: ['var(--f-body)', 'system-ui', 'sans-serif'],
+  			display: ['var(--f-display)', 'system-ui', 'sans-serif'],
+  			read: ['var(--f-read)', 'Georgia', 'serif'],
+  			mono: ['var(--f-mono)', 'ui-monospace', 'monospace']
+  		},
+  		// The site is square: no rounded corners anywhere.
   		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			none: '0px', sm: '0px', DEFAULT: '0px', md: '0px', lg: '0px',
+  			xl: '0px', '2xl': '0px', '3xl': '0px', full: '0px'
   		}
   	}
   },
-  plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("tailwindcss-animate"),
+    // `paper:` applies a utility only in the paper theme.
+    plugin(({ addVariant }) => addVariant("paper", ".paper &")),
+  ],
 };
 export default config;

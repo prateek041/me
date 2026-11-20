@@ -1,6 +1,6 @@
 ---
 title: "Burdens we Carry"
-desciption: "Every life experience is a burden, please don't add more."
+description: "Every life experience is a burden, please don't add more."
 date: October 26, 2024
 audio: "going-for-a-walk.mp3"
 ---

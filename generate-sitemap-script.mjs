@@ -48,6 +48,7 @@ const readDirectoryRecursively = (
         path: fullPath,
         isDirectory: isDirectory,
         lastModified: getFileDate(fullPath, isDirectory),
+        draft: !isDirectory && /\.mdx?$/.test(file) && matter(fs.readFileSync(fullPath, 'utf-8')).data.draft === true,
         children: isDirectory
           ? readDirectoryRecursively(fullPath, fullPath)
           : undefined,
@@ -88,15 +89,16 @@ function generateSitemapContent() {
     if (node) {
       if (
         node.isDirectory === false &&
+        !node.draft &&
         typeof node.path === 'string' &&
         node.path.startsWith(writingsBaseDir) &&
-        node.path.endsWith('.md')
+        /\.mdx?$/.test(node.path) && !/^[_.]/.test(path.basename(node.path))
       ) {
         let relativePath = node.path.substring(writingsBaseDir.length);
         if (relativePath.startsWith('/')) {
           relativePath = relativePath.substring(1);
         }
-        const slugPath = relativePath.replace(/\.md$/, '');
+        const slugPath = relativePath.replace(/\.mdx?$/, '');
 
         if (slugPath) {
           const lastModifiedDate = node.lastModified ? new Date(node.lastModified).toISOString() : new Date().toISOString();

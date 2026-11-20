@@ -1,18 +1,6 @@
-"use server";
-
 import * as fs from "fs";
 import matter from "gray-matter";
 import * as path from "path";
-import html from "remark-html";
-import { remark } from "remark";
-
-export interface Blog {
-  id: string;
-  title: string;
-  articlePath: string;
-  imageUrl: string;
-  parentPath: string | null;
-}
 
 export interface FileSystemNode {
   articlePath: string;
@@ -20,20 +8,28 @@ export interface FileSystemNode {
   name: string;
   path: string;
   parentPath: string | null;
-  lastModified: string; 
+  lastModified: string;
   dateDisplay?: string;
   isDirectory: boolean;
   children?: FileSystemNode[];
 }
 
+/** A post is a .md or .mdx file. Files starting with "_" or "." are never published. */
+export const isPostFile = (name: string) => /\.mdx?$/.test(name) && !/^[_.]/.test(name);
+
+/** Drafts (`draft: true`) are listed in `next dev` only. */
+const SHOW_DRAFTS = process.env.NODE_ENV !== "production";
+
+function readFrontmatter(filePath: string) {
+  return matter(fs.readFileSync(filePath, "utf8")).data as Record<string, unknown>;
+}
+
 function getFrontmatterDate(
-  filePath: string,
+  data: Record<string, unknown>,
 ): { sortable: string; display: string } | undefined {
-  const fileData = fs.readFileSync(filePath, "utf8");
-  const matterResult = matter(fileData);
-  const d = matterResult.data.date;
+  const d = data.date;
   if (d == null) return undefined;
-  const date = typeof d === "string" ? new Date(d) : d;
+  const date = d instanceof Date ? d : new Date(String(d));
   if (Number.isNaN(date.getTime())) return undefined;
   const sortable = date.toISOString();
   const display = typeof d === "string" ? d : date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
@@ -53,22 +49,24 @@ const readDirectoryRecursively = (
   dirPath: string,
   parentPath: string | null = null,
 ): FileSystemNode[] => {
-  const files = fs.readdirSync(dirPath);
+  const nodes: FileSystemNode[] = [];
 
-  return files.map((file): FileSystemNode => {
+  for (const file of fs.readdirSync(dirPath)) {
     const fullPath = path.join(dirPath, file);
     const stat = fs.statSync(fullPath);
     const isDirectory = stat.isDirectory();
-    const children = isDirectory
-      ? readDirectoryRecursively(fullPath, fullPath)
-      : undefined;
 
+    let children: FileSystemNode[] | undefined;
     let lastModified: string;
     let dateDisplay: string | undefined;
+
     if (isDirectory) {
-      lastModified = children && children.length > 0 ? getLatestChildDate(children) : "";
-    } else {
-      const parsed = getFrontmatterDate(fullPath);
+      children = readDirectoryRecursively(fullPath, fullPath);
+      lastModified = children.length > 0 ? getLatestChildDate(children) : "";
+    } else if (isPostFile(file)) {
+      const data = readFrontmatter(fullPath);
+      if (data.draft === true && !SHOW_DRAFTS) continue;
+      const parsed = getFrontmatterDate(data);
       if (parsed) {
         lastModified = parsed.sortable;
         dateDisplay = parsed.display;
@@ -76,33 +74,25 @@ const readDirectoryRecursively = (
         lastModified = stat.mtime.toISOString();
         dateDisplay = stat.mtime.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
       }
+    } else {
+      // Images and other assets that sit next to posts.
+      lastModified = stat.mtime.toISOString();
     }
 
-    const node: FileSystemNode = {
+    nodes.push({
       articlePath: path.relative(process.cwd(), fullPath),
       id: fullPath,
       name: file,
       path: fullPath,
-      parentPath: parentPath,
+      parentPath,
       isDirectory,
       lastModified,
       dateDisplay,
       children,
-    };
+    });
+  }
 
-    return node;
-  });
+  return nodes;
 };
-
-export async function getArticle(path: string) {
-  const data = fs.readFileSync(path, "utf8");
-
-  const matterResult = matter(data);
-
-  const articleHTML = (
-    await remark().use(html).process(matterResult.content)
-  ).toString();
-  return articleHTML;
-}
 
 export default readDirectoryRecursively;

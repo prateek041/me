@@ -2,83 +2,373 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Three themes: dark (default, navy), light (cream) and paper (research-paper).
+  next-themes puts the theme name on <html> as a class, so there is no flash.
+  Colours are HSL triplets; every corner on the site is square (see tailwind.config.ts).
+*/
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem
-  ;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+  :root,
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 220 52% 16%;
+    --foreground: 40 38% 91%;
+    --card: 221 47% 20%;
+    --card-foreground: 40 38% 91%;
+    --popover: 221 47% 20%;
+    --popover-foreground: 40 38% 91%;
+    --primary: 40 38% 91%;
+    --primary-foreground: 220 52% 16%;
+    --secondary: 221 47% 20%;
+    --secondary-foreground: 40 38% 91%;
+    --muted: 221 47% 20%;
+    --muted-foreground: 40 5% 72%;
+    --subtle: 228 6% 58%;
+    --accent: 221 47% 20%;
+    --accent-foreground: 40 38% 91%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 221 34% 26%;
+    --input: 221 34% 26%;
+    --ring: 6 100% 68%;
+    --brand: 6 100% 68%;
+    --brand-text: 6 100% 68%;
+    --brand-foreground: 220 52% 16%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
-  ;
-    --sidebar-background: 0 0% 3.9%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --chart-5: 340 75% 55%;
+    --radius: 0;
+    --sidebar-background: 220 52% 16%;
+    --sidebar-foreground: 40 38% 91%;
+    --sidebar-primary: 6 100% 68%;
+    --sidebar-primary-foreground: 220 52% 16%;
+    --sidebar-accent: 221 47% 20%;
+    --sidebar-accent-foreground: 40 38% 91%;
+    --sidebar-border: 221 34% 26%;
+    --sidebar-ring: 6 100% 68%;
+    --f-display: var(--font-space);
+    --f-body: var(--font-inter);
+    --f-read: var(--font-source-serif);
+    --f-mono: var(--font-jbm);
+  }
+  .light {
+    --background: 40 38% 91%;
+    --foreground: 220 52% 16%;
+    --card: 40 50% 96%;
+    --card-foreground: 220 52% 16%;
+    --popover: 40 50% 96%;
+    --popover-foreground: 220 52% 16%;
+    --primary: 220 52% 16%;
+    --primary-foreground: 40 38% 91%;
+    --secondary: 38 33% 85%;
+    --secondary-foreground: 220 52% 16%;
+    --muted: 38 33% 85%;
+    --muted-foreground: 225 20% 33%;
+    --subtle: 225 15% 41%;
+    --accent: 38 33% 85%;
+    --accent-foreground: 220 52% 16%;
+    --border: 38 28% 82%;
+    --input: 38 28% 82%;
+    --ring: 5 60% 41%;
+    --brand: 6 100% 68%;
+    --brand-text: 5 60% 41%;
+    --brand-foreground: 220 52% 16%;
+    --sidebar-background: 40 38% 91%;
+    --sidebar-foreground: 220 52% 16%;
+    --sidebar-primary: 5 60% 41%;
+    --sidebar-primary-foreground: 40 38% 91%;
+    --sidebar-accent: 38 33% 85%;
+    --sidebar-accent-foreground: 220 52% 16%;
+    --sidebar-border: 38 28% 82%;
+  }
+  .paper {
+    --background: 48 56% 98%;
+    --foreground: 0 0% 10%;
+    --card: 48 56% 98%;
+    --card-foreground: 0 0% 10%;
+    --popover: 48 56% 98%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 48 56% 98%;
+    --secondary: 45 20% 94%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 45 20% 94%;
+    --muted-foreground: 0 0% 24%;
+    --subtle: 0 0% 37%;
+    --accent: 45 20% 94%;
+    --accent-foreground: 0 0% 10%;
+    --border: 45 12% 83%;
+    --input: 45 12% 83%;
+    --ring: 216 66% 36%;
+    --brand: 216 66% 36%;
+    --brand-text: 216 66% 36%;
+    --brand-foreground: 0 0% 100%;
+    --sidebar-background: 48 56% 98%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 216 66% 36%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-accent: 45 20% 94%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 45 12% 83%;
+    --f-display: var(--font-stix);
+    --f-body: var(--font-stix);
+    --f-read: var(--font-stix);
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    scroll-padding-top: 5rem;
   }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  .paper body {
+    font-size: 19px;
+    line-height: 1.6;
+  }
+  .paper a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ---- Post body (markdown rendered through MDX) ---- */
+@layer components {
+  .prose.post {
+    --tw-prose-body: hsl(var(--foreground) / 0.86);
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--muted-foreground));
+    --tw-prose-links: hsl(var(--brand-text));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--subtle));
+    --tw-prose-bullets: hsl(var(--subtle));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--foreground));
+    --tw-prose-quote-borders: hsl(var(--brand));
+    --tw-prose-captions: hsl(var(--subtle));
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--foreground));
+    --tw-prose-pre-bg: transparent;
+    --tw-prose-th-borders: hsl(var(--foreground) / 0.5);
+    --tw-prose-td-borders: hsl(var(--border));
+    max-width: none;
+    font-family: var(--f-read);
+  }
+  .post :is(h1, h2, h3, h4) {
+    font-family: var(--f-display);
+    letter-spacing: -0.02em;
+    scroll-margin-top: 5rem;
+  }
+  .post :is(code, pre, kbd) {
+    font-family: var(--f-mono);
+  }
+  .post code::before,
+  .post code::after,
+  .post blockquote p::before,
+  .post blockquote p::after {
+    content: none;
+  }
+  .post h2 {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid hsl(var(--border));
+    font-size: 1.85em;
+    line-height: 1.15;
+  }
+  .post h3 {
+    margin-top: 2.5rem;
+    font-size: 1.35em;
+  }
+  .post a {
+    text-underline-offset: 4px;
+  }
+  .post img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .post blockquote {
+    font-style: normal;
+    font-weight: 400;
+  }
+  .post table {
+    font-family: var(--f-body);
+    font-size: 0.9em;
+  }
+  .post th {
+    font-weight: 500;
+  }
+
+  /* Personal posts (thoughts, life): drop cap and centred pull quotes */
+  .post-personal > p:first-of-type::first-letter {
+    float: left;
+    padding: 0.08em 0.12em 0 0;
+    font-size: 4.2em;
+    line-height: 0.8;
+    font-weight: 600;
+    color: hsl(var(--brand-text));
+  }
+  .post-personal blockquote {
+    margin: 3rem 0;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    font-family: var(--f-read);
+    font-size: 1.55em;
+    font-style: italic;
+    line-height: 1.35;
+    color: hsl(var(--foreground));
+  }
+  .post-personal blockquote::before {
+    content: "— ✦ —";
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--f-mono);
+    font-size: 0.5em;
+    font-style: normal;
+    color: hsl(var(--brand-text));
+  }
+
+  /* Paper theme: numbered headings, justified text, black-and-white listings */
+  .paper .post-numbered {
+    counter-reset: h2c listing;
+  }
+  .paper .post-numbered h2 {
+    counter-increment: h2c;
+    counter-reset: h3c;
+  }
+  .paper .post-numbered h2::before {
+    content: counter(h2c) "\00a0\00a0\00a0";
+  }
+  .paper .post-numbered h3 {
+    counter-increment: h3c;
+  }
+  .paper .post-numbered h3::before {
+    content: counter(h2c) "." counter(h3c) "\00a0\00a0\00a0";
+  }
+  .paper .post h2 {
+    margin-top: 2.5rem;
+    padding-top: 0;
+    border: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .paper .post h3 {
+    margin-top: 2rem;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .paper .post h2 a,
+  .paper .post h3 a {
+    display: none;
+  }
+  .paper .post p {
+    margin: 0;
+    text-align: justify;
+    text-indent: 1.5em;
+    hyphens: auto;
+  }
+  .paper .post :is(p:first-child, h2 + p, h3 + p, figure + p, ul + p, ol + p, pre + p, blockquote + p, table + p) {
+    text-indent: 0;
+  }
+  .paper .post :is(ul, ol) {
+    margin: 0.6rem 0;
+  }
+  .paper .post blockquote {
+    margin: 1.5rem 2.5em;
+    padding: 0;
+    border: 0;
+    font-style: italic;
+    text-align: left;
+  }
+  .paper .post-personal blockquote {
+    font-size: 1em;
+    text-align: left;
+  }
+  .paper .post-personal blockquote::before {
+    content: none;
+  }
+  .paper .post-personal > p:first-of-type::first-letter {
+    all: unset;
+  }
+  .paper .post-personal > :last-child::after {
+    content: "\00a0∎";
+  }
+}
+
+/* ---- Code blocks in posts (highlighted at build time by rehype-pretty-code) ---- */
+@layer components {
+  [data-rehype-pretty-code-figure] {
+    @apply my-6;
+  }
+  [data-rehype-pretty-code-figure] pre {
+    @apply overflow-x-auto rounded-lg border bg-muted/40 py-4 text-[0.85em] leading-relaxed;
+  }
+  [data-rehype-pretty-code-figure] pre > code {
+    @apply grid bg-transparent p-0;
+    counter-reset: line;
+  }
+  [data-rehype-pretty-code-figure] [data-line] {
+    @apply px-4;
+  }
+  /* Two themes are rendered; show the one that matches the site theme. */
+  [data-rehype-pretty-code-figure] code[data-theme*=" "],
+  [data-rehype-pretty-code-figure] code[data-theme*=" "] span {
+    color: var(--shiki-light);
+  }
+  .dark [data-rehype-pretty-code-figure] code[data-theme*=" "],
+  .dark [data-rehype-pretty-code-figure] code[data-theme*=" "] span {
+    color: var(--shiki-dark);
+  }
+  /* ```c title="main.c" */
+  [data-rehype-pretty-code-title] {
+    @apply rounded-t-lg border border-b-0 bg-muted/60 px-4 py-2 font-mono text-xs text-muted-foreground;
+  }
+  [data-rehype-pretty-code-title] + div > pre,
+  [data-rehype-pretty-code-title] + pre {
+    @apply mt-0 rounded-t-none;
+  }
+  /* ```c {3-5} */
+  [data-rehype-pretty-code-figure] [data-highlighted-line] {
+    @apply border-l-2 border-sky-500 bg-sky-500/10 pl-[calc(1rem-2px)];
+  }
+  /* ```c showLineNumbers */
+  [data-rehype-pretty-code-figure] code[data-line-numbers] > [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply mr-4 inline-block w-4 text-right text-muted-foreground/50;
+  }
+}
+
+/* Paper theme: listings in black and white with rules, numbered captions */
+.paper [data-rehype-pretty-code-figure] {
+  margin: 1.75rem 0;
+}
+.paper [data-rehype-pretty-code-figure] pre {
+  background: transparent;
+  border-width: 1px 0;
+  border-color: hsl(var(--foreground));
+  font-size: 13.5px;
+}
+.paper [data-rehype-pretty-code-figure] code span {
+  color: inherit !important;
+}
+.paper [data-rehype-pretty-code-title] {
+  margin: 0 0 0.35rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--f-body);
+  font-size: 16px;
+  color: hsl(var(--foreground));
+}
+.paper .post-numbered [data-rehype-pretty-code-title]::before {
+  counter-increment: listing;
+  content: "Listing " counter(listing) ":\00a0";
+  font-weight: 700;
 }

@@ -1,0 +1,93 @@
+---
+title: "Writing Guide"
+description: "What a post on this site can use: Markdown, code blocks, callouts and figures."
+date: "November 20, 2026"
+draft: true
+---
+
+This post is a draft, so it only shows up in `npm run dev`. Use it as a reference
+when writing. Copy it to a new file to start a post.
+
+## Files
+
+- A post is a `.md` or `.mdx` file anywhere under `writings/`. Its folder path is
+  its URL: `writings/tech/ebpf/kprobes.md` is `/writings/tech/ebpf/kprobes`.
+- `.md` is plain Markdown. `.mdx` can also use the components below.
+- Files starting with `_` are never published.
+- A header image for `thoughts` and `life` posts goes at `public/<same path>.jpg`.
+
+## Frontmatter
+
+```yaml title="frontmatter"
+title: "Post title"          # required
+date: "November 20, 2026"    # required, any date format JS can read
+description: "Shown in search results, link previews and RSS."
+audio: "song.mp3"            # optional, a file in /public (not shown on tech posts)
+status: WIP                  # optional label next to the date
+tags: [ebpf, networking]     # optional
+draft: true                  # optional, hidden in production
+```
+
+An unknown key, or a missing title or date, fails the build with the file name in
+the error. That's how a typo like `desciption` gets caught.
+
+## Code
+
+Fenced code is highlighted at build time, follows the light and dark theme, and
+has a copy button.
+
+```c title="hello.c" {4} showLineNumbers
+#include <stdio.h>
+
+int main(void) {
+    printf("hello, kernel\n");
+    return 0;
+}
+```
+
+The first line of that block is `` ```c title="hello.c" {4} showLineNumbers ``:
+`title` adds a file name, `{4}` highlights line 4 (ranges like `{2-5}` work too),
+and `showLineNumbers` numbers the lines.
+
+### Inline code
+
+Normal backticks give `inline code`.
+
+## Callouts
+
+<Callout>
+  A plain note. Good for side remarks that would break the flow of a paragraph.
+</Callout>
+
+<Callout type="tip" title="Try it">
+  Run `sudo bpftrace -l 'kprobe:tcp_*'` to list the TCP kprobes on your machine.
+</Callout>
+
+<Callout type="warning">
+  Loading eBPF programs needs root or `CAP_BPF`.
+</Callout>
+
+## Figures
+
+<Figure
+  src="/minimal.png"
+  alt="Site logo"
+  caption="A Figure is an image with a caption under it."
+/>
+
+A plain Markdown image `![alt](/path.png)` works too.
+
+## Tables
+
+| Hook     | Runs when                      | Stable? |
+| -------- | ------------------------------ | ------- |
+| kprobe   | a kernel function is called    | no      |
+| tracepoint | a static kernel event fires | yes     |
+| uprobe   | a user-space function is called | no     |
+
+## Everything else
+
+> Quotes, **bold**, _italics_, [links](https://ebpf.io), lists, footnotes[^1] and
+> emoji shortcodes like :rocket: all work as before.
+
+[^1]: Like this one.

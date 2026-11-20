@@ -1,8 +1,8 @@
-import type { FileSystemNode } from "./blog";
+import { isPostFile, type FileSystemNode } from "./blog";
 
 /**
  * Resolve a slug (e.g. ["tech", "ebpf", "introduction-to-ebpf"]) to the node in the tree.
- * Returns the node if it exists and is a .md file, or the directory node if it's a directory; null if not found.
+ * Returns the node if it exists and is a post file, or the directory node if it's a directory; null if not found.
  */
 export function getNodeBySlug(
   rootNodes: FileSystemNode[],
@@ -17,7 +17,7 @@ export function getNodeBySlug(
     const next = current.find(
       (n) =>
         n.name === segment ||
-        (isLast && n.name === `${segment}.md`)
+        (isLast && (n.name === `${segment}.md` || n.name === `${segment}.mdx`))
     );
     if (!next) return null;
     node = next;
@@ -29,16 +29,16 @@ export function getNodeBySlug(
 
 /** Derive slug from a file node: articlePath "writings/tech/ebpf/elf.md" -> ["tech", "ebpf", "elf"] */
 export function getSlugFromNode(node: FileSystemNode): string[] {
-  const withoutExt = node.articlePath.replace(/\.md$/, "");
+  const withoutExt = node.articlePath.replace(/\.mdx?$/, "");
   const relative = withoutExt.startsWith("writings/")
     ? withoutExt.slice("writings/".length)
     : withoutExt;
   return relative ? relative.split("/") : [];
 }
 
-/** Collect all .md file nodes under a node (recursive). */
+/** Collect all post file nodes under a node (recursive). */
 function collectMarkdownFiles(node: FileSystemNode): FileSystemNode[] {
-  if (!node.isDirectory && node.name.endsWith(".md")) {
+  if (!node.isDirectory && isPostFile(node.name)) {
     return [node];
   }
   if (!node.children) return [];
