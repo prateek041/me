@@ -18,6 +18,7 @@ const AREAS = [
 ];
 
 const WORK = [
+  { name: "Karya", year: "2026", link: "https://www.usekarya.dev/", text: "An open-source coding agent for your terminal, in a single Go binary. Commands run in a sandbox, every turn can be undone and budgets are enforced. Building it now.", short: "open-source terminal coding agent, building it now", stack: "Go · Bubble Tea · JSON-RPC · Sandboxing · LLMs" },
   { name: "ebpf-o11y", year: "2025", link: "https://github.com/prateek041/ebpf-o11y", text: "eBPF based auto-instrumentation of Go and Node.js applications.", short: "eBPF auto-instrumentation for Go and Node.js", stack: "Go · C · eBPF · LLVM · DWARF · Linux" },
   { name: "Senseii", year: "2024", link: "https://github.com/Senseii-ai", text: "AI driven health and fitness app.", short: "AI driven health and fitness app", stack: "Next.js · Node.js · LangChain · OpenAI · MongoDB" },
   { name: "Tetragon", year: "2023", link: "https://github.com/cilium/tetragon", text: "eBPF-based security observability and runtime enforcement.", short: "eBPF security observability, contributor", stack: "Go · eBPF · Kubernetes · Helm · CI/CD" },
