@@ -68,4 +68,6 @@ To tackle both these problems, we have come up with a versioned disk image manag
 
 ### Prebuilds
 
-This is a sub-system of karya that creates and manages a history of *Base Images* called **Master Image** that is used to build
+This is a sub-system of karya that creates and manages a history of *Base Images* called **Master Image** that is used to build every sandbox ever started within that project. There can be many sessions, and sandboxes can be re-used, but they always start with the project's master image.
+
+Any edits they make to the disk from the point of startup goes into an **overlay image**. This technical concept is called **copy-on-write**.
