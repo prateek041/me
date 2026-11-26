@@ -45,12 +45,17 @@ The sandbox interface is right now used a life-cycle management interface for a 
 
 The reason why i think this is good is because logically, the workspace is everything that is the "other world", where "this world" is the host machine. The workspace interface sits between this world and the other world, providing all the capabilities to whoever needs, to work with both worlds, or maybe just manage "other world". What do you think?
 
-  Here is what I think the Workspace interface should offer, depending on the problem and the feature we have described so far.
+Here is what I think the Workspace interface should offer, depending on the problem and the feature we have described so far.
 
-  - Syncing things between host and the sandbox.
-    There are multiple layers to this, but it's responsibility to provide ways the sandbox can be synced with the host (so that the changes in the host can be brought into sandbox) and the other way around (so the changes in the sandbox can be brought back into the host).
+### Syncing things between host and the sandbox.
 
-  I am not ready to write the implementation strategy as of now, so we are just formulating and adding more details in iterations.
+There are multiple layers to this, but it's responsibility is to provide ways the sandbox can be synced with the host. There are two ways data can move:
+- Changes in the host can be brought into sandbox.
+- Changes in the sandbox can be brought back into the host.
 
-  - Project Setup Recipe.
-    This is something that I think is needed at system level, but i am not fully sure where this should exist, so let's walk through it once. The job of this component is making sure the project builds.
+I am not ready to write the implementation strategy as of now, so we are just formulating and adding more details in iterations.
+
+### Performance Optimizations:
+When it comes to performance optimizations, there are many layers to the system, because we are trying to solve multiple problems
+#### Project Setup Recipe.
+This is something that I think is needed at system level, but i am not fully sure where this should exist, so let's walk through it once. It is not directly required in the system, but more as an effort
