@@ -56,6 +56,12 @@ There are multiple layers to this, but it's responsibility is to provide ways th
 I am not ready to write the implementation strategy as of now, so we are just formulating and adding more details in iterations.
 
 ### Performance Optimizations:
-When it comes to performance optimizations, there are many layers to the system, because we are trying to solve multiple problems
+When it comes to performance optimizations, there are many layers to the system, because we are trying to solve multiple problems.
+
+#### Fast Boot
+The biggest advantage of a MicroVM based sandbox is that they can start in milliseconds. But that startup time is not really relevant if the harness takes minutes to get it actually ready with all the code and work that is actually needed to work on the code. Copy times are the largest cost to the speed, now on top of that, imagine that same work for each sandbox to have ever started.
+
+#### Dependencies
+The second biggest problem any coding project faces is large dependencies needed to build the project, `node_modules`, 
 #### Project Setup Recipe.
 This is something that I think is needed at system level, but i am not fully sure where this should exist, so let's walk through it once. It is not directly required in the system, but more as an effort
