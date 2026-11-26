@@ -15,18 +15,18 @@ The other way is your personal laptop, but as you can think now, it is not safe.
 
 That is where [karya](https://www.usekarya.dev/) comes into the picture.
 
-now, i will dump my brain looking at the problem and the thing you described as the workspace feature.
+## System Syncing in Karya
 
-  We have two different systems, one is the host and the other is the sandbox, and there are two actors overall, one in each system, which can make changes to the system content independently. There are the following constraints in the systems.
-  - Host can only be changed by the user through the following methods:
-    - Manually editing things.
-    - Accepting a path/diff/change coming from the sandbox. (Actual application logic is written in the harness)
-    - The final liability is on the human who is accepting changes into the Host system.
-  - Sandbox can only be changed the following way:
-    - The agent running things in the sandbox.
-    - The user that might have changed somthing in the host.
+We have two different systems, one is the host and the other is the sandbox, and there are two actors overall, one in each system, which can make changes to the system content independently. There are the following constraints in the systems.
+- Host can only be changed by the user through the following methods:
+  - Manually editing things.
+  - Accepting a path/diff/change coming from the sandbox. (Actual application logic is written in the harness)
+  - The final liability is on the human who is accepting changes into the Host system.
+- Sandbox can only be changed the following way:
+  - The agent running things in the sandbox.
+  - The user that might have changed somthing in the host.
 
-  This sandbox and everything inside it, we are going to call it the workspace, and everything in it is now going to be formalized through a workspace interface that works on top of the sandbox interface
+This sandbox and everything inside it, we are going to call it the workspace, and everything in it is now going to be formalized through a workspace interface that works on top of the sandbox interface.
 
 ```Go
   // Sandbox is an isolated VM that works as a personal computer for an
@@ -37,29 +37,8 @@ now, i will dump my brain looking at the problem and the thing you described as 
       // Remove destroys the sandbox and clears the resources.
       Remove(context.Context) error
   }
-  ) where the sandbox interface is right now used a lifecycle management interrface for a sandbox, and that directly gives access to the executor interface. Instead it should give access to the Workspace interface, where the Executor is an interface inside the workspace interface.
-
-  The reason why i think this is good is because logically, the workspace is everything that is the "other world", where "this world" is the host machine. The workspace interface sits between this world and the other world, providing all the capabilities to whoever needs, to work with both worlds, or maybe just manage "other world". What do you think?
-
-  Here is what I think the Workspace interface should offer, depending on the problem and the feature we have described so far.
-
-  - Syncing things between host and the sandbox.
-    There are multiple layers to this, but it's responsibility to provide ways the sandbox can be synced with the host (so that the changes in the host can be brought into sandbox) and the other way around (so the changes in the sandbox can be brought back into the host).
-
-  - Sandbox can only be changed the following way:
-    - The agent running things in the sandbox.
-    - The user that might have changed somthing in the host.
-
-  This sandbox and everything inside it, we are going to call it the workspace, and everything in it is now going to be formalized through a workspace interface that works on top of the sandbox interface (
-  // Sandbox is an isolated VM that works as a personal computer for an
-  // AI agent.
-  type Sandbox interface {
-      Start(ctx context.Context, name string) (Executor, error)
-      Stop(context.Context) error
-      // Remove destroys the sandbox and clears the resources.
-      Remove(context.Context) error
-  }
-  ) where the sandbox interface is right now used a lifecycle management interrface for a sandbox, and that directly gives access to the executor interface. Instead it should give access to the Workspace interface, where the Executor is an interface inside the workspace interface.
+```
+where the sandbox interface is right now used a lifecycle management interrface for a sandbox, and that directly gives access to the executor interface. Instead it should give access to the Workspace interface, where the Executor is an interface inside the workspace interface.
 
   The reason why i think this is good is because logically, the workspace is everything that is the "other world", where "this world" is the host machine. The workspace interface sits between this world and the other world, providing all the capabilities to whoever needs, to work with both worlds, or maybe just manage "other world". What do you think?
 
