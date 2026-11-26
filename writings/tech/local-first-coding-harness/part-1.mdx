@@ -72,4 +72,16 @@ This is a sub-system of karya that creates and manages a history of *Base Images
 
 Any edits they make to the disk from the point of startup goes into an **Overlay Image**. This technical concept is called **copy-on-write**. The benefit of this is that each sandbox can boot directly with the master image in milli-seconds and gets it own overlay image, where everything it writes does not alter master image directly, but stays on the overlay. As a result, every sandbox just maintains it's overlay image while sharing the same base as the master image. All the efforts to keep the boot time fast is to keep the master image as close to the actual host code.
 
-The master image is built
+The master image is built exactly in two instances, once the project is created and the first ever sandbox is booted and secondly, every time the host code is out of sync. That includes the code changes, changes in dependencies etc.
+
+The code syncing process is much straightforward, but the dependency management side of things need one more layer that also solves the dependency management problem we mentioned above.
+
+### Project Recipe
+
+On top of master keeping up with the code changes of the repositories, we also have decided to put the dependencies in the master branch itself as well, so the boot-ups are truly fast and every new sandbox doesn't have to install dependencies again and again. But this introduces the problem of making sure they are synced along with the code, which is not as straightforward as copying things as is, in the image simply because the sandbox is running linux images as the Operating System and the host might not be running linux as many users might be on MacOS or Windows.
+
+Therefore we have to implement a system that manages the installation of dependencies in the master image every time a new version of it is created. That is the Project Recipe, a script that makes sure the project with all it's repositories can build properly in every version of the master image. This supports all the different combinations that any codebase can have, monorepos, micro-services etc.
+
+---
+
+I am not able to think how we will translate this into the karya system though, the first thing, system syncing is a workspace problem for sure. The other thing, master image, overlay image, build recipes etc. seem more like a sandbox interface level stuff? or workspace only? Not sure.
