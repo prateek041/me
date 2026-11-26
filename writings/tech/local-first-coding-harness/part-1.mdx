@@ -62,6 +62,8 @@ When it comes to performance optimizations, there are many layers to the system,
 The biggest advantage of a MicroVM based sandbox is that they can start in milliseconds. But that startup time is not really relevant if the harness takes minutes to get it actually ready with all the code and work that is actually needed to work on the code. Copy times are the largest cost to the speed, now on top of that, imagine that same work for each sandbox to have ever started.
 
 #### Dependencies
-The second biggest problem any coding project faces is large dependencies needed to build the project, `node_modules`, 
+The second biggest problem any coding project faces is large dependencies needed to build the project, we cannot depend on the agent installing dependencies again and again, we want a way that installing dependencies is done as less times as possible and incremental if possible.
+
+To tackle both these problems, we have come up with a versioned disk image management system.
 #### Project Setup Recipe.
 This is something that I think is needed at system level, but i am not fully sure where this should exist, so let's walk through it once. It is not directly required in the system, but more as an effort
