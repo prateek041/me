@@ -28,19 +28,22 @@ We have two different systems, one is the host and the other is the sandbox, and
 
 This sandbox and everything inside it, we are going to call it the workspace, and everything in it is now going to be formalized through a workspace interface that works on top of the sandbox interface.
 
-```Go
-  // Sandbox is an isolated VM that works as a personal computer for an
-  // AI agent.
-  type Sandbox interface {
-      Start(ctx context.Context, name string) (Executor, error)
-      Stop(context.Context) error
-      // Remove destroys the sandbox and clears the resources.
-      Remove(context.Context) error
-  }
+```go title="Karya's Sandbox Interface"
+// Sandbox is an isolated VM that works as a personal computer for an
+// AI agent.
+type Sandbox interface {
+	// Start creates and runs a microVM sandbox and return's it [Executor] interface
+	// back to the caller.
+	Start(ctx context.Context, name string) (Executor, error)
+	// Stop halts and gracefully shuts down the sandbox.
+	Stop(context.Context) error
+	// Remove destroys the sandbox and clears the resources.
+	Remove(context.Context) error
+}
 ```
-where the sandbox interface is right now used a lifecycle management interrface for a sandbox, and that directly gives access to the executor interface. Instead it should give access to the Workspace interface, where the Executor is an interface inside the workspace interface.
+The sandbox interface is right now used a life-cycle management interface for a sandbox, and that directly gives access to the `Executor` interface. Instead it should give access to the `Workspace` interface, where the Executor is an interface inside the workspace interface.
 
-  The reason why i think this is good is because logically, the workspace is everything that is the "other world", where "this world" is the host machine. The workspace interface sits between this world and the other world, providing all the capabilities to whoever needs, to work with both worlds, or maybe just manage "other world". What do you think?
+The reason why i think this is good is because logically, the workspace is everything that is the "other world", where "this world" is the host machine. The workspace interface sits between this world and the other world, providing all the capabilities to whoever needs, to work with both worlds, or maybe just manage "other world". What do you think?
 
   Here is what I think the Workspace interface should offer, depending on the problem and the feature we have described so far.
 
