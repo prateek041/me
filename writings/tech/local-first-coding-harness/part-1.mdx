@@ -64,6 +64,8 @@ The biggest advantage of a MicroVM based sandbox is that they can start in milli
 #### Dependencies
 The second biggest problem any coding project faces is large dependencies needed to build the project, we cannot depend on the agent installing dependencies again and again, we want a way that installing dependencies is done as less times as possible and incremental if possible.
 
-To tackle both these problems, we have come up with a versioned disk image management system.
-#### Project Setup Recipe.
-This is something that I think is needed at system level, but i am not fully sure where this should exist, so let's walk through it once. It is not directly required in the system, but more as an effort
+To tackle both these problems, we have come up with a versioned disk image management system, which are calling **prebuilds**.
+
+### Prebuilds
+
+This is a sub-system of karya that creates and manages a history of *Base Images* called **Master Image** that is used to build
