@@ -5,4 +5,10 @@ draft: true
 ---
 okay, so the bigger point here is that let's understand the virutalization first and where things are. Here is what I understand.
 
-Let's start with Virutalization. We have hardware at the very bottom and we want it to be utilized properly.
+Let's start with Virutalization. We have hardware at the very bottom and we want it to be utilized properly. At the bottom we have the hardware with it's real CPU, RAM, Disks and Network Devices and there is an Operating system that actually drives it, as in this operating system is the one that actually manages these resources end to end.
+
+Conceptually the virtualization process is to create smaller computers using software that share the same underlying hardware resources. This is done using virtual devices, virtual CPUs, virtual RAM (memory), disk and network devices and so on.
+
+Now, for a personal computer use-case there is no point in talking about virtualization, but there are two types of virtualization technologies, one is that is directly installed on top of the hardware and is used to manage the hardware and each and every machine on top of it has an Operating system installed, the first guest device is considered the admin. On the other hand, we have an operating system installed on top of the hardware and that exposes the functionality and Interfaces to create more virtual machines on top of it. Linux is of the second type.
+
+Now, to replicate a virtual machine, we have to replicate a few things, virtual resources, CPU, memory, disk, network and overall devices. In linux system, this is done using two separate pieces of software, **Hyperviser** and **QEMU**. Hypervisor is the piece of software that manages the memory and CPU component, where it manages the real CPU and memory and shares/maps them on top of the virtual CPU and virtual memory
